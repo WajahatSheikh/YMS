@@ -1,0 +1,130 @@
+// Mixin for media queries
+@mixin respond-to($breakpoint) {
+    @media (max-width: $breakpoint) {
+        @content;
+    }
+}
+
+// ── Type families ─────────────────────────────────────────────────────────────
+// Weight-mapped faces so `font-weight` selects the right file. The type scale in
+// _typography.scss targets these two family names.
+
+$hauora-weights: (
+    200: "ExtraLight",
+    300: "Light",
+    400: "Regular",
+    500: "Medium",
+    600: "SemiBold",
+    700: "Bold",
+    800: "ExtraBold"
+);
+
+@each $weight, $file in $hauora-weights {
+    @font-face {
+        font-family: "Hauora";
+        src: url("../../../public/assets/fonts/Hauora-#{$file}.ttf") format("truetype");
+        font-weight: $weight;
+        font-style: normal;
+        font-display: swap;
+    }
+}
+
+$open-sauce-weights: (
+    300: "Light",
+    400: "Regular",
+    500: "Medium",
+    600: "SemiBold",
+    700: "Bold",
+    800: "ExtraBold",
+    900: "Black"
+);
+
+@each $weight, $file in $open-sauce-weights {
+    @font-face {
+        font-family: "Open Sauce Sans";
+        src: url("../../../public/assets/fonts/Open-Sauce-Sans/Open-Sauce-Sans/TTF/OpenSauceSans-#{$file}.ttf")
+            format("truetype");
+        font-weight: $weight;
+        font-style: normal;
+        font-display: swap;
+    }
+}
+
+// ── Legacy per-weight aliases ─────────────────────────────────────────────────
+// ~40 component stylesheets still say `font-family: "Hauora-Medium"`. Keep these
+// resolving until those are migrated to family + font-weight.
+
+@each $weight, $file in $hauora-weights {
+    @font-face {
+        font-family: "Hauora-#{$file}";
+        src: url("../../../public/assets/fonts/Hauora-#{$file}.ttf") format("truetype");
+        font-display: swap;
+    }
+}
+
+@font-face {
+    font-family: "Open-Sauce-Regular";
+    src: url("../../../public/assets/fonts/OpenSauceSans-Regular.ttf") format("truetype");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Open-Sauce-Bold";
+    src: url("../../../public/assets/fonts/OpenSauceSans-Bold.ttf") format("truetype");
+    font-display: swap;
+}
+
+html {
+    // Root size drives every rem in the system, so it must shrink monotonically
+    // as the viewport narrows — otherwise tablet type renders smaller than phone.
+    font-size: 16px;
+    overflow-x: clip;
+
+    @include respond-to($breakpoint-xl) {
+        font-size: 15px; // ≤1199.98 — small laptop
+    }
+
+    @include respond-to($breakpoint-lg) {
+        font-size: 14px; // ≤991.98 — tablet landscape / iPad
+    }
+
+    @include respond-to($breakpoint-md) {
+        font-size: 13px; // ≤767.98 — tablet portrait
+    }
+
+    @include respond-to($breakpoint-sm) {
+        font-size: 12px; // ≤575.98 — phone
+    }
+
+    @include respond-to($breakpoint-xs) {
+        font-size: 11px; // ≤320.98 — small phone
+    }
+
+    body {
+        overflow-x: clip;
+        // background-color: var(--background);
+        color: var(--white);
+    }
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 2px;
+    background-color: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: var(--theme-color);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}

@@ -1,0 +1,124 @@
+@import "../../styles/abstract/variables";
+
+// 07b · Shipped with YMS — Figma node 144:1631
+// Frame: py 120, gap 48, header on the page gutter, gallery full-bleed.
+// Cards 380 tall, gap 20, widths 190 / 580 / 780.
+
+.section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-16);
+    min-height: 0;
+    padding-block: var(--space-30);
+    padding-inline: 0; // the gallery is full-bleed; the header carries the gutter
+    background-color: var(--bg-canvas);
+    overflow: hidden;
+
+    @media (max-width: $breakpoint-md) {
+        gap: var(--space-8);
+        padding-block: var(--space-16);
+    }
+}
+
+.head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+    width: 100%;
+    padding-inline: var(--gutter);
+}
+
+// Display/S
+.title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-5xl);
+    line-height: var(--lh-48);
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    text-transform: none;
+}
+
+// Body/M
+.lead {
+    max-width: 620px;
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-base);
+    line-height: var(--lh-26);
+    color: var(--text-tertiary);
+    text-transform: none;
+}
+
+// ── Gallery ───────────────────────────────────────────────────────────────────
+.gallery {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    width: 100%;
+    overflow: hidden;
+}
+
+// Transform is written per frame by rAF; nothing here animates it.
+.row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-5);
+    width: max-content;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    will-change: transform;
+}
+
+.card {
+    position: relative;
+    flex: 0 0 auto;
+    width: var(--w);
+    height: 380px;
+    overflow: hidden;
+    background-color: var(--bg-inset);
+    border: var(--border-thin) solid var(--border-glass);
+    border-radius: var(--radius-xl);
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+
+    // Cards scale down together so the mix of 190 / 580 / 780 keeps its rhythm.
+    @media (max-width: $breakpoint-lg) {
+        width: calc(var(--w) * 0.72);
+        height: 274px;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        width: calc(var(--w) * 0.55);
+        height: 209px;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+        width: calc(var(--w) * 0.42);
+        height: 160px;
+    }
+}
+
+// Motion is the whole point of this section, so with reduced motion the rAF loop
+// never starts (handled in the component) and the row becomes a plain scroller
+// the viewer drives instead.
+@media (prefers-reduced-motion: reduce) {
+    .row {
+        overflow-x: auto;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+}

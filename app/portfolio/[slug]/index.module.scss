@@ -1,0 +1,743 @@
+@import "../../styles/abstract/variables";
+
+/* ─── Layout ─────────────────────────────────────────── */
+.page {
+    background-color: var(--secondary-color);
+    color: var(--white);
+    min-height: 100vh;
+    padding-bottom: 0;
+}
+
+.container {
+    max-width: 90%;
+    margin: 0 auto;
+
+    @media screen and (max-width: $breakpoint-xl) {
+        max-width: 92%;
+    }
+
+    @media screen and (max-width: $breakpoint-md) {
+        max-width: 100%;
+        padding-inline: 1.25rem;
+    }
+}
+
+/* ─── Back Button Strip ──────────────────────────────── */
+.backWrap {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid #1a1a1f;
+    position: sticky;
+    top: var(--navbar-height, 80px);
+    z-index: 10;
+    background: rgba(9, 9, 11, 0.85);
+    backdrop-filter: blur(8px);
+}
+
+/* ─── Section Shared ─────────────────────────────────── */
+.section {
+    padding: 6rem 0;
+    border-top: 1px solid #1a1a1f;
+
+    @media screen and (max-width: $breakpoint-md) {
+        padding: 4rem 0;
+    }
+}
+
+.sectionAlt {
+    background: #0d0d10;
+}
+
+.sectionLabel {
+    display: block;
+    font-family: var(--font-ibm);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--theme-color);
+    margin-bottom: 1rem;
+}
+
+.sectionTitle {
+    font-family: var(--font-inter);
+    font-weight: 900;
+    font-size: 2.75rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: #f4f4f5;
+    margin-bottom: 1.5rem;
+
+    @media screen and (max-width: $breakpoint-md) {
+        font-size: 2rem;
+    }
+
+    @media screen and (max-width: $breakpoint-sm) {
+        font-size: 1.625rem;
+        line-height: 1.2;
+    }
+}
+
+.sectionTitleLg {
+    font-size: 3.25rem;
+
+    @media screen and (max-width: $breakpoint-md) {
+        font-size: 2.25rem;
+    }
+
+    @media screen and (max-width: $breakpoint-sm) {
+        font-size: 1.75rem;
+    }
+}
+
+.body {
+    font-family: "Hauora-Regular";
+    font-size: 1.0625rem;
+    line-height: 1.85;
+    color: #a1a1aa;
+
+    @media screen and (max-width: $breakpoint-sm) {
+        font-size: 0.9375rem;
+    }
+}
+
+.bodyWide {
+    max-width: 62ch;
+}
+
+/* ─── Hero ───────────────────────────────────────────── */
+.hero {
+    padding: 4rem 0 6rem;
+    position: relative;
+    overflow: hidden;
+
+    @media screen and (max-width: $breakpoint-md) {
+        padding: 2.5rem 0 4rem;
+    }
+}
+
+.heroGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+
+    @media screen and (max-width: $breakpoint-lg) {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+}
+
+.heroLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.heroTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.pill {
+    font-family: "Open-Sauce-Bold";
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #a1a1aa;
+    padding: 0.375rem 0.875rem;
+    border: 1px solid #27272a;
+    border-radius: 999px;
+}
+
+.heroTitle {
+    font-family: var(--font-inter);
+    font-weight: 900;
+    font-size: 5rem;
+    line-height: 1;
+    text-transform: uppercase;
+    color: #f4f4f5;
+    margin-bottom: 1.5rem;
+
+    @media screen and (max-width: $breakpoint-xl) {
+        font-size: 4rem;
+    }
+
+    @media screen and (max-width: $breakpoint-md) {
+        font-size: 3rem;
+    }
+
+    @media screen and (max-width: $breakpoint-sm) {
+        font-size: 2.25rem;
+    }
+}
+
+.heroSub {
+    font-family: "Hauora-Medium";
+    font-size: 1.125rem;
+    line-height: 1.75;
+    color: #71717a;
+    margin-bottom: 2.5rem;
+
+    @media screen and (max-width: $breakpoint-sm) {
+        font-size: 1rem;
+    }
+}
+
+.heroMeta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid #27272a;
+
+    @media screen and (max-width: $breakpoint-sm) {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+}
+
+.metaItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.metaLabel {
+    font-family: var(--font-ibm);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #52525b;
+}
+
+.metaValue {
+    font-family: "Open-Sauce-Regular";
+    font-size: 0.9375rem;
+    color: #e4e4e7;
+}
+
+.heroRight {
+    position: relative;
+}
+
+.heroImageWrap {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid #27272a;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(249, 115, 22, 0.06) 0%, transparent 60%);
+        z-index: 1;
+        pointer-events: none;
+    }
+}
+
+.heroImg {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+.heroImgOverlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(to top, rgba(9, 9, 11, 0.7), transparent);
+    pointer-events: none;
+}
+
+/* ─── Overview ───────────────────────────────────────── */
+.overviewGrid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 5rem;
+    align-items: start;
+
+    @media screen and (max-width: $breakpoint-lg) {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+}
+
+.overviewText {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.overviewStats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+
+    @media screen and (max-width: $breakpoint-sm) {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.statCard {
+    padding: 1.5rem;
+    border: 1px solid #27272a;
+    border-radius: 0.75rem;
+    background: #111115;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    transition: border-color 0.25s ease;
+
+    &:hover {
+        border-color: #3f3f46;
+    }
+}
+
+.statLabel {
+    font-family: var(--font-ibm);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #52525b;
+}
+
+.statValue {
+    font-family: "Open-Sauce-Regular";
+    font-size: 0.9375rem;
+    color: #e4e4e7;
+    line-height: 1.4;
+}
+
+/* ─── Problem ────────────────────────────────────────── */
+.problemHead {
+    margin-bottom: 3.5rem;
+}
+
+.problemGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+
+    @media screen and (max-width: $breakpoint-lg) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media screen and (max-width: $breakpoint-sm) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.problemCard {
+    padding: 2rem;
+    border: 1px solid #27272a;
+    border-radius: 0.75rem;
+    background: #111115;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+
+    &:hover {
+        border-color: rgba(249, 115, 22, 0.3);
+        transform: translateY(-3px);
+    }
+}
+
+.problemNum {
+    font-family: var(--font-ibm);
+    font-size: 0.75rem;
+    color: var(--theme-color);
+    letter-spacing: 0.1em;
+}
+
+.problemTitle {
+    font-family: "Open-Sauce-Regular";
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: #f4f4f5;
+    line-height: 1.4;
+}
+
+.problemDesc {
+    font-family: "Hauora-Regular";
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: #71717a;
+}
+
+/* ─── Research ───────────────────────────────────────── */
+.researchHead {
+    margin-bottom: 3.5rem;
+}
+
+.researchGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+
+    @media screen and (max-width: $breakpoint-lg) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media screen and (max-width: $breakpoint-sm) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.researchCard {
+    padding: 2rem;
+    border: 1px solid #27272a;
+    border-radius: 0.75rem;
+    background: #111115;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.25s ease;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--theme-color), transparent);
+        opacity: 0;
+        transition: opacity 0.25s ease;
+    }
+
+    &:hover {
+        border-color: #3f3f46;
+
+        &::before {
+            opacity: 1;
+        }
+    }
+}
+
+.researchNum {
+    font-family: var(--font-ibm);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #27272a;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.researchTitle {
+    font-family: "Open-Sauce-Regular";
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #f4f4f5;
+}
+
+.researchDesc {
+    font-family: "Hauora-Regular";
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: #71717a;
+    flex: 1;
+}
+
+.researchStat {
+    font-family: var(--font-ibm);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--theme-color);
+    padding-top: 0.75rem;
+    border-top: 1px solid #27272a;
+    margin-top: auto;
+}
+
+/* ─── Wireframes ─────────────────────────────────────── */
+.wireGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+
+    @media screen and (max-width: $breakpoint-md) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media screen and (max-width: $breakpoint-sm) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.wireCard {
+    position: relative;
+    border-radius: 0.625rem;
+    overflow: hidden;
+    border: 1px solid #27272a;
+    background: #111115;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.25s ease;
+
+    &:hover {
+        border-color: #3f3f46;
+    }
+}
+
+.wireImg {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(0.4) contrast(0.9);
+
+    @media screen and (max-width: $breakpoint-sm) {
+        height: 180px;
+    }
+}
+
+.wireLabel {
+    padding: 0.75rem 1rem;
+    font-family: var(--font-ibm);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #52525b;
+}
+
+/* ─── UI Showcase ────────────────────────────────────── */
+.uiGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+
+    @media screen and (max-width: $breakpoint-md) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media screen and (max-width: $breakpoint-sm) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.uiCard {
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 1px solid #27272a;
+    background: #0d0d10;
+    transition: transform 0.3s ease, border-color 0.25s ease;
+
+    &:hover {
+        transform: translateY(-4px);
+        border-color: #3f3f46;
+    }
+}
+
+.uiImg {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+}
+
+/* ─── Design System ──────────────────────────────────── */
+.dsGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    margin-top: 2.5rem;
+}
+
+.dsSubLabel {
+    font-family: var(--font-ibm);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #52525b;
+    margin-bottom: 1.25rem;
+}
+
+.colorRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+}
+
+.colorSwatch {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    min-width: 80px;
+}
+
+.swatchCircle {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+}
+
+.swatchName {
+    font-family: "Open-Sauce-Regular";
+    font-size: 0.75rem;
+    color: #a1a1aa;
+    line-height: 1.3;
+}
+
+.swatchHex {
+    font-family: var(--font-ibm);
+    font-size: 0.6875rem;
+    color: #52525b;
+    letter-spacing: 0.05em;
+}
+
+.fontRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.fontCard {
+    padding: 1.5rem 2rem;
+    border: 1px solid #27272a;
+    border-radius: 0.75rem;
+    background: #111115;
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.fontSample {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #f4f4f5;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.fontName {
+    font-family: var(--font-ibm);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #a1a1aa;
+}
+
+.fontUsage {
+    font-family: "Hauora-Regular";
+    font-size: 0.8125rem;
+    color: #52525b;
+}
+
+/* ─── Final Screens ──────────────────────────────────── */
+.screensGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+
+    @media screen and (max-width: $breakpoint-md) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media screen and (max-width: $breakpoint-sm) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.screenCard {
+    border-radius: 1.25rem;
+    overflow: hidden;
+    border: 1px solid #27272a;
+    background: #111115;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+
+    &:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+}
+
+.screenImg {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+/* ─── Outcomes ───────────────────────────────────────── */
+.outcomesSection {
+    background: #0d0d10;
+}
+
+.outcomesGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+
+    @media screen and (max-width: $breakpoint-lg) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media screen and (max-width: $breakpoint-sm) {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+}
+
+.outcomeCard {
+    padding: 2rem 1.5rem;
+    border: 1px solid #27272a;
+    border-radius: 0.875rem;
+    background: #111115;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+
+    &:hover {
+        border-color: rgba(249, 115, 22, 0.35);
+        transform: translateY(-3px);
+    }
+}
+
+.outcomeValue {
+    font-family: var(--font-inter);
+    font-weight: 900;
+    font-size: 2.5rem;
+    line-height: 1;
+    color: var(--theme-color);
+    margin-bottom: 0.25rem;
+
+    @media screen and (max-width: $breakpoint-sm) {
+        font-size: 1.875rem;
+    }
+}
+
+.outcomeMetric {
+    font-family: "Open-Sauce-Regular";
+    font-size: 1rem;
+    color: #f4f4f5;
+}
+
+.outcomeDesc {
+    font-family: "Hauora-Regular";
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #71717a;
+    margin-top: 0.25rem;
+}

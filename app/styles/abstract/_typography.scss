@@ -1,0 +1,121 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Type scale — mirrored from the Figma text styles.
+//
+// Every style below is a 1:1 port of a named Figma style. Sizes and line heights
+// come from the token file; letter-spacing is expressed in `em` because Figma
+// stores it as a percentage of font size (see note under "Letter spacing").
+//
+// Letter spacing: Figma reports Eyebrow/S at 12.5 on 12px text. Read as px that
+// would be 1.04em, which is not a real tracking value, so these are percentages.
+// Display/L's -1.5 reads as -0.015em on the same basis.
+// ─────────────────────────────────────────────────────────────────────────────
+
+@mixin type($family, $weight, $size, $lh, $ls: 0) {
+    font-family: $family;
+    font-weight: $weight;
+    font-size: $size;
+    line-height: $lh;
+    letter-spacing: $ls;
+}
+
+// ── Display — Stack Sans Notch ───────────────────────────────────────────────
+.display-l {
+    @include type(var(--font-display), var(--fw-semibold), var(--text-7xl), var(--lh-72), -0.015em);
+}
+.display-m {
+    @include type(var(--font-display), var(--fw-semibold), var(--text-6xl), var(--lh-56), -0.01em);
+}
+.display-s {
+    @include type(var(--font-display), var(--fw-semibold), var(--text-5xl), var(--lh-48), -0.01em);
+}
+.display-xs {
+    @include type(var(--font-display), var(--fw-medium), var(--text-3xl), var(--lh-40), -0.005em);
+}
+.display-2xs {
+    @include type(var(--font-display), var(--fw-medium), var(--text-xl), var(--lh-32), -0.005em);
+}
+
+// ── Heading — Geist ──────────────────────────────────────────────────────────
+.heading-xl {
+    @include type(var(--font-sans), var(--fw-semibold), var(--text-4xl), var(--lh-44));
+}
+.heading-m {
+    @include type(var(--font-sans), var(--fw-semibold), var(--text-xl), var(--lh-32));
+}
+.heading-s {
+    @include type(var(--font-sans), var(--fw-semibold), var(--text-lg), var(--lh-28));
+}
+.heading-xs {
+    @include type(var(--font-sans), var(--fw-semibold), var(--text-base), var(--lh-24));
+}
+
+// ── Body — Geist ─────────────────────────────────────────────────────────────
+.body-l {
+    @include type(var(--font-sans), var(--fw-regular), var(--text-lg), var(--lh-28));
+}
+.body-m {
+    @include type(var(--font-sans), var(--fw-regular), var(--text-base), var(--lh-26));
+}
+.body-s {
+    @include type(var(--font-sans), var(--fw-regular), var(--text-sm), var(--lh-22));
+}
+.body-s-medium {
+    @include type(var(--font-sans), var(--fw-medium), var(--text-sm), var(--lh-22));
+}
+.body-xs {
+    @include type(var(--font-sans), var(--fw-regular), var(--text-xs), var(--lh-20));
+}
+
+// ── Label — Geist ────────────────────────────────────────────────────────────
+.label-xl {
+    @include type(var(--font-sans), var(--fw-medium), var(--text-base), var(--lh-20));
+}
+.label-l {
+    @include type(var(--font-sans), var(--fw-medium), var(--text-sm), var(--lh-20));
+}
+.label-m {
+    @include type(var(--font-sans), var(--fw-medium), var(--text-xs), var(--lh-16));
+}
+
+// ── Eyebrow — Geist Mono, wide tracking ──────────────────────────────────────
+.eyebrow-l {
+    @include type(var(--font-mono), var(--fw-regular), var(--text-base), var(--lh-24), 0.02em);
+}
+.eyebrow-m {
+    @include type(var(--font-mono), var(--fw-regular), var(--text-sm), var(--lh-20), 0.1em);
+}
+.eyebrow-s {
+    @include type(var(--font-mono), var(--fw-semibold), var(--text-xs), var(--lh-16), 0.125em);
+}
+
+// ── Mono — Geist Mono ────────────────────────────────────────────────────────
+.mono-l {
+    @include type(var(--font-mono), var(--fw-medium), var(--text-lg), var(--lh-28));
+}
+.mono-s {
+    @include type(var(--font-mono), var(--fw-regular), var(--text-xs), var(--lh-16));
+}
+
+// ── Element defaults ─────────────────────────────────────────────────────────
+// Bare tags get the closest style so unclassed markup is never unstyled.
+h1 {
+    @extend .display-l;
+}
+h2 {
+    @extend .display-m;
+}
+h3 {
+    @extend .display-s;
+}
+h4 {
+    @extend .display-xs;
+}
+h5 {
+    @extend .heading-m;
+}
+h6 {
+    @extend .heading-s;
+}
+p {
+    @extend .body-m;
+}

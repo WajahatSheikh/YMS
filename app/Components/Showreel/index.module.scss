@@ -1,0 +1,259 @@
+@import "../../styles/abstract/variables";
+
+// 03 · Showreel — Figma node 143:783 (1920×736)
+// Frame: px 100, pb 80. Rest media 1141×656 → Expanded 1720×880.
+//
+// Size is interpolated from --reel-progress (0 → 1), written by the component on
+// scroll. The section reserves the expanded height up front so the content below
+// never shifts as the card grows — that jump is what makes most scroll-scaling
+// effects feel broken.
+
+.section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 var(--gutter) 80px;
+
+    // Reserve the expanded height so growing the card never pushes the sections
+    // below it. Without this the layout shifts under the scroll that is driving
+    // the growth, which reads as stutter.
+    min-height: calc(880px + 80px);
+
+    @media (max-width: $breakpoint-xxl) {
+        // Stage is 100% of the content box at full progress, at the 1720:880
+        // ratio — so reserve that height instead of the fixed 880.
+        min-height: calc((100vw - 2 * var(--gutter)) * 880 / 1720 + 80px);
+    }
+
+    @media (max-width: $breakpoint-md) {
+        padding-bottom: var(--space-16);
+        min-height: calc((100vw - 2 * var(--gutter)) * 880 / 1720 + var(--space-16));
+    }
+}
+
+.stage {
+    --reel-progress: 0;
+
+    // rest + (expanded − rest) × progress
+    width: calc(1141px + 579 * var(--reel-progress) * 1px);
+    height: calc(656px + 224 * var(--reel-progress) * 1px);
+    max-width: 100%;
+    will-change: width, height;
+    contain: layout paint;
+
+    // Below the desktop frame the fixed pair gives way to the design's ratio,
+    // interpolated the same way so the effect survives at every width.
+    @media (max-width: $breakpoint-xxl) {
+        width: calc(78% + 22% * var(--reel-progress));
+        height: auto;
+        aspect-ratio: calc(1141 - 1141 * var(--reel-progress) + 1720 * var(--reel-progress)) /
+            calc(656 - 656 * var(--reel-progress) + 880 * var(--reel-progress));
+    }
+
+    @media (max-width: $breakpoint-md) {
+        width: calc(88% + 12% * var(--reel-progress));
+    }
+}
+
+.media {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-2xl);
+    background-color: var(--bg-raised);
+    // Lifts slightly as it reaches full size.
+    box-shadow: 0 calc(24px * var(--reel-progress)) calc(64px * var(--reel-progress)) #00000066;
+    transition: box-shadow 0.3s ease;
+}
+
+// Rest state — the looping GIF, clickable.
+.poster {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+
+    &:focus-visible {
+        outline: 2px solid var(--border-focus);
+        outline-offset: -4px;
+        border-radius: var(--radius-2xl);
+    }
+
+}
+
+.gif {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+// Wrapper carries the cursor-follow offset (--bx/--by, written by rAF each
+// frame). It gets no transition — the easing is the lerp itself; a CSS
+// transition on top would fight it and add lag.
+.playBadgeWrap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(calc(-50% + var(--bx, 0px)), calc(-50% + var(--by, 0px)));
+    pointer-events: none;
+    will-change: transform;
+}
+
+// Inner element owns the hover treatment, so scale and follow never collide.
+.playBadge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 84px;
+    height: 84px;
+    border: var(--border-thin) solid var(--border-glass);
+    border-radius: var(--radius-full);
+    background-color: #00000073;
+    backdrop-filter: blur(8px);
+    color: var(--text-primary);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s ease,
+        border-color 0.3s ease;
+
+    svg {
+        width: 34px;
+        height: 34px;
+        margin-left: 4px; // optically centre the triangle
+    }
+
+    .poster:hover & {
+        transform: scale(1.1);
+        background-color: var(--bg-brand);
+        border-color: var(--border-brand);
+    }
+
+    .poster:active & {
+        transform: scale(0.96);
+    }
+
+    @media (max-width: $breakpoint-md) {
+        width: 60px;
+        height: 60px;
+
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+}
+
+// ── Playing — full canvas overlay (Calendly reference) ───────────────────────
+// Fixed and inset from the viewport edges rather than a fullscreen takeover, so
+// the page colour still frames it exactly like the reference.
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9998; // above the fixed header (z-index 100)
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #000000d9;
+    backdrop-filter: blur(6px);
+    animation: overlayIn 0.25s ease both;
+}
+
+.overlayPanel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 28px;
+    background-color: #000000;
+    animation: panelIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+    @media (max-width: $breakpoint-md) {
+        border-radius: 18px;
+    }
+}
+
+.video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-color: #000000;
+}
+
+// Top-right, inset within the panel — matches the reference control.
+.dismiss {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: var(--border-thin) solid var(--border-glass);
+    border-radius: var(--radius-lg);
+    background-color: #ffffff26;
+    backdrop-filter: blur(10px);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background-color 0.25s ease, transform 0.25s ease;
+
+    svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    &:hover {
+        background-color: #ffffff40;
+        transform: scale(1.06);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--border-focus);
+        outline-offset: 2px;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        top: 14px;
+        right: 14px;
+        width: 40px;
+        height: 40px;
+
+        svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
+}
+
+@keyframes overlayIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes panelIn {
+    from {
+        opacity: 0;
+        transform: scale(0.94);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .overlay,
+    .overlayPanel {
+        animation: none;
+    }
+}

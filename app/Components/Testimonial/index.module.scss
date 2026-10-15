@@ -1,0 +1,545 @@
+@import "../../styles/abstract/variables";
+@import "../../styles/abstract/mixins";
+
+// 07 · Testimonials — "wall of proof" (see Testimonial.tsx for the art
+// direction). All spacing is flex/grid gap; nothing is absolutely placed
+// except the decorative quote glyph and the ambient glow.
+
+$spotlight-radius: 24px;
+$marker: rgba(232, 80, 2, 0.5); // --bg-brand at 50%, for the marker stroke
+
+.section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-10);
+    padding: var(--space-30) var(--gutter);
+    isolation: isolate;
+
+    // Ambient brand light behind the spotlight — the section's one focal glow.
+    &::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 22%;
+        left: 50%;
+        width: min(1100px, 90vw);
+        aspect-ratio: 2 / 1;
+        transform: translateX(-50%);
+        background: radial-gradient(closest-side, rgba(232, 80, 2, 0.14), transparent);
+        pointer-events: none;
+    }
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-5);
+    width: 100%;
+    text-align: center;
+}
+
+// Eyebrow/L — same brand token as the Logos and Services eyebrows.
+.eyebrow {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-base);
+    line-height: var(--lh-24);
+    letter-spacing: 0.02em;
+    color: var(--text-brand);
+    text-transform: uppercase;
+}
+
+// Display/S
+.title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-5xl);
+    line-height: var(--lh-48);
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    text-transform: none;
+}
+
+// Avatar stack + who/where, in one pill.
+.proof {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    max-width: 100%;
+    padding: var(--space-2) var(--space-5) var(--space-2) var(--space-2);
+    border: var(--border-thin) solid var(--border-default);
+    border-radius: var(--radius-full);
+    background: var(--bg-raised);
+}
+
+.stack {
+    display: flex;
+    flex-shrink: 0;
+
+    .avatar {
+        box-shadow: 0 0 0 2px var(--bg-raised);
+
+        & + .avatar {
+            margin-left: -10px;
+        }
+    }
+}
+
+.proofText {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    line-height: var(--lh-20);
+    color: var(--text-secondary);
+    text-align: left;
+}
+
+// ── Shared atoms ──────────────────────────────────────────────────────────────
+.avatar {
+    display: inline-flex;
+    flex-shrink: 0;
+    width: var(--size);
+    height: var(--size);
+    overflow: hidden;
+    border-radius: var(--radius-full);
+    background: var(--bg-canvas);
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    // A logo mark rather than a photo — give it a light ground and some air.
+    &.onWhite {
+        background: #ffffff;
+        // Hairline so a white disc still has an edge on a white card.
+        box-shadow: inset 0 0 0 1px var(--border-default);
+
+        img {
+            object-fit: contain;
+            padding: 16%;
+        }
+    }
+}
+
+.whoText {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.name {
+    font-family: var(--font-sans);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-base);
+    line-height: var(--lh-24);
+    color: var(--text-primary);
+}
+
+.role {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    line-height: var(--lh-20);
+    color: var(--text-tertiary);
+}
+
+.logo {
+    width: auto;
+    height: 28px;
+    opacity: 0.92;
+}
+
+// The line that matters, marked like a highlighter stroke across the lower
+// half of the text. box-decoration-break keeps the stroke on every wrapped line.
+.mark {
+    padding: 0 0.08em;
+    color: var(--text-primary);
+    background-color: transparent;
+    background-image: linear-gradient(transparent 58%, $marker 58%, $marker 92%, transparent 92%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}
+
+// Where scroll-driven animation exists, the stroke draws itself in as the
+// quote scrolls into view; everywhere else it is simply there.
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+        .mark {
+            animation: mark-draw linear both;
+            animation-timeline: view();
+            animation-range: entry 30% cover 40%;
+        }
+    }
+}
+
+@keyframes mark-draw {
+    from {
+        background-size: 0% 100%;
+    }
+    to {
+        background-size: 100% 100%;
+    }
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px var(--space-3);
+    border: var(--border-thin) solid var(--border-default);
+    border-radius: var(--radius-full);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    line-height: var(--lh-20);
+    color: var(--text-secondary);
+
+    svg {
+        width: 14px;
+        height: 14px;
+        color: var(--text-brand);
+    }
+}
+
+// ── Spotlight ─────────────────────────────────────────────────────────────────
+.spotlight {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    align-items: stretch;
+    gap: var(--space-16);
+    width: 100%;
+    max-width: 1520px;
+    margin: 0;
+    padding: var(--space-16);
+    overflow: hidden;
+    border: var(--border-thin) solid var(--border-brand-subtle);
+    border-radius: $spotlight-radius;
+    background:
+        radial-gradient(90% 140% at 0% 0%, rgba(232, 80, 2, 0.16), transparent 55%),
+        var(--bg-raised);
+    box-shadow: 0 40px 100px -50px rgba(232, 80, 2, 0.45);
+}
+
+// Oversized quotation mark, half off the corner — the art-direction flourish.
+.glyph {
+    position: absolute;
+    top: var(--space-10);
+    right: var(--space-10);
+    width: clamp(72px, 9vw, 140px);
+    color: var(--text-brand);
+    opacity: 0.16;
+    pointer-events: none;
+}
+
+.spotlightQuote {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-6);
+    min-width: 0;
+}
+
+// Result sticker — tilted like it was slapped on.
+.result {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    background: var(--gradient-brand);
+    color: var(--text-on-brand);
+    font-family: var(--font-mono);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-sm);
+    line-height: var(--lh-20);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transform: rotate(-3deg);
+    box-shadow: 0 10px 28px -10px rgba(232, 80, 2, 0.7);
+}
+
+.bigQuote {
+    margin: 0;
+
+    p {
+        margin: 0;
+        font-family: var(--font-display);
+        font-weight: var(--fw-medium);
+        font-size: clamp(22px, 2.3vw, 36px);
+        line-height: 1.32;
+        letter-spacing: -0.01em;
+        color: var(--text-secondary);
+        text-wrap: pretty;
+    }
+}
+
+.spotlightWho {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: var(--space-4);
+    min-width: 0;
+    padding-left: var(--space-10);
+    border-left: var(--border-thin) solid var(--border-default);
+
+    .name {
+        font-size: var(--text-lg);
+        line-height: var(--lh-28);
+    }
+}
+
+.rule {
+    width: 100%;
+    height: 1px;
+    margin-block: var(--space-2);
+    background: var(--border-default);
+}
+
+// ── Proof cards ───────────────────────────────────────────────────────────────
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-5);
+    width: 100%;
+    max-width: 1520px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    min-width: 0;
+    margin: 0;
+    padding: var(--space-7);
+    border: var(--border-thin) solid var(--border-default);
+    border-radius: var(--radius-xl);
+    background: var(--bg-raised);
+    @include card-hover;
+
+    // Scroll reveal, staggered along the row (RevealChildren adds .inView).
+    opacity: 0;
+    translate: 0 24px;
+    transition:
+        opacity 0.7s ease calc(var(--i) * 90ms),
+        translate 0.8s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--i) * 90ms),
+        border-color 0.35s ease,
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.35s ease;
+
+    &.inView {
+        opacity: 1;
+        translate: 0 0;
+    }
+
+    &:hover .mark {
+        background-image: linear-gradient(
+            transparent 58%,
+            rgba(232, 80, 2, 0.7) 58%,
+            rgba(232, 80, 2, 0.7) 92%,
+            transparent 92%
+        );
+    }
+}
+
+// Logo, then the result tag under it — the same stack on every card, so the
+// quotes start on one line across the row.
+.cardTop {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+}
+
+.tag {
+    max-width: 100%;
+    padding: 4px 10px;
+    border: var(--border-thin) solid var(--border-brand-subtle);
+    border-radius: var(--radius-full);
+    background: var(--bg-brand-faint);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    letter-spacing: 0.04em;
+    color: var(--text-brand);
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cardQuote {
+    flex: 1;
+    margin: 0;
+
+    p {
+        margin: 0;
+        font-family: var(--font-sans);
+        font-size: var(--text-base);
+        line-height: var(--lh-26);
+        color: var(--text-muted);
+    }
+}
+
+.cardWho {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding-top: var(--space-5);
+    border-top: var(--border-thin) solid var(--border-default);
+}
+
+.cardMeta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px var(--space-2);
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    color: var(--text-tertiary);
+}
+
+.metaDot {
+    width: 3px;
+    height: 3px;
+    border-radius: var(--radius-full);
+    background: var(--text-disabled);
+}
+
+.metaPlace {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    svg {
+        width: 12px;
+        height: 12px;
+        color: var(--text-brand);
+    }
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@media (max-width: $breakpoint-xl) {
+    .spotlight {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-10);
+        padding: var(--space-10);
+    }
+
+    // Attribution becomes a footer row under the quote.
+    .spotlightWho {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: center;
+        gap: var(--space-4) var(--space-5);
+        padding-left: 0;
+        padding-top: var(--space-8);
+        border-left: 0;
+        border-top: var(--border-thin) solid var(--border-default);
+    }
+
+    .rule {
+        display: none;
+    }
+
+    .spotlightWho .logo {
+        margin-left: auto;
+    }
+
+    .chips {
+        flex-basis: 100%;
+    }
+
+    .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: $breakpoint-md) {
+    .section {
+        gap: var(--space-8);
+    }
+
+    .proof {
+        border-radius: var(--radius-xl);
+    }
+
+    .spotlight {
+        gap: var(--space-8);
+        padding: var(--space-8) var(--space-5);
+        border-radius: var(--radius-xl);
+    }
+
+    .glyph {
+        top: var(--space-6);
+        right: var(--space-5);
+    }
+
+    // Logo on its own line under the name; contain keeps its proportions in
+    // the full-width box.
+    .spotlightWho .logo {
+        flex-basis: 100%;
+        margin-left: 0;
+        object-fit: contain;
+        object-position: left center;
+    }
+
+    // Avatar beside the name rather than on a line of its own.
+    .spotlightWho .avatar {
+        width: 56px;
+        height: 56px;
+    }
+
+    .spotlightWho .whoText {
+        flex: 1 1 0;
+    }
+
+    // Cards become a swipe rail: edge to edge, snapping, with the next card
+    // peeking in so it's obvious there's more.
+    .cards {
+        display: flex;
+        // The section is a centred flex column; without stretch the rail would
+        // shrink to its content width (all four cards) and centre, pushing the
+        // first card off the left edge.
+        align-self: stretch;
+        gap: var(--space-3);
+        width: auto;
+        max-width: none;
+        margin-inline: calc(-1 * var(--gutter));
+        padding: var(--space-2) var(--gutter) var(--space-4);
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: var(--gutter);
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    .card {
+        // Narrow enough that the next card visibly peeks in from the right.
+        flex: 0 0 min(80%, 320px);
+        padding: var(--space-6) var(--space-5);
+        scroll-snap-align: start;
+    }
+}

@@ -1,0 +1,600 @@
+@import "../../styles/abstract/variables";
+@import "../../styles/abstract/mixins";
+
+// 05 · Expertise & Capabilities — capability explorer (see Services.tsx).
+//
+// Mobile-first: accordion cards. From 992px up the same markup becomes two
+// panes — `.item` turns into `display: contents`, so each heading drops into the
+// index column and every panel shares one stage cell in the right column. All
+// spacing is flex/grid gap.
+
+$stage-radius: 24px;
+$ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+.section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-16);
+    padding: var(--space-30) var(--gutter);
+    isolation: isolate;
+
+    // Soft brand light behind the stage side — the section's one focal glow.
+    &::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 30%;
+        right: -10%;
+        width: min(900px, 80vw);
+        aspect-ratio: 1;
+        background: radial-gradient(closest-side, rgba(232, 80, 2, 0.12), transparent);
+        pointer-events: none;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        gap: var(--space-10);
+    }
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+// Editorial split: eyebrow + title on the left, the pitch and a count on the
+// right, sharing a baseline. Stacks below 992.
+.head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+    gap: var(--space-6) var(--space-16);
+    width: 100%;
+    max-width: 1520px;
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.headMain,
+.headAside {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+// Eyebrow/L — same brand token as the Logos eyebrow.
+.eyebrow {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-base);
+    line-height: var(--lh-24);
+    letter-spacing: 0.02em;
+    color: var(--text-brand);
+    text-transform: uppercase;
+}
+
+.title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-6xl);
+    line-height: var(--lh-56);
+    letter-spacing: -0.015em;
+    color: var(--text-primary);
+    text-transform: none;
+    text-wrap: balance;
+}
+
+.sub {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-lg);
+    line-height: var(--lh-28);
+    color: var(--text-secondary);
+    text-wrap: pretty;
+}
+
+// Inline flow rather than flex, so on a narrow screen the text wraps after the
+// count instead of dropping the whole line under it.
+.meta {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: var(--lh-20);
+    letter-spacing: 0.02em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+}
+
+.metaCount {
+    margin-right: var(--space-2);
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-xl);
+    line-height: 1;
+    color: var(--text-brand);
+}
+
+// ── Explorer — mobile-first accordion ─────────────────────────────────────────
+.explorer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    width: 100%;
+    max-width: 1520px;
+}
+
+.item {
+    border: var(--border-thin) solid var(--border-default);
+    border-radius: var(--radius-xl);
+    background: transparent;
+    transition: background-color 0.35s ease, border-color 0.35s ease;
+
+    // Staggered entrance as the list scrolls in.
+    opacity: 0;
+    translate: 0 20px;
+
+    .revealed & {
+        opacity: 1;
+        translate: 0 0;
+        transition:
+            opacity 0.6s ease calc(var(--i) * 70ms),
+            translate 0.7s $ease-out calc(var(--i) * 70ms),
+            background-color 0.35s ease,
+            border-color 0.35s ease;
+    }
+
+    &.open {
+        border-color: var(--border-brand-subtle);
+        background: var(--bg-raised);
+    }
+}
+
+.itemHeading {
+    position: relative;
+    margin: 0;
+}
+
+.trigger {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-4);
+    width: 100%;
+    padding: var(--space-5);
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+
+    &:focus-visible {
+        outline: 2px solid var(--border-focus);
+        outline-offset: -2px;
+        border-radius: var(--radius-xl);
+    }
+}
+
+.number::before {
+    content: attr(data-number);
+}
+
+.number {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: var(--lh-20);
+    color: var(--text-tertiary);
+    transition: color 0.3s ease;
+
+    .open & {
+        color: var(--text-brand);
+    }
+}
+
+.titleGroup {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+    min-width: 0;
+}
+
+.itemTitle {
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: clamp(20px, 2.2vw, 30px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+
+    .open &,
+    .trigger:hover & {
+        color: var(--text-primary);
+    }
+}
+
+%badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-1) var(--space-3);
+    border: var(--border-thin) solid var(--border-brand-subtle);
+    border-radius: var(--radius-full);
+    background-color: var(--bg-brand-faint);
+    font-family: var(--font-mono);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    letter-spacing: 0.08em;
+    color: var(--text-brand);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.label {
+    @extend %badge;
+}
+
+.icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: var(--border-thin) solid var(--border-default);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+    transition: border-color 0.3s ease, color 0.3s ease;
+
+    svg {
+        grid-area: 1 / 1;
+        width: 18px;
+        height: 18px;
+        transition: transform 0.4s $ease-out, opacity 0.25s ease;
+    }
+
+    .open & {
+        border-color: var(--border-brand);
+        color: var(--text-brand);
+    }
+}
+
+// Accordion: the plus turns into a close ×; the arrow is desktop-only.
+.plus {
+    .open & {
+        transform: rotate(45deg);
+    }
+}
+
+.arrow {
+    opacity: 0;
+}
+
+// Panel collapse: 0fr → 1fr animates height without measuring. Closed panels
+// are visibility:hidden — out of the tab order and the a11y tree, yet still
+// transitionable (display:none would kill the animation).
+.panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows 0.45s $ease-out, visibility 0s linear 0.45s;
+
+    .open & {
+        grid-template-rows: 1fr;
+        visibility: visible;
+        transition: grid-template-rows 0.45s $ease-out, visibility 0s;
+    }
+}
+
+.panelInner {
+    min-height: 0;
+    overflow: hidden;
+}
+
+// ── Stage (one service's showcase) ────────────────────────────────────────────
+.stage {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding: 0 var(--space-5) var(--space-5);
+}
+
+.media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    // Shows through until the poster/reel arrives.
+    background-image: var(--surface-warm);
+
+    video,
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+// "01 / 07" chip on the reel — always over video, so it stays light-on-dark.
+.mediaTag {
+    position: absolute;
+    top: var(--space-3);
+    left: var(--space-3);
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    background: rgba(2, 2, 2, 0.6);
+    backdrop-filter: blur(8px);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    letter-spacing: 0.06em;
+    color: #ffffff;
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+}
+
+// The service name on the stage — redundant in the accordion (its title sits
+// right above), so it only appears in the two-pane layout.
+.kicker {
+    display: none;
+    align-items: center;
+    gap: var(--space-3);
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-3xl);
+    line-height: var(--lh-40);
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+}
+
+.kickerLabel {
+    @extend %badge;
+}
+
+.description {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--lh-26);
+    color: var(--text-secondary);
+    text-wrap: pretty;
+}
+
+.whatYouGet {
+    margin: var(--space-1) 0 0;
+    font-family: var(--font-mono);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    letter-spacing: 0.1em;
+    color: var(--text-brand);
+    text-transform: uppercase;
+}
+
+.tags {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2) var(--space-5);
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @media (max-width: $breakpoint-sm) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.tag {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    line-height: var(--lh-20);
+    color: var(--text-secondary);
+
+    svg {
+        flex-shrink: 0;
+        width: 16px;
+        height: 16px;
+        margin-top: 2px;
+        color: var(--text-brand);
+    }
+}
+
+.ctaRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-4);
+    margin-top: var(--space-2);
+}
+
+.cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    height: var(--control-md);
+    padding-inline: var(--space-6);
+    border: 0;
+    border-radius: var(--radius-full);
+    background: var(--gradient-brand);
+    box-shadow: inset 0 -1px 4px 2px #ffffff40;
+    color: var(--text-on-cta);
+    font-family: var(--font-sans);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-sm);
+    line-height: var(--lh-20);
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+
+    @include brand-cta-glow;
+
+    svg {
+        width: 16px;
+        height: 16px;
+        transition: rotate 0.3s $ease-out;
+    }
+
+    &:hover svg {
+        rotate: -12deg;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--border-focus);
+        outline-offset: 3px;
+    }
+}
+
+.ctaNote {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    line-height: var(--lh-20);
+    color: var(--text-tertiary);
+}
+
+// ── Two-pane explorer (≥992) ──────────────────────────────────────────────────
+@media (min-width: 992px) {
+    .explorer {
+        display: grid;
+        grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+        align-items: start;
+        column-gap: clamp(40px, 4vw, 72px);
+        row-gap: 0;
+    }
+
+    // Each item's heading and panel become direct grid children.
+    .item {
+        display: contents;
+    }
+
+    // Index column
+    .itemHeading {
+        grid-column: 1;
+        border-bottom: var(--border-thin) solid var(--border-default);
+
+        // Entrance moves here, since a display:contents item has no box.
+        opacity: 0;
+        translate: -16px 0;
+
+        .revealed & {
+            opacity: 1;
+            translate: 0 0;
+            transition: opacity 0.6s ease calc(var(--i) * 70ms), translate 0.7s $ease-out calc(var(--i) * 70ms);
+        }
+
+        // Active indicator — a brand bar that grows in on the left edge.
+        &::before {
+            content: "";
+            position: absolute;
+            top: 22%;
+            bottom: 22%;
+            left: 0;
+            width: 3px;
+            border-radius: 3px;
+            background: var(--gradient-brand);
+            transform: scaleY(0);
+            transition: transform 0.4s $ease-out;
+        }
+
+        .open &::before {
+            transform: scaleY(1);
+        }
+    }
+
+    .trigger {
+        padding: var(--space-6) var(--space-2) var(--space-6) var(--space-6);
+
+        &:focus-visible {
+            border-radius: var(--radius-lg);
+        }
+    }
+
+    // Hovering a row previews the arrow; the active row keeps it.
+    .icon {
+        border-color: transparent;
+        color: var(--text-tertiary);
+
+        .trigger:hover &,
+        .open & {
+            border-color: var(--border-brand);
+            color: var(--text-brand);
+        }
+    }
+
+    .plus {
+        opacity: 0;
+    }
+
+    .arrow {
+        opacity: 1;
+        transform: translateX(-4px);
+
+        .trigger:hover &,
+        .open & {
+            transform: translateX(0);
+        }
+    }
+
+    // Stage column: every panel occupies the same cell, spanning all index
+    // rows; only the open one is visible, so switching cross-fades in place.
+    // Sticky, so the stage stays in view while the index scrolls past.
+    .panel {
+        grid-column: 2;
+        grid-row: 1 / span var(--rows);
+        position: sticky;
+        top: calc(var(--navbar-height) + var(--space-6));
+        grid-template-rows: 1fr;
+        opacity: 0;
+        transform: translateY(14px) scale(0.985);
+        transition: opacity 0.35s ease, transform 0.5s $ease-out, visibility 0s linear 0.35s;
+
+        .open & {
+            opacity: 1;
+            transform: none;
+            transition: opacity 0.45s ease 0.05s, transform 0.6s $ease-out 0.05s, visibility 0s;
+        }
+    }
+
+    .stage {
+        gap: var(--space-6);
+        padding: var(--space-4);
+        border: var(--border-thin) solid var(--border-default);
+        border-radius: $stage-radius;
+        background: var(--bg-raised);
+        box-shadow: 0 40px 90px -50px rgba(232, 80, 2, 0.45);
+    }
+
+    .media {
+        border-radius: var(--radius-2xl);
+    }
+
+    .body {
+        padding: 0 var(--space-4) var(--space-4);
+    }
+
+    .kicker {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .item,
+    .itemHeading,
+    .panel {
+        transition: none !important;
+        translate: none !important;
+        transform: none !important;
+    }
+}

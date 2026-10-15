@@ -1,0 +1,21 @@
+// Legacy colour aliases.
+//
+// Pre-existing components reference these names directly. They now resolve to
+// the Figma tokens in _tokens.scss so the old sections pick up the new palette
+// instead of drifting from it. Prefer the token names in anything new.
+//
+// `--white` was only ever used as "foreground" (body text, outline buttons), so
+// it follows the theme's primary text colour rather than staying literal white.
+
+:root {
+    --theme-color: var(--bg-brand); // was #f97316
+    --secondary-color: var(--bg-canvas); // was #09090b
+    --background: var(--bg-canvas);
+    --white: var(--text-primary);
+    --black: #000000;
+}
+
+// The page itself, so overscroll and any gap between sections match the theme.
+html {
+    background-color: var(--bg-canvas);
+}

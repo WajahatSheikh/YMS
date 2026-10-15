@@ -1,0 +1,191 @@
+@import "../../styles/abstract/variables";
+
+// Edge-light CTA.
+//
+// The JS writes two things and nothing else: `--light-x` on the track, and an
+// opacity + filter on each edge glow. Everything else — the shape of the light,
+// how far the glow spills, the rim — lives here, so the look can be retuned
+// without touching the physics.
+//
+// The pill stays white per the Figma secondary button; the light is brand
+// orange, which is what actually reads against white and against the dark hero
+// behind it. Sass mirror of --bg-brand, since Sass cannot read a custom property
+// at compile time.
+$brand: #e85002;
+
+.wrap {
+    position: relative;
+    display: inline-flex;
+    isolation: isolate;
+}
+
+// ── Button ────────────────────────────────────────────────────────────────────
+// Matches the hero's other pill: Large 48, Label/XL, radius-full.
+.control {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    height: var(--control-lg);
+    padding-inline: var(--space-6);
+    border: 0;
+    border-radius: var(--radius-full);
+    background-color: var(--action-secondary-bg);
+    color: var(--action-secondary-text);
+    cursor: pointer;
+    white-space: nowrap;
+    // Clips the travelling light to the pill.
+    overflow: hidden;
+    isolation: isolate;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+
+    &:hover {
+        transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--border-focus);
+        outline-offset: 3px;
+    }
+}
+
+.label {
+    position: relative;
+    z-index: 1;
+    font-family: var(--font-sans);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-base);
+    line-height: var(--lh-20);
+}
+
+.arrow {
+    position: relative;
+    z-index: 1;
+    width: 17px;
+    height: 9px;
+    flex-shrink: 0;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+
+    .control:hover & {
+        transform: translateX(3px);
+    }
+}
+
+// ── Travelling light ──────────────────────────────────────────────────────────
+// Centred, then displaced by --light-x. Sits under the label, above the white
+// fill, so the text stays crisp while the wash slides beneath it.
+.lightTrack {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 0;
+    translate: calc(-50% + var(--light-x, 0px)) -50%;
+    width: 120px;
+    height: 300%;
+    pointer-events: none;
+    will-change: translate;
+}
+
+.lightCore {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(closest-side, #{rgba($brand, 0.55)} 0%, #{rgba($brand, 0)} 100%);
+    filter: blur(6px);
+}
+
+.lightBloom {
+    position: absolute;
+    inset: -60%;
+    background: radial-gradient(closest-side, #{rgba($brand, 0.22)} 0%, #{rgba($brand, 0)} 100%);
+    filter: blur(14px);
+}
+
+// ── Edge glow ─────────────────────────────────────────────────────────────────
+// One per end. Opacity and the colour-tuning filter come from JS; the geometry
+// is fixed here. Sits behind the button so it reads as light escaping the pill.
+.glow {
+    position: absolute;
+    top: 50%;
+    right: -4px;
+    z-index: 0;
+    translate: 0 -50%;
+    width: 96px;
+    height: 150%;
+    opacity: 0;
+    pointer-events: none;
+    will-change: opacity, filter;
+}
+
+// Same element flipped, so both ends share one set of rules.
+.mirrored {
+    right: auto;
+    left: -4px;
+    scale: -1 1;
+}
+
+.outerGlow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        closest-side,
+        #{rgba($brand, 0.55)} 0%,
+        #{rgba($brand, 0.18)} 45%,
+        #{rgba($brand, 0)} 100%
+    );
+    filter: blur(18px);
+}
+
+.innerGlow {
+    position: absolute;
+    top: 50%;
+    right: 4px;
+    translate: 0 -50%;
+    width: 46px;
+    height: 70%;
+    background: radial-gradient(closest-side, #{rgba(#ffb37a, 0.7)} 0%, #{rgba($brand, 0)} 100%);
+    filter: blur(7px);
+}
+
+// The bright line hugging the pill's edge — the tell that the light has reached
+// the end rather than just glowing nearby.
+.rim {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    translate: 0 -50%;
+    width: 2px;
+    height: 58%;
+    border-radius: var(--radius-full);
+    background: linear-gradient(
+        180deg,
+        #{rgba(#ffffff, 0)} 0%,
+        #{rgba(#fff2e5, 0.95)} 50%,
+        #{rgba(#ffffff, 0)} 100%
+    );
+}
+
+.rimGlow {
+    position: absolute;
+    inset: -8px -6px;
+    background: radial-gradient(closest-side, #{rgba(#ffb37a, 0.85)} 0%, #{rgba($brand, 0)} 100%);
+    filter: blur(5px);
+}
+
+// Motion is the point of this control, so with reduced motion the JS never
+// starts its loop; the light parks centred and the edges stay dark.
+@media (prefers-reduced-motion: reduce) {
+    .control,
+    .arrow {
+        transition: none;
+    }
+}
+
+// Touch has no cursor to follow. The pill still works as a button; the light
+// simply sits where the spring left it.
+@media (hover: none) {
+    .glow {
+        opacity: 0 !important;
+    }
+}

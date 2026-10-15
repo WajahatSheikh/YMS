@@ -1,0 +1,54 @@
+@import "../../../styles/abstract/variables";
+
+// Nav Item — Figma node 196:465.
+// Active is black-on-white: 5.58:1. White-on-brand would be 2.80:1 and fail AA,
+// which is why the active chip is pinned to the light surface.
+
+.list {
+    a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: var(--control-sm);
+        padding-inline: var(--space-3);
+        border-radius: var(--radius-full);
+        font-family: var(--font-sans);
+        font-weight: var(--fw-medium);
+        font-size: var(--text-sm);
+        line-height: var(--lh-20);
+        color: var(--text-primary);
+        white-space: nowrap;
+        text-decoration: none;
+        transition: background-color 0.25s ease, color 0.25s ease;
+
+        &:hover {
+            background-color: var(--bg-glass-strong);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--border-focus);
+            outline-offset: 2px;
+        }
+    }
+
+    &.active a {
+        padding-inline: var(--space-6);
+        background-color: var(--action-secondary-bg);
+        box-shadow: inset 0 -1px 2px 2px #0a0a0a1f;
+        color: var(--action-secondary-text);
+    }
+
+    // In the mobile sheet the items stack full-width and left-align.
+    @media (max-width: $breakpoint-lg) {
+        a {
+            justify-content: flex-start;
+            height: var(--control-md);
+            padding-inline: var(--space-4);
+            font-size: var(--text-base);
+        }
+
+        &.active a {
+            padding-inline: var(--space-4);
+        }
+    }
+}

@@ -1,0 +1,399 @@
+@import "../../styles/abstract/variables";
+@import "../../styles/abstract/mixins";
+
+// 13 · CTA (143:1453) + 14 · Footer (143:1461)
+// Both frames: pt 120, px 120, column, gap 54.
+
+.footer {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-canvas);
+    overflow: hidden;
+}
+
+// Cursor-reactive colour field. The canvas paints the mass; the blur is what
+// turns overlapping blobs into one soft body, and doing it in CSS is far cheaper
+// than blurring in the 2D context every frame.
+.glow {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    filter: blur(70px);
+    opacity: 0.9;
+}
+
+// Grain over the colour, as in the reference. Generated rather than shipped as
+// an image — feTurbulence is a few hundred bytes and scales to any viewport.
+.grain {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.32;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+
+    @media (prefers-reduced-motion: reduce) {
+        opacity: 0.22;
+    }
+}
+
+.inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 54px;
+    padding: var(--space-30) 120px 0;
+
+    @media (max-width: $breakpoint-xl) {
+        padding-inline: var(--gutter);
+    }
+
+    @media (max-width: $breakpoint-md) {
+        gap: var(--space-8);
+        padding-top: var(--space-16);
+    }
+}
+
+// ── CTA ───────────────────────────────────────────────────────────────────────
+.ctaBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    width: 100%;
+}
+
+// Display/S
+.ctaTitle {
+    width: 100%;
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-5xl);
+    line-height: var(--lh-48);
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    text-align: center;
+    text-transform: none;
+    text-wrap: balance;
+}
+
+.ctaSub {
+    margin: 0;
+    // Narrower than the heading above it, so the pair reads as one centred
+    // block rather than two full-width lines of different sizes.
+    max-width: 52ch;
+    font-family: var(--font-sans);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-lg);
+    line-height: var(--lh-28);
+    color: var(--text-secondary);
+    text-align: center;
+    text-wrap: balance;
+}
+
+// Primary CTA. Larger than the Figma Large 48 on request, so it carries the
+// closing block on its own rather than reading as one more control. Everything
+// below is size; the hover finish comes from the shared mixin, which every
+// other "Book a call" on the page includes too.
+.cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    height: 60px;
+    padding-inline: var(--space-10);
+    border: 0;
+    border-radius: var(--radius-full);
+    background: var(--gradient-brand);
+    box-shadow: inset 0 -1px 4px 2px #ffffff40;
+    color: var(--text-on-cta);
+    cursor: pointer;
+    white-space: nowrap;
+
+    @include brand-cta-glow;
+
+    @media (max-width: $breakpoint-md) {
+        height: 54px;
+        padding-inline: var(--space-8);
+    }
+
+    &:hover .phoneIcon {
+        rotate: -12deg;
+        scale: 1.08;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--border-focus);
+        outline-offset: 3px;
+    }
+}
+
+.phoneIcon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    transition: rotate 0.35s cubic-bezier(0.22, 1, 0.36, 1), scale 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ctaLabel {
+    font-family: var(--font-sans);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-lg);
+    line-height: var(--lh-28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .phoneIcon {
+        transition: none;
+    }
+
+    .cta:hover .phoneIcon {
+        rotate: none;
+        scale: none;
+    }
+}
+
+
+// ── Columns ───────────────────────────────────────────────────────────────────
+.columns {
+    display: grid;
+    grid-template-columns: 420px repeat(3, 1fr);
+    gap: 64px;
+    width: 100%;
+
+    @media (max-width: $breakpoint-xl) {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: var(--space-8);
+
+        .brand {
+            grid-column: 1 / -1;
+        }
+    }
+
+    @media (max-width: $breakpoint-sm) {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.brand {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 420px;
+}
+
+// Display/2XS
+.brandName {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-xl);
+    line-height: var(--lh-32);
+    letter-spacing: -0.005em;
+    color: var(--text-primary);
+    text-transform: none;
+}
+
+// Body/S
+.brandCopy {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-sm);
+    line-height: var(--lh-22);
+    color: var(--text-tertiary);
+    text-transform: none;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    a {
+        display: inline-block;
+        font-family: var(--font-sans);
+        font-weight: var(--fw-regular);
+        font-size: var(--text-sm);
+        line-height: var(--lh-22);
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+
+        &:hover {
+            color: var(--text-brand);
+            transform: translateX(3px);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--border-focus);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+    }
+}
+
+// Eyebrow/S — 12.5% tracking (1.5px at 12px)
+.columnHead {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    letter-spacing: 0.125em;
+    color: var(--text-brand);
+    text-transform: uppercase;
+}
+
+.email {
+    color: var(--text-brand) !important;
+}
+
+// Social label whose profile URL isn't set yet (see app/data/site.ts) — same
+// type as its sibling links, but plain text with no hover.
+.pending {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-sm);
+    line-height: var(--lh-22);
+    color: var(--text-secondary);
+}
+
+// ── Bottom bar ────────────────────────────────────────────────────────────────
+// Figma Line 28 is #FF6F3C — the brand focus colour, not a subtle rule. It was
+// --border-subtle here (#1f1f24), which is all but invisible on the near-black
+// canvas, so the divider read as missing.
+.rule {
+    width: 100%;
+    height: 0;
+    margin: 0;
+    border: 0;
+    border-top: var(--border-thin) solid var(--border-focus);
+}
+
+.bottomBar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    width: 100%;
+
+    @media (max-width: $breakpoint-sm) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-3);
+    }
+}
+
+// Body/XS
+.copyright {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-xs);
+    line-height: var(--lh-20);
+    color: var(--text-muted);
+    text-transform: none;
+}
+
+.availability {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-xs);
+    line-height: var(--lh-20);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    text-transform: none;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: var(--radius-full);
+    background-color: var(--bg-brand);
+    animation: pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+        scale: 1;
+    }
+    50% {
+        opacity: 0.4;
+        scale: 0.75;
+    }
+}
+
+// ── Wordmark ──────────────────────────────────────────────────────────────────
+// Full-bleed and cropped at the baseline, as drawn. Exported rather than set as
+// text because MohoStdCondensed-Bold is not licensed here.
+.wordmark {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    margin-top: 54px;
+    // Figma insets the wordmark 62px, not on the 120px gutter the rest of the
+    // footer uses, and its baseline sits flush with the frame bottom.
+    padding-inline: 62px;
+    // Rises the last stretch as it enters view.
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+
+    &.inView {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        margin-top: var(--space-8);
+        padding-inline: var(--space-5);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
+// RevealChildren's own box around the wordmark (Footer.tsx). display: contents
+// keeps it out of layout, so .wordmark sits exactly where it did before.
+.wordmarkReveal {
+    display: contents;
+}

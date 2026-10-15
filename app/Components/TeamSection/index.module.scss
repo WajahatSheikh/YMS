@@ -1,0 +1,302 @@
+@import "../../styles/abstract/variables";
+
+// 11 · Team — Figma node 143:1384 (1920×964)
+// Frame: py 120, content band 1520 (px 200 at 1920). Heading at y=64 with a 16px
+// internal gap; members row at y=260. Cards 260×420, gap 20, and the even cards
+// sit 44px lower.
+
+.section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 44px; // Figma: heading block ends 216, members start 260
+    min-height: 0;
+    padding: var(--space-30) var(--gutter);
+
+    @media (max-width: $breakpoint-md) {
+        gap: var(--space-8);
+    }
+}
+
+// ── Heading ───────────────────────────────────────────────────────────────────
+.head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+    width: 1520px;
+    max-width: 100%;
+}
+
+// Eyebrow/S — 12.5% tracking (1.5px at 12px)
+.eyebrow {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    letter-spacing: 0.125em;
+    color: var(--text-brand);
+    text-transform: uppercase;
+}
+
+// Display/S
+.title {
+    max-width: 900px;
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-5xl);
+    line-height: var(--lh-48);
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    text-transform: none;
+}
+
+// Body/L
+.lead {
+    max-width: 760px;
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-lg);
+    line-height: var(--lh-28);
+    color: var(--text-tertiary);
+    text-transform: none;
+}
+
+// ── Rail ──────────────────────────────────────────────────────────────────────
+// Figma draws the row 1660 wide inside a 1520 container, so it is already meant
+// to run past the edge. Making it a real scroll rail keeps that intent and means
+// the same markup works from 1920 down to a phone — the number of visible cards
+// is simply whatever fits.
+.railWrap {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+
+    // Cards fade at the ends rather than being chopped by the viewport.
+    mask-image: linear-gradient(
+        90deg,
+        transparent 0,
+        #000 clamp(20px, 5vw, 120px),
+        #000 calc(100% - clamp(20px, 5vw, 120px)),
+        transparent 100%
+    );
+}
+
+.rail {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-5);
+    width: 100%;
+    margin: 0;
+    // Top room for the 44px offset and the hover lift; sides align the first
+    // card with the heading above.
+    padding: 0 clamp(var(--gutter-mobile), 5vw, var(--gutter-desktop)) var(--space-5);
+    padding-top: var(--space-3);
+    list-style: none;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    cursor: grab;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    &.dragging {
+        cursor: grabbing;
+        scroll-snap-type: none;
+        user-select: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--border-focus);
+        outline-offset: -4px;
+        border-radius: var(--radius-xl);
+    }
+}
+
+// ── Card ──────────────────────────────────────────────────────────────────────
+.card {
+    position: relative;
+    flex: 0 0 auto;
+    width: 260px;
+    height: 420px;
+    overflow: hidden;
+    border: var(--border-thin) solid var(--border-glass);
+    border-radius: var(--radius-xl);
+    scroll-snap-align: start;
+
+    // The design offsets every second card by 44px.
+    &:nth-child(even) {
+        margin-top: 44px;
+    }
+
+    // Rise-in, staggered along the row.
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.35s ease, box-shadow 0.35s ease;
+    transition-delay: calc(var(--i, 0) * 80ms);
+
+    &.inView {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    // Hover, per note 157:380 — lift, brand border, brand index, deeper scrim,
+    // and the specialty line revealed. 220ms to match the Smart Animate timing.
+    &.inView:hover {
+        transform: translateY(-8px);
+        transition-delay: 0s;
+        border-color: var(--border-brand);
+        box-shadow: 0 22px 50px -22px #{rgba(#e85002, 0.55)};
+    }
+
+    // Phones get a slightly narrower card so the next one peeks.
+    @media (max-width: $breakpoint-sm) {
+        width: 224px;
+        height: 364px;
+
+        &:nth-child(even) {
+            margin-top: 28px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        opacity: 1;
+        transform: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+        &.inView:hover {
+            transform: none;
+        }
+    }
+}
+
+.photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    // Figma: the photo is the card fill. A slow push-in on hover keeps the
+    // portrait feeling alive without moving the text under it.
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+
+    .card:hover & {
+        transform: scale(1.05);
+    }
+}
+
+// Figma scrim: 220px tall, rgba(2,2,2,0) → 0.72 at 50% → 0.95.
+.scrim {
+    position: absolute;
+    inset: auto -1px -1px -1px;
+    height: 220px;
+    pointer-events: none;
+    background: linear-gradient(180deg, #02020200 0%, #020202b8 50%, #020202f2 100%);
+    transition: height 0.35s ease, opacity 0.35s ease;
+
+    // Deepens on hover so the revealed line stays legible.
+    .card:hover & {
+        height: 280px;
+    }
+}
+
+// Mono/S
+.index {
+    position: absolute;
+    top: 15px;
+    left: 17px;
+    font-family: var(--font-mono);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    color: var(--text-primary);
+    opacity: 0.75;
+    transition: color 0.35s ease, opacity 0.35s ease;
+
+    .card:hover & {
+        color: var(--text-brand);
+        opacity: 1;
+    }
+}
+
+.info {
+    position: absolute;
+    inset: auto 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 0 var(--space-5) var(--space-5);
+}
+
+// Display/2XS
+.name {
+    margin: 0;
+    width: 100%;
+    font-family: var(--font-display);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-xl);
+    line-height: var(--lh-32);
+    letter-spacing: -0.005em;
+    color: var(--text-primary);
+    text-transform: none;
+}
+
+// Eyebrow/S
+.position {
+    margin: 0;
+    width: 100%;
+    font-family: var(--font-mono);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    letter-spacing: 0.125em;
+    color: var(--text-brand);
+    text-transform: uppercase;
+}
+
+// Progressive disclosure — the specialty line the component note describes.
+// `grid-template-rows` animates to the line's real height, so nothing is
+// hard-coded and a longer specialty still reveals fully.
+.specialty {
+    display: grid;
+    grid-template-rows: 0fr;
+    margin: 0;
+    width: 100%;
+    font-family: var(--font-sans);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-xs);
+    line-height: var(--lh-20);
+    color: var(--text-secondary);
+    text-transform: none;
+    opacity: 0;
+    overflow: hidden;
+    transition: grid-template-rows 0.22s ease, opacity 0.22s ease, padding-top 0.22s ease;
+
+    .card:hover & {
+        grid-template-rows: 1fr;
+        padding-top: var(--space-2);
+        opacity: 1;
+    }
+
+    // The grid row is the animating track, so the text needs a wrapper that can
+    // be clipped — `min-height: 0` lets it collapse to nothing.
+    > * {
+        min-height: 0;
+    }
+}
+
+// Touch has no hover, so the specialty is simply always visible there.
+@media (hover: none) {
+    .specialty {
+        grid-template-rows: 1fr;
+        padding-top: var(--space-2);
+        opacity: 1;
+    }
+}

@@ -1,0 +1,414 @@
+@import "../../styles/abstract/variables";
+
+// 06 · Work — the project index (see Client.tsx).
+//
+// Rows are a grid: number | title + tags | CTA. On touch / narrow screens a
+// small thumbnail joins the row (there is no hover preview there). The floating
+// preview is portalled to <body> and positioned by ProjectIndex.tsx.
+
+$ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+.section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-16);
+    min-height: 0;
+    padding: var(--space-30) var(--gutter);
+
+    @media (max-width: $breakpoint-md) {
+        gap: var(--space-10);
+    }
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: var(--space-6) var(--space-10);
+    width: 100%;
+    max-width: 1450px;
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.headMain {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.eyebrow {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-base);
+    line-height: var(--lh-24);
+    letter-spacing: 0.02em;
+    color: var(--text-brand);
+    text-transform: uppercase;
+}
+
+.title {
+    max-width: 760px;
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-6xl);
+    line-height: var(--lh-56);
+    letter-spacing: -0.015em;
+    color: var(--text-primary);
+    text-transform: none;
+    text-wrap: balance;
+}
+
+.headAside {
+    max-width: 320px;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: var(--lh-20);
+    letter-spacing: 0.02em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+
+    @media (max-width: $breakpoint-lg) {
+        max-width: none;
+    }
+
+    // Hover hint is meaningless on touch.
+    @media (hover: none) {
+        display: none;
+    }
+}
+
+.headCount {
+    margin-right: var(--space-2);
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-xl);
+    line-height: 1;
+    color: var(--text-brand);
+}
+
+// ── Index ─────────────────────────────────────────────────────────────────────
+.list {
+    width: 100%;
+    max-width: 1450px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: var(--border-thin) solid var(--border-default);
+}
+
+.row {
+    position: relative;
+    border-bottom: var(--border-thin) solid var(--border-default);
+
+    // Staggered entrance.
+    opacity: 0;
+    translate: 0 18px;
+
+    .revealed & {
+        opacity: 1;
+        translate: 0 0;
+        transition: opacity 0.6s ease calc(var(--i) * 70ms), translate 0.7s $ease-out calc(var(--i) * 70ms);
+    }
+
+    // Brand wash that sweeps in from the left on the active row.
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, var(--bg-brand-faint), transparent 80%);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.5s $ease-out;
+        pointer-events: none;
+    }
+
+    &.active::before {
+        transform: scaleX(1);
+    }
+}
+
+.rowLink {
+    position: relative;
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-6);
+    padding: var(--space-8) var(--space-2);
+    color: inherit;
+    text-decoration: none;
+
+    &:focus-visible {
+        outline: 2px solid var(--border-focus);
+        outline-offset: -2px;
+        border-radius: var(--radius-lg);
+    }
+}
+
+.num {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: var(--lh-20);
+    color: var(--text-tertiary);
+    transition: color 0.3s ease;
+
+    .active & {
+        color: var(--text-brand);
+    }
+}
+
+// Inline thumbnail — touch / narrow screens only (desktop has the preview).
+.inlineThumb {
+    display: none;
+}
+
+.rowMain {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-6);
+    min-width: 0;
+}
+
+.rowTitle {
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: clamp(26px, 3vw, 44px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text-secondary);
+    transition: color 0.35s ease, translate 0.5s $ease-out;
+
+    .active & {
+        color: var(--text-primary);
+        translate: var(--space-3) 0;
+    }
+}
+
+.meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.tag {
+    padding: 4px 10px;
+    border: var(--border-thin) solid var(--border-default);
+    border-radius: var(--radius-full);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: border-color 0.3s ease, color 0.3s ease;
+
+    .active & {
+        border-color: var(--border-brand-subtle);
+        color: var(--text-secondary);
+    }
+}
+
+.cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.ctaLabel {
+    font-family: var(--font-sans);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-sm);
+    line-height: var(--lh-20);
+    color: var(--text-secondary);
+    opacity: 0;
+    translate: 8px 0;
+    transition: opacity 0.3s ease, translate 0.4s $ease-out;
+
+    .active & {
+        opacity: 1;
+        translate: 0 0;
+    }
+
+    @media (max-width: $breakpoint-lg) {
+        display: none;
+    }
+}
+
+.arrow {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border: var(--border-thin) solid var(--border-default);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+    transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease, rotate 0.45s $ease-out;
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .active & {
+        border-color: transparent;
+        background: var(--gradient-brand);
+        color: var(--text-on-cta);
+        rotate: -45deg;
+    }
+}
+
+// Monogram card — stands in for a thumbnail until one is supplied.
+.monogram {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(120% 90% at 18% 12%, rgba(255, 255, 255, 0.22) 0%, transparent 55%),
+        radial-gradient(90% 80% at 88% 100%, rgba(0, 0, 0, 0.28) 0%, transparent 60%),
+        var(--gradient-brand);
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    letter-spacing: -0.02em;
+    color: #ffffff;
+}
+
+// ── Floating preview (portalled to <body>) ────────────────────────────────────
+.preview {
+    position: fixed;
+    z-index: 50;
+    top: 0;
+    left: 0;
+    width: 340px;
+    aspect-ratio: 16 / 11;
+    overflow: hidden;
+    border-radius: var(--radius-2xl);
+    box-shadow: 0 30px 80px -24px rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    scale: 0.85;
+    pointer-events: none;
+    transition: opacity 0.3s ease, scale 0.45s $ease-out;
+
+    &.previewOn {
+        opacity: 1;
+        scale: 1;
+    }
+
+    // Touch screens never get it.
+    @media (hover: none), (pointer: coarse) {
+        display: none;
+    }
+}
+
+.previewItem {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+
+    &.previewItemOn {
+        opacity: 1;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .monogram {
+        font-size: 88px;
+    }
+}
+
+.previewCaption {
+    position: absolute;
+    right: var(--space-3);
+    bottom: var(--space-3);
+    left: var(--space-3);
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    background: rgba(2, 2, 2, 0.5);
+    backdrop-filter: blur(8px);
+    font-family: var(--font-sans);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    color: #ffffff;
+    text-align: center;
+}
+
+// ── Touch / narrow screens ────────────────────────────────────────────────────
+@media (max-width: $breakpoint-md), (hover: none) {
+    .rowLink {
+        grid-template-columns: 72px minmax(0, 1fr) auto;
+        gap: var(--space-4);
+        padding: var(--space-5) 0;
+    }
+
+    .num {
+        display: none;
+    }
+
+    .inlineThumb {
+        display: block;
+        width: 72px;
+        height: 72px;
+        overflow: hidden;
+        border-radius: var(--radius-lg);
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .monogram {
+            font-size: 24px;
+        }
+    }
+
+    .rowMain {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-2);
+    }
+
+    .rowTitle {
+        font-size: var(--text-xl);
+        line-height: 1.2;
+        color: var(--text-primary);
+    }
+
+    .arrow {
+        width: 40px;
+        height: 40px;
+
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+    }
+
+    // No hover state to reveal; the row reads as a plain list.
+    .row::before {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .row {
+        opacity: 1 !important;
+        translate: none !important;
+        transition: none !important;
+    }
+}

@@ -1,0 +1,168 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Themes — dark (default, the brand look) and light.
+//
+// The active theme is `data-theme` on <html>, set before first paint by the
+// inline script in app/layout.tsx and switched by ThemeToggle. Only colour
+// tokens change; spacing, type and radii live in _tokens.scss untouched.
+//
+// Dark islands: an element with data-theme="dark" re-declares the dark colours
+// for its own subtree, so content that sits on photos or video (team cards,
+// showreel) and the footer band keep their designed look inside a light page.
+//
+// Contrast (WCAG 2.2 AA: 4.5:1 body text, 3:1 large text and UI). Light
+// values, measured on --bg-canvas #faf9f7 / --bg-raised #ffffff:
+//   text-primary   #0c0a09   18.8 / 19.8
+//   text-secondary #3f3f46    9.9 / 10.4
+//   text-tertiary  #57534e    7.3 /  7.6
+//   text-muted     #52525b    7.3 /  7.7
+//   text-disabled  #78716c    4.6 /  4.8   (still AA — it labels things)
+//   text-brand     #a8380a    6.2 /  6.5   (5.1 on the brand-tinted pills;
+//                                          #e85002 is only 3.8 on white)
+//   CTA label:     #fff on #e85002 3.8 (white by design in both themes)
+//   border-focus   #a8380a    6.2          (≥3:1 for focus indicators)
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Tokens that differ by theme but didn't exist as tokens before: the
+// secondary (white) button, the pricing amount fill, the warm card surface, and
+// elevated surfaces vs chips. On dark, a raised surface and a chip are both a
+// white tint; on light, a surface is white and a chip is a faint grey, so the
+// two needed separate names (--bg-glass* stay as hover tints).
+:root {
+    --text-on-cta: #ffffff;
+    --bg-elevated: #ffffff1a;
+    --bg-elevated-soft: #ffffff05;
+    --bg-chip: #ffffff1a;
+    --action-secondary-bg: #ffffff;
+    --action-secondary-bg-hover: #ebebeb;
+    --fill-price: linear-gradient(134.84deg, #ffffff 0%, #fff2e5 44.444%, #ffa174 74.074%);
+    --surface-warm: linear-gradient(137.49deg, #211b19 0%, #0c0c0e 71.429%);
+    --logo-filter: none;
+    color-scheme: dark;
+}
+
+@mixin theme-dark {
+    --bg-canvas: #020202;
+    --bg-inset: #000000;
+    --bg-raised: #1e1e1e;
+    --bg-glass: #ffffff05;
+    --bg-glass-strong: #ffffff1a;
+    --bg-canvas-light: #f9f9f9;
+    --bg-elevated: #ffffff1a;
+    --bg-elevated-soft: #ffffff05;
+    --bg-chip: #ffffff1a;
+
+    --bg-brand: #e85002;
+    --bg-brand-subtle: #e850021a;
+    --bg-brand-faint: #e850020d;
+
+    --text-primary: #ffffff;
+    --text-secondary: #d4d4d8;
+    --text-tertiary: #989795;
+    --text-muted: #a1a1aa;
+    --text-disabled: #52525b;
+    --text-brand: #e85002;
+    --text-on-brand: #000000;
+
+    --icon-secondary: #d4d4d8;
+    --icon-tertiary: #989795;
+    --icon-brand: #e85002;
+
+    --border-default: #333333;
+    --border-subtle: #1f1f24;
+    --border-glass: #ffffff1f;
+    --border-brand: #e85002;
+    --border-brand-subtle: #e8500233;
+    --border-focus: #ff6f3c;
+
+    --text-on-cta: #ffffff;
+    --action-ghost-text: #ffffff;
+    --action-ghost-border: #1f1f24;
+    --action-secondary-text: #000000;
+    --action-secondary-bg: #ffffff;
+    --action-secondary-bg-hover: #ebebeb;
+
+    --fill-price: linear-gradient(134.84deg, #ffffff 0%, #fff2e5 44.444%, #ffa174 74.074%);
+    --surface-warm: linear-gradient(137.49deg, #211b19 0%, #0c0c0e 71.429%);
+    --logo-filter: none;
+
+    color-scheme: dark;
+}
+
+@mixin theme-light {
+    // Warm neutrals, so the orange sits in a family rather than on cold grey.
+    --bg-canvas: #faf9f7;
+    --bg-inset: #f3f2ef;
+    --bg-raised: #ffffff;
+    --bg-glass: #0000000a;
+    --bg-glass-strong: #00000012;
+    --bg-elevated: #ffffff;
+    --bg-elevated-soft: #ffffffb3;
+    --bg-chip: #0000000a;
+    // Literal light canvas, kept for anything pinned to the light mode.
+    --bg-canvas-light: #f9f9f9;
+
+    --bg-brand: #e85002;
+    --bg-brand-subtle: #e850021a;
+    --bg-brand-faint: #e850020f;
+
+    --text-primary: #0c0a09;
+    --text-secondary: #3f3f46;
+    --text-tertiary: #57534e;
+    --text-muted: #52525b;
+    --text-disabled: #78716c;
+    --text-brand: #a8380a;
+    --text-on-brand: #000000;
+
+    --icon-secondary: #3f3f46;
+    --icon-tertiary: #57534e;
+    --icon-brand: #a8380a;
+
+    --border-default: #e7e5e4;
+    --border-subtle: #efeeec;
+    --border-glass: #0000001a;
+    --border-brand: #e85002;
+    --border-brand-subtle: #e8500240;
+    --border-focus: #a8380a;
+
+    // Label + icon on the orange "Book a call" buttons: white in both themes,
+    // as designed (brand choice; white on #e85002 is 3.8:1, so it meets AA for
+    // large/bold text, not for small body text).
+    --text-on-cta: #ffffff;
+    // Text on outlined/ghost buttons ("View case study", "See what's included").
+    --action-ghost-text: #0c0a09;
+    --action-ghost-border: #e7e5e4;
+    // The "See our work" button inverts: dark pill, white label (19:1).
+    --action-secondary-text: #ffffff;
+    --action-secondary-bg: #1c1917;
+    --action-secondary-bg-hover: #3a3533;
+
+    --fill-price: linear-gradient(134.84deg, #0c0a09 0%, #431407 55%, #c2410c 100%);
+    --surface-warm: linear-gradient(137.49deg, #fff4ec 0%, #ffffff 71.429%);
+    // Client logos are white PNGs; on a light page they become black.
+    --logo-filter: invert(1);
+
+    color-scheme: light;
+}
+
+:root[data-theme="dark"],
+[data-theme="dark"] {
+    @include theme-dark;
+}
+
+:root[data-theme="light"],
+[data-theme="light"] {
+    @include theme-light;
+}
+
+// Islands also need their own text colour and background resolved, since the
+// values they inherit were computed against the page theme.
+[data-theme="dark"]:not(:root),
+[data-theme="light"]:not(:root) {
+    color: var(--text-primary);
+}
+
+// White client-logo PNGs → black on light pages. Moonshot's logo is a dark
+// tile, which already reads on light, so it is left alone.
+img[src*="client-logos"]:not([src*="moonshot"]) {
+    filter: var(--logo-filter);
+}

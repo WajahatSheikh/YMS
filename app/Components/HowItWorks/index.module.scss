@@ -1,0 +1,641 @@
+@import "../../styles/abstract/variables";
+@import "../../styles/abstract/mixins";
+
+// 08 · Process — journey redesign.
+// Brand tokens throughout (the old section used a scoped #f97316).
+
+$ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+.section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(var(--space-10), 4vw, 72px);
+    min-height: 0;
+    padding-block: var(--space-30);
+    padding-inline: max(var(--gutter), min(200px, calc(100px + (100vw - 1440px) * 0.208)));
+
+    @media (max-width: $breakpoint-md) {
+        padding-block: var(--space-16);
+    }
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    width: 100%;
+}
+
+.eyebrow {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-base);
+    line-height: var(--lh-24);
+    letter-spacing: 0.02em;
+    color: var(--text-brand);
+    text-transform: uppercase;
+}
+
+.headRow {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-5);
+    width: 100%;
+    color: var(--text-primary);
+
+    @media (max-width: $breakpoint-lg) {
+        flex-direction: column;
+        gap: var(--space-4);
+    }
+}
+
+.title {
+    flex: 1 0 0;
+    min-width: 0;
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-5xl);
+    line-height: var(--lh-48);
+    letter-spacing: -0.01em;
+    text-transform: none;
+}
+
+.intro {
+    flex: 1 0 0;
+    min-width: 0;
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-lg);
+    line-height: var(--lh-28);
+    color: var(--text-tertiary);
+    text-transform: none;
+}
+
+// ── Journey ───────────────────────────────────────────────────────────────────
+.journey {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    width: 100%;
+}
+
+// Line graph
+.graph {
+    position: relative;
+    height: clamp(120px, 11vw, 170px);
+    margin-bottom: var(--space-2);
+
+    svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+    }
+
+    @media (max-width: $breakpoint-lg) {
+        display: none;
+    }
+}
+
+.gridLine {
+    stroke: var(--border-subtle);
+    stroke-width: 1;
+    stroke-dasharray: 4 6;
+    vector-effect: non-scaling-stroke;
+}
+
+.lineBase,
+.lineActive {
+    fill: none;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+}
+
+.lineBase {
+    stroke: var(--border-default);
+    stroke-width: 2;
+}
+
+.lineActive {
+    stroke: var(--text-brand);
+    stroke-width: 3;
+    filter: drop-shadow(0 0 6px rgba(232, 80, 2, 0.45));
+}
+
+// Both lines are revealed by scaling a clip rect from the left edge.
+.revealAll,
+.revealProgress {
+    transform-box: fill-box;
+    transform-origin: left center;
+    transform: scaleX(0);
+}
+
+.revealAll {
+    transition: transform 1.6s $ease;
+}
+
+.revealProgress {
+    transition: transform 0.9s $ease 0.2s;
+}
+
+.inView {
+    .revealAll {
+        transform: scaleX(1);
+    }
+
+    .revealProgress {
+        transform: scaleX(var(--progress));
+    }
+}
+
+.axisStart,
+.axisEnd {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.axisStart {
+    left: 0;
+    bottom: -6px;
+}
+
+.axisEnd {
+    right: 0;
+    top: -26px;
+}
+
+.node {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: var(--border-thin) solid var(--border-default);
+    border-radius: var(--radius-full);
+    background: var(--bg-canvas);
+    color: var(--text-tertiary);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    cursor: pointer;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.5s $ease, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease,
+        box-shadow 0.3s ease;
+
+    .inView & {
+        transform: translate(-50%, -50%) scale(1);
+        transition-delay: calc(0.35s + var(--i) * 0.18s), 0s, 0s, 0s, 0s;
+    }
+
+    &.nodeDone {
+        border-color: var(--border-brand);
+        color: var(--text-brand);
+    }
+
+    &.nodeActive {
+        background: var(--bg-brand);
+        border-color: var(--bg-brand);
+        color: var(--text-on-brand);
+        box-shadow: 0 0 0 8px var(--bg-brand-subtle), 0 0 24px rgba(232, 80, 2, 0.5);
+    }
+}
+
+// ── Phase cards ───────────────────────────────────────────────────────────────
+.phases {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    // phone: vertical timeline
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: 1fr;
+        gap: 0;
+        position: relative;
+        padding-left: var(--space-8);
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 11px;
+            top: 18px;
+            bottom: 18px;
+            width: 2px;
+            background: linear-gradient(var(--text-brand), var(--border-default));
+            border-radius: 2px;
+        }
+    }
+}
+
+.phase {
+    position: relative;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s $ease, transform 0.7s $ease;
+    transition-delay: calc(var(--i) * 0.12s);
+
+    .inView & {
+        opacity: 1;
+        transform: none;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        padding-block: var(--space-2);
+    }
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    width: 100%;
+    height: 100%;
+    padding: var(--space-6);
+    border: var(--border-thin) solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    background: var(--bg-elevated-soft);
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.35s ease, background-color 0.35s ease, transform 0.35s $ease;
+
+    &:hover {
+        border-color: var(--border-default);
+        transform: translateY(-4px);
+    }
+
+    .active & {
+        border-color: var(--border-brand-subtle);
+        background: var(--bg-elevated);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--border-focus);
+        outline-offset: 2px;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: var(--space-4);
+        // the phone row also holds the inline detail, so the card must not stretch to it
+        height: auto;
+        padding: var(--space-4);
+
+        &:hover {
+            transform: none;
+        }
+    }
+}
+
+.illoWrap {
+    display: grid;
+    place-items: center;
+    width: 96px;
+    height: 96px;
+    border-radius: var(--radius-lg);
+    background: var(--bg-brand-faint);
+    transition: background-color 0.35s ease;
+
+    .active & {
+        background: var(--bg-brand-subtle);
+    }
+
+    @media (max-width: $breakpoint-md) {
+        flex-shrink: 0;
+        width: 64px;
+        height: 64px;
+    }
+}
+
+.illo {
+    width: 64px;
+    height: 64px;
+    overflow: visible;
+    stroke: var(--text-tertiary);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.35s ease;
+
+    path {
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+        transition: stroke-dashoffset 1.3s $ease;
+    }
+
+    .accent {
+        stroke: var(--text-brand);
+    }
+
+    .inView & path {
+        stroke-dashoffset: 0;
+        transition-delay: calc(0.3s + var(--i) * 0.15s);
+    }
+
+    .active &,
+    .card:hover & {
+        stroke: var(--text-primary);
+    }
+
+    // redraw on hover and when a phase becomes active
+    .card:hover & path,
+    .active & path {
+        animation: draw 1.3s $ease both;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+@keyframes draw {
+    from {
+        stroke-dashoffset: 1;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.cardText {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 0;
+}
+
+.week {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-brand);
+}
+
+// on phone the dot sits on the vertical timeline
+.dot {
+    display: none;
+
+    @media (max-width: $breakpoint-md) {
+        display: block;
+        position: absolute;
+        left: calc(-1 * var(--space-8) + 5px);
+        top: 34px;
+        width: 14px;
+        height: 14px;
+        border-radius: var(--radius-full);
+        border: 2px solid var(--border-default);
+        background: var(--bg-canvas);
+        transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+
+        .active & {
+            background: var(--bg-brand);
+            border-color: var(--bg-brand);
+            box-shadow: 0 0 0 5px var(--bg-brand-subtle);
+        }
+    }
+}
+
+.cardTitle {
+    font-family: var(--font-display);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-3xl);
+    line-height: var(--lh-40);
+    color: var(--text-primary);
+}
+
+.summary {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    line-height: var(--lh-22);
+    color: var(--text-tertiary);
+}
+
+// ── Detail (shared panel on tablet/desktop, inline on phone) ──────────────────
+.panel {
+    width: 100%;
+    border: var(--border-thin) solid var(--border-brand-subtle);
+    border-radius: var(--radius-xl);
+    background: var(--bg-elevated);
+    overflow: hidden;
+
+    @media (max-width: $breakpoint-md) {
+        display: none;
+    }
+}
+
+.panelInner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+    gap: var(--space-10);
+    padding: var(--space-8);
+    animation: fadeUp 0.5s $ease both;
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+        padding: var(--space-6);
+    }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.inline {
+    display: none;
+
+    @media (max-width: $breakpoint-md) {
+        display: grid;
+        grid-template-rows: 0fr;
+        visibility: hidden;
+        transition: grid-template-rows 0.45s $ease, visibility 0s linear 0.45s;
+
+        .active & {
+            grid-template-rows: 1fr;
+            visibility: visible;
+            transition: grid-template-rows 0.45s $ease, visibility 0s;
+        }
+    }
+}
+
+.inlineInner {
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+
+    @media (max-width: $breakpoint-md) {
+        > :first-child {
+            padding-top: var(--space-4);
+        }
+
+        > :last-child {
+            padding-bottom: var(--space-4);
+        }
+    }
+}
+
+.detailCopy,
+.detailList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    min-width: 0;
+}
+
+.detailLabel {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    letter-spacing: 0.125em;
+    text-transform: uppercase;
+    color: var(--text-brand);
+}
+
+.roles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-2);
+    padding: 0;
+    list-style: none;
+}
+
+.role {
+    padding: var(--space-1-5) var(--space-3);
+    border: var(--border-thin) solid var(--border-glass);
+    border-radius: var(--radius-full);
+    background: var(--bg-chip);
+    font-family: var(--font-sans);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.detailText {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--lh-26);
+    color: var(--text-secondary);
+    text-transform: none;
+}
+
+.deliverables {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3) var(--space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--space-2);
+        font-family: var(--font-sans);
+        font-size: var(--text-sm);
+        line-height: var(--lh-22);
+        color: var(--text-primary);
+        animation: fadeUp 0.45s $ease both;
+        animation-delay: calc(0.08s + var(--i) * 0.05s);
+    }
+
+    @media (max-width: $breakpoint-sm) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.checkIcon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    margin-top: 3px;
+    stroke: var(--text-brand);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+// ── Callout ───────────────────────────────────────────────────────────────────
+.callout {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    width: 100%;
+    padding: var(--space-5) var(--space-6);
+    border: var(--border-thin) solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background-color: var(--bg-brand-faint);
+
+    p {
+        flex: 1 0 0;
+        min-width: 0;
+        margin: 0;
+        font-family: var(--font-sans);
+        font-size: var(--text-sm);
+        line-height: var(--lh-22);
+        color: var(--text-secondary);
+        text-transform: none;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        align-items: flex-start;
+        padding: var(--space-5);
+    }
+}
+
+.infoIcon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    color: var(--text-brand);
+}
+
+// ── Reduced motion: everything visible, nothing animates ──────────────────────
+@media (prefers-reduced-motion: reduce) {
+    .phase,
+    .node,
+    .illo path,
+    .revealAll,
+    .revealProgress,
+    .panelInner,
+    .deliverables li {
+        transition: none !important;
+        animation: none !important;
+    }
+}

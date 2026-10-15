@@ -1,0 +1,117 @@
+@import "../../styles/abstract/variables";
+
+// Fluid reveal — decorative background layer.
+//
+// Stacking inside the host section:
+//   .orbit  z0  — the cards
+//   .canvas z1  — the mask that hides them until the cursor erases it
+//   (host content sits above both, so it needs z-index >= 2)
+//
+// The whole layer is pointer-events:none; the pointer is tracked on window so
+// the effect keeps running over the headline and CTAs.
+
+.reveal {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+// Hidden until FluidReveal.tsx has laid the orbit out (and the mask is
+// covering it) and sets data-ready. Before that the cards sit stacked at full
+// size in the centre: a visible jump once the orbit kicks in, and the biggest
+// thing on a phone's first paint, so the browser scored a decorative tile as
+// the page's Largest Contentful Paint instead of the headline.
+.orbit {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+
+    .reveal[data-ready] & {
+        opacity: 1;
+    }
+}
+
+.track {
+    position: relative;
+    display: grid;
+    width: 384px;
+    height: 288px;
+    will-change: transform;
+}
+
+// Every card shares one grid cell so they stack on a common origin — the
+// translate/rotate in orbitTiles.ts is what pushes them apart.
+.item {
+    grid-area: 1 / 1;
+    width: 100%;
+    height: 100%;
+    will-change: transform, filter;
+}
+
+.card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--bg-raised);
+}
+
+.image {
+    object-fit: cover;
+}
+
+.canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+// The orbit is sized for the desktop hero; below that the cards would spill
+// past the section, so shrink the radius with the viewport.
+@media (max-width: $breakpoint-xl) {
+    .track {
+        width: 300px;
+        height: 225px;
+    }
+}
+
+@media (max-width: $breakpoint-md) {
+    .track {
+        width: 220px;
+        height: 165px;
+    }
+}
+
+// Phones and tablets: the effect is uncovered by a hovering cursor, which touch
+// screens don't have, so the whole layer goes. Its images are lazy, so a
+// display:none layer never downloads them, and FluidReveal.tsx skips all setup
+// for the same query (TOUCH_QUERY there — keep the two in sync).
+@media (hover: none), (pointer: coarse) {
+    .reveal {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .canvas {
+        display: none;
+    }
+
+    .orbit {
+        transition: none;
+    }
+
+    .reveal[data-ready] .orbit {
+        opacity: 0.2;
+    }
+}

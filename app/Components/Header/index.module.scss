@@ -1,0 +1,238 @@
+@import "../../styles/abstract/variables";
+@import "../../styles/abstract/mixins";
+
+@include entrance-keyframes;
+
+// 01 · Nav — Figma node 107:1388
+// Container 1920×92: gutter padding, 20px block padding, pill left, CTA right.
+
+.header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 100;
+    padding: var(--space-5) var(--gutter);
+    transition: transform 0.35s ease;
+
+    &.navHidden {
+        transform: translateY(-100%);
+    }
+}
+
+.inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    width: 100%;
+    max-width: var(--content-max);
+    margin-inline: auto;
+}
+
+// ── Segmented pill ────────────────────────────────────────────────────────────
+.pill {
+    display: flex;
+    align-items: center;
+    padding: var(--space-2);
+    background-color: var(--bg-raised);
+    border: var(--border-thin) solid var(--border-glass);
+    border-radius: var(--radius-full);
+
+    // Not on .header itself — .navHidden drives that with translateY(-100%) on
+    // scroll, and an entrance on the same element would be fighting it.
+    @include enters(0.12s);
+
+    ul {
+        display: flex;
+        align-items: center;
+        gap: var(--space-1);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    // The pill has already risen by the time these land, so the links only
+    // fade — two rises stacked on the same pixels reads as a wobble.
+    li {
+        @include enters(0.3s, enter-fade, 0.5s);
+    }
+
+    @for $i from 1 through 8 {
+        li:nth-child(#{$i}) {
+            animation-delay: 0.3s + $i * 0.05s;
+        }
+    }
+
+    @media (max-width: $breakpoint-lg) {
+        display: none;
+    }
+}
+
+// ── Book a call ───────────────────────────────────────────────────────────────
+.cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    height: var(--control-lg);
+    padding-inline: var(--space-6);
+    border: 0;
+    border-radius: var(--radius-full);
+    background: var(--gradient-brand);
+    box-shadow: inset 0 -1px 4px 2px #ffffff40;
+    color: var(--text-on-cta);
+    cursor: pointer;
+    white-space: nowrap;
+
+    // Size stays exactly as Figma drew it — this only adds the hover finish.
+    @include brand-cta-glow;
+
+    span {
+        font-family: var(--font-sans);
+        font-weight: var(--fw-medium);
+        font-size: var(--text-base);
+        line-height: var(--lh-20);
+    }
+
+    &:hover .callIcon {
+        rotate: -12deg;
+        scale: 1.08;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--border-focus);
+        outline-offset: 2px;
+    }
+}
+
+.callIcon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: currentColor;    transition: rotate 0.35s cubic-bezier(0.22, 1, 0.36, 1), scale 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    // Stays top-right even when the nav pill is hidden (tablet and phone) and
+    // this is the only item in the row.
+    margin-left: auto;
+
+    > * {
+        @include enters(0.62s);
+    }
+
+    > * + * {
+        animation-delay: 0.69s;
+    }
+}
+
+.ctaDesktop {
+    @media (max-width: $breakpoint-sm) {
+        display: none;
+    }
+}
+
+.ctaMobile {
+    width: 100%;
+    margin-top: var(--space-4);
+}
+
+// ── Back button (portfolio pages) ─────────────────────────────────────────────
+.backButton {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    height: var(--control-lg);
+    padding-inline: var(--space-6);
+    background-color: var(--bg-raised);
+    border: var(--border-thin) solid var(--border-glass);
+    border-radius: var(--radius-full);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+
+    span {
+        font-family: var(--font-sans);
+        font-weight: var(--fw-medium);
+        font-size: var(--text-sm);
+        line-height: var(--lh-20);
+    }
+
+    &:hover {
+        background-color: var(--bg-glass-strong);
+    }
+}
+
+// ── Hamburger ─────────────────────────────────────────────────────────────────
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: var(--control-lg);
+    height: var(--control-lg);
+    padding: 0 12px;
+    background-color: var(--bg-raised);
+    border: var(--border-thin) solid var(--border-glass);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+
+    @media (max-width: $breakpoint-lg) {
+        display: flex;
+    }
+}
+
+.bar {
+    display: block;
+    width: 100%;
+    height: 2px;
+    border-radius: 2px;
+    background-color: var(--text-primary);
+    transition: transform 0.3s ease, opacity 0.2s ease;
+}
+
+.barTop {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.barMid {
+    opacity: 0;
+}
+
+.barBot {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+// ── Mobile sheet ──────────────────────────────────────────────────────────────
+.mobileMenu {
+    display: none;
+    margin-top: var(--space-3);
+    padding: var(--space-4);
+    background-color: var(--bg-raised);
+    border: var(--border-thin) solid var(--border-glass);
+    border-radius: var(--radius-2xl);
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-1);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    @media (max-width: $breakpoint-lg) {
+        &.open {
+            display: block;
+        }
+    }
+}
+
+// The icon nudge on hover is the one bit of motion the CTA mixin does not own.
+@media (prefers-reduced-motion: reduce) {
+    .callIcon {
+        transition: none;
+    }
+}

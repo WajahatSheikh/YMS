@@ -1,0 +1,227 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Design tokens — mirrored from Figma
+// File:  Digital-Agency-Website (XrSiLLpbOI4fPG4A771F2e)
+// Source of truth: the Figma variable collection. Do not hand-edit values here;
+// re-pull with get_variable_defs and update in one pass.
+// ─────────────────────────────────────────────────────────────────────────────
+
+:root {
+    // ── Surfaces ─────────────────────────────────────────────────────────────
+    --bg-canvas: #020202;
+    --bg-inset: #000000;
+    --bg-raised: #1e1e1e;
+    --bg-glass: #ffffff05;
+    --bg-glass-strong: #ffffff1a;
+
+    // Light-mode value of --bg-canvas. The nav pill's active chip is pinned to
+    // the light colour mode in Figma, so it needs this rather than the dark one.
+    --bg-canvas-light: #f9f9f9;
+
+    // ── Brand ────────────────────────────────────────────────────────────────
+    --bg-brand: #e85002;
+    --bg-brand-subtle: #e850021a;
+    --bg-brand-faint: #e850020d;
+    --gradient-brand: linear-gradient(107.69deg, #e85002 6.8%, #f97316 92.99%);
+
+    // ── Text ─────────────────────────────────────────────────────────────────
+    --text-primary: #ffffff;
+    --text-secondary: #d4d4d8;
+    --text-tertiary: #989795;
+    --text-muted: #a1a1aa;
+    --text-disabled: #52525b;
+    --text-brand: #e85002;
+    --text-on-brand: #000000;
+
+    // ── Icon ─────────────────────────────────────────────────────────────────
+    --icon-secondary: #d4d4d8;
+    --icon-tertiary: #989795;
+    --icon-brand: #e85002;
+
+    // ── Border ───────────────────────────────────────────────────────────────
+    --border-default: #333333;
+    --border-subtle: #1f1f24;
+    --border-glass: #ffffff1f;
+    --border-brand: #e85002;
+    --border-brand-subtle: #e8500233;
+    --border-focus: #ff6f3c;
+    --border-thin: 1px;
+
+    // ── Action ───────────────────────────────────────────────────────────────
+    --action-ghost-text: #ffffff;
+    --action-ghost-border: #1f1f24;
+    --action-secondary-text: #000000;
+
+    // ── Spacing ──────────────────────────────────────────────────────────────
+    --space-1: 4px;
+    --space-1-5: 6px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-7: 28px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-16: 64px;
+    --space-30: 120px;
+
+    // ── Layout ───────────────────────────────────────────────────────────────
+    --gutter-desktop: 100px;
+    --gutter-tablet: 40px;
+    --gutter-mobile: 20px;
+    --gutter: var(--gutter-desktop);
+    --content-max: 1720px; // 1920 canvas − 2 × 100px gutter
+
+    // ── Radius ───────────────────────────────────────────────────────────────
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 20px;
+    --radius-full: 999px;
+
+    // ── Control heights ──────────────────────────────────────────────────────
+    --control-sm: 36px;
+    --control-md: 44px;
+    --control-lg: 48px;
+
+    // ── Font families ────────────────────────────────────────────────────────
+    // Wired to next/font in app/layout.tsx.
+    // Stack Sans Notch, self-hosted from app/fonts. The fallbacks are sans on
+    // purpose: this face replaced Playfair, and the old serif stack would have
+    // swapped Georgia in during the swap window and on any load failure.
+    --font-display: var(--font-stack-sans), "Helvetica Neue", Arial, sans-serif;
+    --font-sans: var(--font-geist), system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+    // Legacy aliases — older stylesheets (portfolio pages) still name these. The
+    // families are no longer downloaded; they resolve to the system faces.
+    --font-ibm: var(--font-mono);
+    --font-ibm-sans: var(--font-sans);
+    --font-inter: var(--font-sans);
+    --font-inter-tight: var(--font-sans);
+
+    // ── Font weights ─────────────────────────────────────────────────────────
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+
+    // ── Font sizes ───────────────────────────────────────────────────────────
+    --text-xs: 12px;
+    --text-sm: 14px;
+    --text-base: 16px;
+    --text-lg: 20px;
+    --text-xl: 24px;
+    --text-3xl: 32px;
+    --text-4xl: 36px;
+    --text-5xl: 40px;
+    --text-6xl: 48px;
+    --text-7xl: 60px;
+
+    // ── Line heights ─────────────────────────────────────────────────────────
+    --lh-16: 16px;
+    --lh-20: 20px;
+    --lh-22: 22px;
+    --lh-24: 24px;
+    --lh-26: 26px;
+    --lh-28: 28px;
+    --lh-32: 32px;
+    --lh-40: 40px;
+    --lh-44: 44px;
+    --lh-48: 48px;
+    --lh-56: 56px;
+    --lh-72: 72px;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Responsive scale
+//
+// The Figma file is drawn at 1920 only. Rather than restyling each component per
+// breakpoint, the tokens themselves step down — every consumer scales with them.
+// Body, label and mono sizes hold steady; only display/heading sizes, the large
+// spacing steps and the page gutter move.
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ≤1199.98 — small laptop
+@media (max-width: $breakpoint-xl) {
+    :root {
+        --text-7xl: 52px;
+        --lh-72: 62px;
+        --text-6xl: 42px;
+        --lh-56: 50px;
+        --text-5xl: 36px;
+        --lh-48: 44px;
+        --text-4xl: 32px;
+        --lh-44: 40px;
+        --space-30: 96px;
+        --gutter: 56px;
+    }
+}
+
+// ≤991.98 — tablet landscape / iPad
+@media (max-width: $breakpoint-lg) {
+    :root {
+        --text-7xl: 44px;
+        --lh-72: 52px;
+        --text-6xl: 36px;
+        --lh-56: 44px;
+        --text-5xl: 32px;
+        --lh-48: 40px;
+        --text-4xl: 28px;
+        --lh-44: 36px;
+        --text-3xl: 28px;
+        --lh-40: 36px;
+        --space-30: 80px;
+        --space-16: 48px;
+        --gutter: var(--gutter-tablet);
+    }
+}
+
+// ≤767.98 — tablet portrait
+@media (max-width: $breakpoint-md) {
+    :root {
+        --text-7xl: 36px;
+        --lh-72: 44px;
+        --text-6xl: 32px;
+        --lh-56: 40px;
+        --text-5xl: 28px;
+        --lh-48: 36px;
+        --text-4xl: 26px;
+        --lh-44: 34px;
+        --text-3xl: 24px;
+        --lh-40: 32px;
+        --text-xl: 20px;
+        --lh-32: 28px;
+        --space-30: 64px;
+        --space-16: 40px;
+        --gutter: 28px;
+    }
+}
+
+// ≤575.98 — phone
+@media (max-width: $breakpoint-sm) {
+    :root {
+        --text-7xl: 32px;
+        --lh-72: 40px;
+        --text-6xl: 28px;
+        --lh-56: 36px;
+        --text-5xl: 26px;
+        --lh-48: 34px;
+        --text-4xl: 24px;
+        --lh-44: 32px;
+        --text-lg: 18px;
+        --lh-28: 26px;
+        --space-30: 56px;
+        --space-16: 32px;
+        --gutter: var(--gutter-mobile);
+    }
+}
+
+// ≤320.98 — small phone
+@media (max-width: $breakpoint-xs) {
+    :root {
+        --text-7xl: 28px;
+        --lh-72: 36px;
+        --text-6xl: 26px;
+        --lh-56: 34px;
+        --gutter: 16px;
+    }
+}

@@ -1,0 +1,272 @@
+@import "../../styles/abstract/variables";
+@import "../../styles/abstract/mixins";
+
+@include entrance-keyframes;
+
+// 02 · Hero — Figma node 143:772 (1920×568)
+// Frame: px 200, py 120, column, centered. Inner column 810 wide, gap 28.
+
+.heroSection {
+    // Overrides the global `section` rule (min-h-screen + 10rem padding), which
+    // predates the Figma spacing and would stretch this 568px-tall section.
+    position: relative; // containing block for .glow — do not rely on the global rule
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 0;
+    padding-block: var(--space-30);
+    // Figma's 200px gutter, but only while there is room for the full 880px
+    // column. Between 1200 and 1280 a flat 200px each side left under 833px of
+    // usable width, which is just less than the first line of the headline
+    // needs — so it broke to three ragged lines on exactly those laptops.
+    padding-inline: max(var(--gutter), min(200px, calc((100% - 880px) / 2)));
+    overflow: hidden;
+
+    @media (max-width: $breakpoint-xl) {
+        padding-inline: var(--gutter);
+    }
+
+    @media (max-width: $breakpoint-md) {
+        padding-block: var(--space-16);
+    }
+}
+
+.glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(900px, 120%);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, var(--bg-brand-subtle) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-7);
+    // 880, not Figma's 810. The headline was drawn in Playfair; Stack Sans Notch
+    // sets the same words wider, and "MVP design and development," measures
+    // 833px at 60px/-1.5%. At 810 it could not fit, so the line collapsed into
+    // an awkward three-line stack. 880 restores the two-line shape.
+    width: 880px;
+    max-width: 100%;
+}
+
+.copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    width: 100%;
+    text-align: center;
+    color: var(--text-primary);
+}
+
+.heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-7xl);
+    line-height: var(--lh-72);
+    letter-spacing: -0.015em; // Figma -1.5% → -0.9px at 60px
+    text-transform: none;
+    margin: 0;
+    // The break is the shape of this headline, so even the lines out rather
+    // than greedily filling the first. It picks the comma on desktop and keeps
+    // the two lines close in length down the breakpoints; below ~430px the
+    // words simply cannot fit in two, and it evens out three instead.
+    text-wrap: balance;
+}
+
+// Each word carries its own animation-delay inline, so the stagger is data, not
+// a wall of :nth-child rules that would break the moment the copy changes.
+//
+// Inline, not inline-block: an inline-block word is its own text block, so the
+// browser scores each word separately for Largest Contentful Paint and a
+// decorative hero tile wins instead. Inline words keep the H1 one block — the
+// page's LCP element. `translate` does nothing on inline boxes, so the rise is
+// a relative `top` offset instead; it looks the same.
+.word {
+    position: relative;
+    @include enters($name: word-rise);
+}
+
+@keyframes word-rise {
+    from {
+        opacity: 0;
+        top: 0.4em;
+        filter: blur(0.14em);
+    }
+    to {
+        opacity: 1;
+        top: 0;
+        filter: blur(0);
+    }
+}
+
+.sub {
+    font-family: var(--font-sans);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-lg);
+    line-height: var(--lh-28);
+    text-transform: none;
+    margin: 0;
+    // Held narrower than the column it sits in. At the full 880px this line is
+    // near enough to fit on one, which reads as a stray caption under the
+    // headline instead of a supporting paragraph; capped it stays two centred
+    // lines and the block tapers.
+    max-width: 60ch;
+    margin-inline: auto;
+    text-wrap: balance;
+
+    // Lands as the last word of the headline is still settling.
+    @include enters(0.58s);
+}
+
+// ── CTAs ──────────────────────────────────────────────────────────────────────
+.ctaRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-5);
+    width: 100%;
+
+    @media (max-width: $breakpoint-sm) {
+        flex-direction: column;
+        gap: var(--space-3);
+
+        button {
+            width: 100%;
+        }
+    }
+
+    // The row is only layout; each button enters on its own beat.
+    > * {
+        @include enters(0.72s);
+    }
+
+    > * + * {
+        animation-delay: 0.79s;
+    }
+}
+
+%pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    height: var(--control-lg);
+    padding-inline: var(--space-6);
+    border: 0;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: filter 0.25s ease, transform 0.25s ease, background-color 0.25s ease;
+
+    span {
+        font-family: var(--font-sans);
+        font-weight: var(--fw-medium);
+        font-size: var(--text-base);
+        line-height: var(--lh-20);
+    }
+
+    &:hover {
+        transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--border-focus);
+        outline-offset: 2px;
+    }
+}
+
+.primaryCta {
+    @extend %pill;
+    background: var(--gradient-brand);
+    box-shadow: inset 0 -1px 4px 2px #ffffff40;
+    color: var(--text-on-cta);
+
+    // Figma note on Button 51:354 — primary lightens on hover. The mixin does
+    // that and the rest; %pill keeps owning the size, and its transition is
+    // overridden here because the include comes after the extend.
+    @include brand-cta-glow;
+
+    &:hover .callIcon {
+        rotate: -12deg;
+        scale: 1.08;
+    }
+}
+
+.secondaryCta {
+    @extend %pill;
+    background-color: var(--action-secondary-bg);
+    color: var(--action-secondary-text);
+
+    &:hover {
+        background-color: var(--action-secondary-bg-hover);
+    }
+}
+
+.callIcon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;    transition: rotate 0.35s cubic-bezier(0.22, 1, 0.36, 1), scale 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.arrowIcon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+// ── Price qualifier — Figma node 190:299 ──────────────────────────────────────
+.qualifier {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    line-height: var(--lh-22);
+    @include enters(0.86s);
+}
+
+.dot {
+    width: 5px;
+    height: 5px;
+    flex-shrink: 0;
+    border-radius: var(--radius-full);
+    background-color: var(--bg-brand);
+}
+
+.price {
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+}
+
+.separator {
+    font-weight: var(--fw-regular);
+    color: var(--text-disabled);
+}
+
+.terms {
+    font-weight: var(--fw-regular);
+    color: var(--text-tertiary);
+}
+
+// The icon nudge on hover is the one bit of motion the CTA mixin does not own.
+@media (prefers-reduced-motion: reduce) {
+    .callIcon {
+        transition: none;
+    }
+}
