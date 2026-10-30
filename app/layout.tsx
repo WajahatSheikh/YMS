@@ -6,7 +6,7 @@ import Wrapper from "./Components/Wrapper/Wrapper";
 import Footer from "./Components/Footer/Footer";
 import Analytics from "./Components/Seo/Analytics";
 import { SITE } from "./data/site";
-import { THEME_COLOR, THEME_INIT_SCRIPT } from "./lib/theme";
+import { DEFAULT_THEME, THEME_COLOR, THEME_INIT_SCRIPT } from "./lib/theme";
 
 // ── Fonts ────────────────────────────────────────────────────────────────────
 // Stack Sans Notch is self-hosted via next/font/local: the files ship from our
@@ -75,10 +75,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-    // Dark is the default theme; the pre-paint script and ThemeToggle update the
-    // theme-color meta when the visitor is on light.
-    themeColor: THEME_COLOR.dark,
-    colorScheme: "dark light",
+    // Light is the default theme; the pre-paint script and ThemeToggle update the
+    // theme-color meta when the visitor is on dark.
+    themeColor: THEME_COLOR[DEFAULT_THEME],
+    colorScheme: "light dark",
     width: "device-width",
     initialScale: 1
 };
@@ -92,11 +92,11 @@ export default function RootLayout({
         // The font variables must live on <html>, not <body>: _tokens.scss declares
         // --font-display/--font-sans/--font-mono on :root, and a custom property
         // that references an undefined variable is invalid at computed-value time.
-        // data-theme defaults to dark in the server HTML; THEME_INIT_SCRIPT swaps it
+        // data-theme is DEFAULT_THEME in the server HTML; THEME_INIT_SCRIPT swaps it
         // before first paint, hence suppressHydrationWarning on <html>.
         <html
             lang="en"
-            data-theme="dark"
+            data-theme={DEFAULT_THEME}
             className={`${stackSans.variable} ${geist.variable} ${geistMono.variable}`}
             suppressHydrationWarning
         >

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { flushSync } from "react-dom";
-import { FAQS, type FaqTopic } from "@/app/data/faq";
+import { FAQS, type Faq, type FaqTopic } from "@/app/data/faq";
 import style from "./FAQSection.module.scss";
 
 // The FAQ conversation — the only client code in the FAQ section.
@@ -14,24 +14,26 @@ import style from "./FAQSection.module.scss";
 //
 // Markup: the button covers only the question; the answer is a labelled
 // region — correct accordion semantics.
+//
+// Inner pages pass a subset (e.g. only Pricing questions on /pricing); with a
+// single topic the chips are left out.
 
 type Filter = "All" | FaqTopic;
 
-const TOPICS: Filter[] = ["All", ...Array.from(new Set(FAQS.map((f) => f.topic)))];
-
-const FaqAccordion = () => {
+const FaqAccordion = ({ faqs = FAQS }: { faqs?: Faq[] }) => {
     // The first question starts open, as drawn.
     const [openIndex, setOpenIndex] = useState<number | null>(0);
     const [filter, setFilter] = useState<Filter>("All");
 
-    const count = (topic: Filter) => (topic === "All" ? FAQS.length : FAQS.filter((f) => f.topic === topic).length);
+    const topics: Filter[] = ["All", ...Array.from(new Set(faqs.map((f) => f.topic)))];
+    const count = (topic: Filter) => (topic === "All" ? faqs.length : faqs.filter((f) => f.topic === topic).length);
 
     const choose = (topic: Filter) => {
         if (topic === filter) return;
         const apply = () => {
             setFilter(topic);
             // Open the first question of the topic, so the filter shows an answer.
-            const first = FAQS.findIndex((f) => topic === "All" || f.topic === topic);
+            const first = faqs.findIndex((f) => topic === "All" || f.topic === topic);
             setOpenIndex(first);
         };
         const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown };
@@ -42,23 +44,25 @@ const FaqAccordion = () => {
 
     return (
         <div className={style.thread}>
-            <div className={style.topics} role="group" aria-label="Filter questions by topic">
-                {TOPICS.map((topic) => (
-                    <button
-                        key={topic}
-                        type="button"
-                        className={style.topic}
-                        aria-pressed={filter === topic}
-                        onClick={() => choose(topic)}
-                    >
-                        {topic}
-                        <span className={style.topicCount}>{count(topic)}</span>
-                    </button>
-                ))}
-            </div>
+            {topics.length > 2 && (
+                <div className={style.topics} role="group" aria-label="Filter questions by topic">
+                    {topics.map((topic) => (
+                        <button
+                            key={topic}
+                            type="button"
+                            className={style.topic}
+                            aria-pressed={filter === topic}
+                            onClick={() => choose(topic)}
+                        >
+                            {topic}
+                            <span className={style.topicCount}>{count(topic)}</span>
+                        </button>
+                    ))}
+                </div>
+            )}
 
             <ol className={style.questions}>
-                {FAQS.map((faq, index) => {
+                {faqs.map((faq, index) => {
                     const visible = filter === "All" || faq.topic === filter;
                     const isOpen = visible && openIndex === index;
                     const panelId = `faq-panel-${index}`;

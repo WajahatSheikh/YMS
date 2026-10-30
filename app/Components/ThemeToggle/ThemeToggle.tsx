@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { THEME_COLOR, THEME_STORAGE_KEY, type Theme } from "@/app/lib/theme";
+import { DEFAULT_THEME, THEME_COLOR, THEME_STORAGE_KEY, type Theme } from "@/app/lib/theme";
 import style from "./index.module.scss";
 
 // Dark/light switch for the nav. The theme is `data-theme` on <html>; the
@@ -20,6 +20,8 @@ const apply = (theme: Theme) => {
         // Private mode or storage blocked: the switch still works for this visit.
     }
     window.dispatchEvent(new CustomEvent("themechange", { detail: theme }));
+    // GA4 (live site only): how many visitors switch, and to which theme.
+    window.gtag?.("event", "theme_change", { theme });
 };
 
 const SunIcon = () => (
@@ -46,9 +48,9 @@ const MoonIcon = () => (
 );
 
 const ThemeToggle = ({ className }: { className?: string }) => {
-    // Server HTML can't know the visitor's theme, so render the dark state and
+    // Server HTML can't know the visitor's theme, so render the default and
     // read the real one after mount (the attribute is already set pre-paint).
-    const [theme, setTheme] = useState<Theme>("dark");
+    const [theme, setTheme] = useState<Theme>(DEFAULT_THEME);
 
     useEffect(() => {
         const current: Theme = document.documentElement.dataset.theme === "light" ? "light" : "dark";

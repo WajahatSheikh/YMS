@@ -12,17 +12,21 @@ import { NAVBAR_HEIGHT, scrollToSection as scrollTo } from "@/app/lib/scrollToSe
 
 // Order and labels come from the Figma nav (node 107:1388).
 //
-// Every entry must have a section with a matching id on the page, or the link
-// scrolls nowhere.
+// On the home page every entry scrolls to the section with its id, so each id
+// must exist there. On inner pages the entries are links: to the section's own
+// page where there is one (`href`), otherwise back to the home section.
 const NAV_ITEMS = [
-    { text: "Services", id: "services" },
-    { text: "Work", id: "work" },
-    { text: "Testimonials", id: "testimonials" },
-    { text: "Process", id: "process" },
-    { text: "Pricing", id: "pricing" },
-    { text: "Team", id: "team" },
-    { text: "FAQ", id: "faq" }
+    { text: "Services", id: "services", href: "/services" },
+    { text: "Work", id: "work", href: "/#work" },
+    { text: "Testimonials", id: "testimonials", href: "/#testimonials" },
+    { text: "Process", id: "process", href: "/process" },
+    { text: "Pricing", id: "pricing", href: "/pricing" },
+    { text: "Team", id: "team", href: "/team" },
+    { text: "FAQ", id: "faq", href: "/faq" }
 ] as const;
+
+const isCurrentPage = (pathname: string | null, href: string) =>
+    !href.includes("#") && !!pathname && (pathname === href || pathname.startsWith(`${href}/`));
 
 const SECTION_IDS = NAV_ITEMS.map((item) => item.id);
 
@@ -74,8 +78,14 @@ const PortfolioHeader = () => {
 const Header = () => {
     const pathname = usePathname();
     const isPortfolio = pathname?.startsWith("/portfolio");
+    const isHome = pathname === "/";
 
     const [menuOpen, setMenuOpen] = useState(false);
+
+    // A page link in the mobile sheet navigates; close the sheet when it does.
+    useEffect(() => {
+        setMenuOpen(false);
+    }, [pathname]);
     const [activeSection, setActiveSection] = useState<string>(NAV_ITEMS[0].id);
     const [navHidden, setNavHidden] = useState(false);
     const lastScrollY = useRef(0);
@@ -134,22 +144,26 @@ const Header = () => {
         scrollTo(id, lenis);
     };
 
+    const navItems = NAV_ITEMS.map((item) =>
+        isHome ? (
+            <HeaderList
+                key={item.id}
+                text={item.text}
+                link={`#${item.id}`}
+                isActive={activeSection === item.id}
+                onClick={() => scrollToSection(item.id)}
+            />
+        ) : (
+            <HeaderList key={item.id} text={item.text} link={item.href} isActive={isCurrentPage(pathname, item.href)} />
+        )
+    );
+
     return (
         <header className={`${style.header} ${navHidden ? style.navHidden : ""}`}>
             <div className={style.inner}>
                 {/* Segmented nav pill — Figma "Status Toggle" */}
                 <nav className={style.pill} aria-label="Primary">
-                    <ul>
-                        {NAV_ITEMS.map((item) => (
-                            <HeaderList
-                                key={item.id}
-                                text={item.text}
-                                link={`#${item.id}`}
-                                isActive={activeSection === item.id}
-                                onClick={() => scrollToSection(item.id)}
-                            />
-                        ))}
-                    </ul>
+                    <ul>{navItems}</ul>
                 </nav>
 
                 <div className={style.right}>
@@ -170,17 +184,7 @@ const Header = () => {
 
             {/* Mobile sheet */}
             <div className={`${style.mobileMenu} ${menuOpen ? style.open : ""}`}>
-                <ul>
-                    {NAV_ITEMS.map((item) => (
-                        <HeaderList
-                            key={item.id}
-                            text={item.text}
-                            link={`#${item.id}`}
-                            isActive={activeSection === item.id}
-                            onClick={() => scrollToSection(item.id)}
-                        />
-                    ))}
-                </ul>
+                <ul>{navItems}</ul>
                 <BookACall className={style.ctaMobile} placement="header-mobile" />
             </div>
         </header>

@@ -54,7 +54,8 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     font-size: var(--text-xs);
     line-height: var(--lh-16);
     letter-spacing: 0.125em;
-    color: var(--text-brand);
+    // The pinned intro scrolls over raised cards on inner pages.
+    color: var(--text-brand-raised);
     text-transform: uppercase;
 }
 
@@ -495,7 +496,7 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     padding: 2px 8px;
     border: var(--border-thin) solid var(--border-brand-subtle);
     border-radius: var(--radius-full);
-    color: var(--text-brand);
+    color: var(--text-brand-raised);
 }
 
 .answer {

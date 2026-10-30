@@ -456,11 +456,23 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     }
 }
 
+// Link to the service's own page, quieter than the CTA beside it.
 .ctaNote {
     font-family: var(--font-sans);
+    font-weight: var(--fw-medium);
     font-size: var(--text-sm);
     line-height: var(--lh-20);
-    color: var(--text-tertiary);
+    color: var(--text-secondary);
+    text-decoration: underline;
+    text-decoration-color: var(--border-default);
+    text-underline-offset: 5px;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+        color: var(--text-brand);
+        text-decoration-color: currentColor;
+    }
 }
 
 // ── Two-pane explorer (≥992) ──────────────────────────────────────────────────

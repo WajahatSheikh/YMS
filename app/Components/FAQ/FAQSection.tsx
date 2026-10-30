@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ctaGlow } from "@/app/lib/ctaGlow";
 import { bookingLinkProps } from "@/app/lib/booking";
 import { SITE } from "@/app/data/site";
+import type { Faq } from "@/app/data/faq";
 import FaqAccordion from "./FaqAccordion";
 import style from "./FAQSection.module.scss";
 
@@ -24,13 +25,15 @@ const PhoneIcon = () => (
     </svg>
 );
 
-const FAQSection = () => (
+// Inner pages pass the FAQs that fit them (and the same list to PageSchema, so
+// the FAQPage data matches what is shown) and may retitle the section.
+const FAQSection = ({ faqs, title = "Questions, answered straight." }: { faqs?: Faq[]; title?: string }) => (
     <section id="faq" className={style.section}>
         <div className={style.content}>
             <aside className={style.intro}>
                 <div className={style.introHead}>
                     <p className={style.eyebrow}>FAQ</p>
-                    <h2 className={style.title}>Questions, answered straight.</h2>
+                    <h2 className={style.title}>{title}</h2>
                 </div>
 
                 {/* Contact card — a person to talk to, not a form. */}
@@ -55,7 +58,7 @@ const FAQSection = () => (
                 </div>
             </aside>
 
-            <FaqAccordion />
+            <FaqAccordion faqs={faqs} />
         </div>
     </section>
 );

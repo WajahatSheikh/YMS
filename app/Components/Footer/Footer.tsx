@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import RevealChildren from "@/app/Components/RevealChildren/RevealChildren";
 import { ctaGlow } from "@/app/lib/ctaGlow";
 import { bookingLinkProps } from "@/app/lib/booking";
@@ -19,20 +20,21 @@ import style from "./index.module.scss";
 //
 // Server component, passed into Wrapper by the root layout. Client islands:
 // FooterGlow (the cursor-reactive colour field) and the wordmark's reveal. The
-// links are plain /#anchors; Wrapper's delegated handler smooth-scrolls
-// them past the fixed header.
+// columns link to the inner pages — the site-wide internal links search
+// engines follow; "/#work" is a home-page anchor, which Wrapper's delegated
+// handler smooth-scrolls past the fixed header.
 
 const EXPLORE = [
-    { label: "Services", id: "services" },
-    { label: "Work", id: "work" },
-    { label: "Pricing", id: "pricing" },
-    { label: "Process", id: "process" },
-    { label: "FAQ", id: "faq" }
+    { label: "Design subscription", href: "/design-subscription" },
+    { label: "Services", href: "/services" },
+    { label: "Pricing", href: "/pricing" },
+    { label: "Process", href: "/process" },
+    { label: "FAQ", href: "/faq" }
 ];
 
 const COMPANY = [
-    { label: "The team", id: "team" },
-    { label: "Case studies", id: "work" }
+    { label: "The team", href: "/team" },
+    { label: "Case studies", href: "/#work" }
 ];
 
 // Profiles come from app/data/site.ts. Until a URL is set the label renders as
@@ -52,10 +54,10 @@ const PhoneIcon = () => (
     </svg>
 );
 
-const linkList = (items: { label: string; id: string }[]) =>
+const linkList = (items: { label: string; href: string }[]) =>
     items.map((item) => (
         <li key={item.label}>
-            <a href={`/#${item.id}`}>{item.label}</a>
+            <Link href={item.href}>{item.label}</Link>
         </li>
     ));
 

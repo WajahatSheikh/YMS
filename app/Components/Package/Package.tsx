@@ -1,6 +1,7 @@
 import { ctaGlow } from "@/app/lib/ctaGlow";
 import { bookingLinkProps } from "@/app/lib/booking";
 import { PRICE_LABEL } from "@/app/data/site";
+import { INCLUDES, WEEKLY_LOOP } from "@/app/data/subscription";
 import HologramCard from "./HologramCard";
 import style from "./index.module.scss";
 
@@ -14,23 +15,8 @@ import style from "./index.module.scss";
 //
 // Copy is unchanged from the previous layout. The hologram (pointer sheen +
 // slight tilt) on the receipt is HologramCard.tsx, the only client code here.
-
-const INCLUDES = [
-    "Product design & UX",
-    "Frontend + backend build",
-    "QA & testing",
-    "Launch & deployment",
-    "A dedicated technical PM",
-    "Shared Slack channel",
-    "Weekly live demo",
-    "You own all code & design"
-];
-
-const WEEKLY_LOOP = [
-    { day: "MON", title: "Sprint kickoff", note: "You set the agenda for the week." },
-    { day: "TUE–THU", title: "Design and build", note: "Work ships to staging as it lands." },
-    { day: "FRI", title: "Live demo", note: "You review, we plan the next sprint." }
-];
+// INCLUDES and WEEKLY_LOOP live in app/data/subscription.ts (shared with the
+// /pricing, /design-subscription and /services/* pages).
 
 const CheckIcon = () => (
     <svg className={style.check} viewBox="0 0 16 16" fill="none" aria-hidden="true">

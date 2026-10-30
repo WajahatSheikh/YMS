@@ -1,8 +1,12 @@
-// Services content. Rendered by the Services accordion and reused by the
-// Service / OfferCatalog structured data.
+// Services content. Rendered by the Services accordion and the /services pages,
+// and reused by the Service / OfferCatalog structured data and llms.txt.
 
 export interface Service {
     title: string;
+    /** URL segment of the service page: /services/<slug>. */
+    slug: string;
+    /** <title> (before "| YourMomStudio") and H1, plus the meta description (~155 chars), of the service page. */
+    seo: { title: string; description: string };
     // Short category badge shown beside the title.
     label?: string;
     description: string;
@@ -18,6 +22,12 @@ export interface Service {
 export const SERVICES: Service[] = [
     {
         title: "Product Design",
+        slug: "product-design",
+        seo: {
+            title: "Product design agency for startups and MVPs",
+            description:
+                "Product design for funded startups: UI and UX, MVP and prototype design, design systems and usability testing, delivered dev-ready by one team."
+        },
         description:
             "Most design agencies hand you files. We hand you products. We sit inside your workflow, work with your engineers, and ship interfaces that are dev-ready on delivery, not “almost there, just needs a few tweaks.” From early MVP through scaled product, what we ship is what your users see.",
         tags: [
@@ -35,6 +45,12 @@ export const SERVICES: Service[] = [
     },
     {
         title: "Websites",
+        slug: "websites",
+        seo: {
+            title: "Website design and development for startups",
+            description:
+                "Marketing sites, landing pages and replatforms designed and built by one team, on Webflow, Framer or custom code, with SEO-ready structure."
+        },
         description:
             "We’ve shipped 50+ sites, from first launches to full rebrands and replatforms. Designed and built by one team, no handoff, no waiting on dev, no round-tripping between Figma and Slack. The site goes live looking exactly like it looked in the comp.",
         tags: [
@@ -52,6 +68,12 @@ export const SERVICES: Service[] = [
     },
     {
         title: "Mobile App",
+        slug: "mobile-app",
+        seo: {
+            title: "Mobile app design and development (iOS and Android)",
+            description:
+                "iOS and Android apps designed and built by one team, from onboarding and user flows to cross-platform development and App Store launch."
+        },
         label: "iOS & Android",
         description:
             "Great apps feel obvious to use, and that takes a lot of work behind the scenes. We design and build mobile apps around how people actually use their phones: one thumb, half a minute, zero patience. From first idea to App Store launch, you get one team that owns the whole thing, so what we design is exactly what ships.",
@@ -70,6 +92,12 @@ export const SERVICES: Service[] = [
     },
     {
         title: "SaaS Products",
+        slug: "saas-products",
+        seo: {
+            title: "SaaS product design and development",
+            description:
+                "SaaS product strategy, UX, dashboards and onboarding that turns trials into paying users, plus front-end development, from one product team."
+        },
         label: "Web Platforms",
         description:
             "SaaS is hard to design because users come back every day, and every confusing screen costs you a subscriber. We design and build SaaS products that make complex features feel simple, from your first paying customers to a platform that scales. We’ve worked on dashboards, analytics tools, and B2B platforms, and we think like product partners, not just a design vendor.",
@@ -88,6 +116,12 @@ export const SERVICES: Service[] = [
     },
     {
         title: "Web Management System",
+        slug: "web-management-system",
+        seo: {
+            title: "Custom web management systems and admin panels",
+            description:
+                "Custom admin panels, internal tools and role-based dashboards that replace spreadsheets and manual follow-ups, shaped around how your team works."
+        },
         label: "Custom Web Systems",
         description:
             "If your team still runs on spreadsheets, WhatsApp threads, and manual follow-ups, a custom management system pays for itself quickly. We build web-based systems for managing operations, teams, clients, inventory, and approvals, shaped around how your business really works, not a template that makes you adapt. Clear for your staff on day one, flexible enough to grow with you.",
@@ -106,6 +140,12 @@ export const SERVICES: Service[] = [
     },
     {
         title: "Game Design",
+        slug: "game-design",
+        seo: {
+            title: "2D game design studio",
+            description:
+                "2D game design: concept and core loop, characters and environments, game UI and HUD, level design and animation-ready art for mobile and branded games."
+        },
         label: "2D Games",
         description:
             "A good game gets players to want “one more round.” We design 2D games with that in mind, covering mechanics, characters, worlds, and the interface that holds it all together. Whether you’re building a mobile casual game, a branded experience, or an indie project, we handle the art and design so your game looks great and feels good to play.",
@@ -124,6 +164,12 @@ export const SERVICES: Service[] = [
     },
     {
         title: "Brand Identity",
+        slug: "brand-identity",
+        seo: {
+            title: "Brand identity design for startups",
+            description:
+                "Brand identity for startups: logo and marks, colour and typography, usable brand guidelines, pitch deck and marketing templates, and brand voice."
+        },
         label: "Brand & Visuals",
         description:
             "Your brand is what people remember after they close the tab. We build identities that look sharp and are easy to use, a clear system your team can apply consistently across your website, product, social media, and print. No generic logos, no trend-chasing. Just a brand that sounds like you and stands apart from your competitors.",
@@ -141,3 +187,5 @@ export const SERVICES: Service[] = [
         }
     }
 ];
+
+export const serviceHref = (service: Pick<Service, "slug">) => `/services/${service.slug}`;

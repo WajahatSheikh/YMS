@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { SERVICES } from "@/app/data/services";
+import Link from "next/link";
+import { SERVICES, serviceHref } from "@/app/data/services";
 import { bookingLinkProps } from "@/app/lib/booking";
 import { ctaGlow } from "@/app/lib/ctaGlow";
 import CapabilityExplorer, { ServiceVideo } from "./CapabilityExplorer";
@@ -11,16 +12,11 @@ import style from "./index.module.scss";
 // index on the left and the active one plays large on a showcase stage on the
 // right; on phones each service opens as a card. Everything a visitor needs to
 // decide is on the stage: what it is, what they get, and a call to action that
-// names the service (so ads can attribute the lead: book-call-services-<slug>).
+// names the service (so ads can attribute the lead: book-call-services-<slug>),
+// and a link to the service's own page (/services/<slug>).
 //
 // Server component: each stage is rendered here and handed to
 // CapabilityExplorer.tsx, which only tracks which service is showing.
-
-const slug = (text: string) =>
-    text
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/(^-|-$)/g, "");
 
 const PhoneIcon = () => (
     <svg viewBox="0 0 18 18" fill="none" aria-hidden="true">
@@ -101,13 +97,15 @@ const Services = () => (
                             <div className={style.ctaRow}>
                                 <a
                                     className={style.cta}
-                                    {...bookingLinkProps(`services-${slug(service.title)}`)}
+                                    {...bookingLinkProps(`services-${service.slug}`)}
                                     {...ctaGlow}
                                 >
                                     <PhoneIcon />
                                     <span>Book a call</span>
                                 </a>
-                                <span className={style.ctaNote}>about {service.title.toLowerCase()}</span>
+                                <Link className={style.ctaNote} href={serviceHref(service)}>
+                                    Explore {service.title.toLowerCase()} <span aria-hidden="true">&rarr;</span>
+                                </Link>
                             </div>
                         </div>
                     </div>

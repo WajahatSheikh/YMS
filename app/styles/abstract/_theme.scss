@@ -61,6 +61,8 @@
     --text-muted: #a1a1aa;
     --text-disabled: #52525b;
     --text-brand: #e85002;
+    // Small brand text on --bg-raised cards: #e85002 is 4.4:1 there, this is 5.0.
+    --text-brand-raised: #ee5f12;
     --text-on-brand: #000000;
 
     --icon-secondary: #d4d4d8;
@@ -111,6 +113,7 @@
     --text-muted: #52525b;
     --text-disabled: #78716c;
     --text-brand: #a8380a;
+    --text-brand-raised: #a8380a;
     --text-on-brand: #000000;
 
     --icon-secondary: #3f3f46;

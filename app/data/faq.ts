@@ -61,3 +61,6 @@ export const FAQS: Faq[] = [
             "Monday you set the agenda. We design and build Tuesday to Thursday, shipping to staging as work lands. Friday you see it live and shape the next sprint."
     }
 ];
+
+/** The FAQs on the given topics, in their usual order — for the inner pages. */
+export const faqsByTopic = (...topics: FaqTopic[]) => FAQS.filter((f) => topics.includes(f.topic));
