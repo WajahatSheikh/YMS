@@ -43,7 +43,7 @@ export const SITE = {
     social: {
         x: "" as string,
         linkedin: "" as string,
-        instagram: "" as string
+        instagram: "https://www.instagram.com/your.momstudio/" as string
     }
 } as const;
 
