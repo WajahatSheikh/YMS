@@ -71,23 +71,31 @@ const FaqAccordion = () => {
                             hidden={!visible}
                             style={{ viewTransitionName: `faq-${index}` } as React.CSSProperties}
                         >
-                            <button
-                                id={buttonId}
-                                type="button"
-                                className={style.trigger}
-                                onClick={() => setOpenIndex(isOpen ? null : index)}
-                                aria-expanded={isOpen}
-                                aria-controls={panelId}
-                            >
-                                <span className={style.number}>{String(index + 1).padStart(2, "0")}</span>
-                                <span className={style.question}>{faq.question}</span>
-                                <span className={style.icon} aria-hidden="true">
-                                    {/* One glyph: the vertical bar folds into the
-                                        horizontal one, so plus becomes minus. */}
-                                    <span className={style.bar} />
-                                    <span className={`${style.bar} ${style.barVertical}`} />
-                                </span>
-                            </button>
+                            <h3 className={style.questionHeading}>
+                                <button
+                                    id={buttonId}
+                                    type="button"
+                                    className={style.trigger}
+                                    onClick={() => setOpenIndex(isOpen ? null : index)}
+                                    aria-expanded={isOpen}
+                                    aria-controls={panelId}
+                                >
+                                    {/* The number is drawn by CSS (::before) so the <h3> reads as
+                                        just the question to search engines and screen readers. */}
+                                    <span
+                                        className={style.number}
+                                        data-number={String(index + 1).padStart(2, "0")}
+                                        aria-hidden="true"
+                                    />
+                                    <span className={style.question}>{faq.question}</span>
+                                    <span className={style.icon} aria-hidden="true">
+                                        {/* One glyph: the vertical bar folds into the
+                                            horizontal one, so plus becomes minus. */}
+                                        <span className={style.bar} />
+                                        <span className={`${style.bar} ${style.barVertical}`} />
+                                    </span>
+                                </button>
+                            </h3>
 
                             <div id={panelId} role="region" aria-labelledby={buttonId} className={style.panel}>
                                 <div className={style.panelInner}>

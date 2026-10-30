@@ -22,6 +22,7 @@ import style from "./index.module.scss";
 declare global {
     interface Window {
         dataLayer?: Record<string, unknown>[];
+        gtag?: (command: "event", name: string, params: Record<string, unknown>) => void;
     }
 }
 
@@ -51,9 +52,13 @@ const embedUrl = (href: string) => {
     return url.toString();
 };
 
+// GTM reads the dataLayer push; GA4 (gtag.js, app/Components/Seo/Analytics.tsx)
+// only takes gtag() calls, so the event goes to both. gtag is absent off the
+// live site, where nothing is sent.
 const track = (event: string, cta: string) => {
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event, cta });
+    window.gtag?.("event", event, { cta });
 };
 
 const BookingModal = () => {

@@ -220,7 +220,19 @@ const Showreel = () => {
 
     return (
         // Dark island: the reel, its controls and the overlay are video UI.
-        <section id="showreel" ref={sectionRef} className={style.section} aria-label="Showreel" data-theme="dark">
+        <section
+            id="showreel"
+            ref={sectionRef}
+            className={style.section}
+            aria-labelledby="showreel-title"
+            data-theme="dark"
+        >
+            {/* The design has no visible title here; the heading keeps the
+                page outline complete for search engines and screen readers. */}
+            <h2 id="showreel-title" className="sr-only">
+                YourMomStudio showreel: product design and development work
+            </h2>
+
             {/* Resting card — the muted loop */}
             <div ref={stageRef} className={style.stage}>
                 <div ref={mediaRef} className={style.media}>

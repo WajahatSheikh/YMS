@@ -333,6 +333,17 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     }
 }
 
+// The <h3> around each question button: no box or type of its own.
+.questionHeading {
+    margin: 0;
+    font: inherit;
+    letter-spacing: normal;
+}
+
+.number::before {
+    content: attr(data-number);
+}
+
 .number {
     font-family: var(--font-mono);
     font-size: var(--text-sm);

@@ -70,7 +70,8 @@ export const metadata: Metadata = {
         googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 }
     },
     formatDetection: { telephone: false, email: false, address: false },
-    category: "technology"
+    category: "technology",
+    ...(SITE.googleSiteVerification && { verification: { google: SITE.googleSiteVerification } })
 };
 
 export const viewport: Viewport = {

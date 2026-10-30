@@ -147,13 +147,15 @@ const ProjectIndex = ({ projects }: { projects: IndexProject[] }) => {
                             <span className={style.inlineThumb}>
                                 <Thumb project={project} sizes="80px" />
                             </span>
-                            <span className={style.rowMain}>
-                                <span className={style.rowTitle}>{project.title}</span>
+                            {/* A <div> because it holds the <h3>: each project title is a
+                                real heading, so the case studies sit in the page outline. */}
+                            <div className={style.rowMain}>
+                                <h3 className={style.rowTitle}>{project.title}</h3>
                                 <span className={style.meta}>
                                     <span className={style.tag}>{project.client}</span>
                                     <span className={style.tag}>{project.category}</span>
                                 </span>
-                            </span>
+                            </div>
                             <span className={style.cta}>
                                 <span className={style.ctaLabel}>View case study</span>
                                 <span className={style.arrow}>

@@ -55,6 +55,20 @@ section {
     }
 }
 
+// Text for screen readers and search engines only — e.g. a section heading
+// where the design shows media instead of a title.
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 // Below-the-fold sections skip style, layout and paint until they come near the
 // viewport. Laying out the whole long page up front was the biggest single cost
 // before a phone's first paint. `auto` makes the browser remember each section's

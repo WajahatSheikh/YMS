@@ -1,5 +1,6 @@
 import { ctaGlow } from "@/app/lib/ctaGlow";
 import { bookingLinkProps } from "@/app/lib/booking";
+import { PRICE_LABEL } from "@/app/data/site";
 import HologramCard from "./HologramCard";
 import style from "./index.module.scss";
 
@@ -183,7 +184,7 @@ const Package = () => (
                     <span className={style.badge}>Flat monthly · no scoping, no quotes</span>
                     <h3 className={style.planName}>Product subscription</h3>
                     <p className={style.price}>
-                        <span className={style.amount}>$3,999</span>
+                        <span className={style.amount}>{PRICE_LABEL}</span>
                         <span className={style.period}>/ month</span>
                     </p>
                     <p className={style.note}>Pause or cancel any time. No contracts, no scoping calls, no change orders.</p>

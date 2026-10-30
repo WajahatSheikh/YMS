@@ -178,6 +178,7 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .rowTitle {
+    margin: 0;
     font-family: var(--font-display);
     font-weight: var(--fw-semibold);
     font-size: clamp(26px, 3vw, 44px);

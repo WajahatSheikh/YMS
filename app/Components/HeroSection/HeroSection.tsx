@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import style from "./index.module.scss";
 import { ctaGlow } from "@/app/lib/ctaGlow";
 import { bookingLinkProps } from "@/app/lib/booking";
+import { PRICE_LABEL } from "@/app/data/site";
 import EdgeLightButton from "./EdgeLightButton";
 import FluidReveal from "@/app/Components/FluidReveal/FluidReveal";
 
@@ -88,7 +89,7 @@ const HeroSection = () => (
         {/* Price qualifier — Figma node 190:299 */}
         <div className={style.qualifier}>
             <span className={style.dot} aria-hidden="true" />
-            <span className={style.price}>From $3,999/month</span>
+            <span className={style.price}>From {PRICE_LABEL}/month</span>
             <span className={style.separator} aria-hidden="true">
                 ·
             </span>

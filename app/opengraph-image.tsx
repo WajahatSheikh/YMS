@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { PRICE_LABEL } from "./data/site";
 
 // The image shown when the site is shared (LinkedIn, Slack, WhatsApp, X…) and
 // used by ad platforms that read Open Graph. Generated at build time, 1200×630.
@@ -37,7 +38,7 @@ export default function OpengraphImage() {
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 24, fontSize: 28 }}>
                     <div style={{ display: "flex", padding: "14px 28px", borderRadius: 999, background: "#e85002", color: "#000" }}>
-                        From $3,999/month
+                        From {PRICE_LABEL}/month
                     </div>
                     <div style={{ color: "#d4d4d8" }}>Pause or cancel anytime</div>
                 </div>
