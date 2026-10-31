@@ -1,5 +1,7 @@
 "use client";
 import style from "./index.module.scss";
+import Link from "next/link";
+import Image from "next/image";
 import { ctaGlow } from "@/app/lib/ctaGlow";
 import { bookingLinkProps } from "@/app/lib/booking";
 import HeaderList from "./HeaderList/HeaderList";
@@ -44,6 +46,41 @@ const BookACall = ({ className, placement }: { className?: string; placement: st
         <CallIcon />
         <span>Book a call</span>
     </a>
+);
+
+// Logo — Figma component 391:1627. Default is the orange mark; on hover or
+// focus the box widens and the full white mark + wordmark fades in (inverted
+// to black on the light theme via --logo-filter). On the home page it scrolls
+// back to the top instead of reloading the page.
+const Logo = ({ onHome }: { onHome?: () => void }) => (
+    <Link
+        href="/"
+        className={style.logo}
+        aria-label="YourMomStudio home"
+        onClick={(event) => {
+            if (!onHome) return;
+            event.preventDefault();
+            onHome();
+        }}
+    >
+        <Image
+            className={style.logoMark}
+            src="/assets/images/logo/yms-mark.svg"
+            alt=""
+            width={64}
+            height={52}
+            priority
+            unoptimized
+        />
+        <Image
+            className={style.logoFull}
+            src="/assets/images/logo/yms-logo-full.svg"
+            alt=""
+            width={247}
+            height={52}
+            unoptimized
+        />
+    </Link>
 );
 
 // ── Portfolio header — back arrow + Book a Call ───────────────────────────────
@@ -161,6 +198,18 @@ const Header = () => {
     return (
         <header className={`${style.header} ${navHidden ? style.navHidden : ""}`}>
             <div className={style.inner}>
+                <Logo
+                    onHome={
+                        isHome
+                            ? () => {
+                                  setMenuOpen(false);
+                                  if (lenis) lenis.scrollTo(0);
+                                  else window.scrollTo({ top: 0, behavior: "smooth" });
+                              }
+                            : undefined
+                    }
+                />
+
                 {/* Segmented nav pill — Figma "Status Toggle" */}
                 <nav className={style.pill} aria-label="Primary">
                     <ul>{navItems}</ul>

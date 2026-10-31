@@ -3,8 +3,9 @@ import { SITE } from "./data/site";
 import { THEME_COLOR } from "./lib/theme";
 
 // /manifest.webmanifest — name, colours and icons used when the site is added
-// to a home screen, and read by Chrome and Lighthouse. Icons come from
-// app/icon.tsx (one route per size).
+// to a home screen, and read by Chrome and Lighthouse. The favicon itself is
+// app/icon.svg (Figma 392:16654) with app/icon1.png as the PNG fallback; these
+// larger PNGs are rendered from the same mark.
 export default function manifest(): MetadataRoute.Manifest {
     return {
         name: SITE.name,
@@ -15,8 +16,8 @@ export default function manifest(): MetadataRoute.Manifest {
         background_color: THEME_COLOR.dark,
         theme_color: THEME_COLOR.dark,
         icons: [
-            { src: "/icon/192", sizes: "192x192", type: "image/png" },
-            { src: "/icon/512", sizes: "512x512", type: "image/png" }
+            { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+            { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png" }
         ]
     };
 }
