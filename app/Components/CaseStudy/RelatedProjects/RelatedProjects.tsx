@@ -34,13 +34,20 @@ const RelatedProjects = ({ currentSlug, allProjects }: RelatedProjectsProps) => 
                     {related.map((project) => (
                         <div key={project.slug} className={style.card}>
                             <div className={style.thumb}>
-                                <Image
-                                    src={project.thumbnail}
-                                    alt={project.title}
-                                    width={680}
-                                    height={460}
-                                    className={style.img}
-                                />
+                                {/* No thumbnail yet (page.tsx blanks missing files): a brand tile with the project name. */}
+                                {project.thumbnail ? (
+                                    <Image
+                                        src={project.thumbnail}
+                                        alt={project.title}
+                                        width={680}
+                                        height={460}
+                                        className={style.img}
+                                    />
+                                ) : (
+                                    <div className={`${style.img} ${style.placeholder}`} aria-hidden="true">
+                                        {project.title}
+                                    </div>
+                                )}
                                 <div className={style.overlay} />
                             </div>
                             <div className={style.cardContent}>

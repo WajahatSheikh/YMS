@@ -93,19 +93,20 @@
     }
 
     .tag {
-        font-family: "Open-Sauce-Bold";
+        font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
         font-size: 0.6875rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.12em;
-        color: #71717a;
+        color: var(--text-tertiary);
         padding: 0.25rem 0.625rem;
         border: 1px solid #27272a;
         border-radius: 999px;
     }
 
     h3 {
-        font-family: "Open-Sauce-Regular";
+        font-family: var(--font-sans);
         font-size: 1.5rem;
         font-weight: 400;
         color: #f4f4f5;
@@ -114,10 +115,10 @@
     }
 
     p {
-        font-family: "Hauora-Regular";
+        font-family: var(--font-sans);
         font-size: 0.9375rem;
         line-height: 1.6;
-        color: #71717a;
+        color: var(--text-tertiary);
         margin-bottom: 1.25rem;
 
         @media screen and (max-width: $breakpoint-sm) {
@@ -129,4 +130,17 @@
 .cta {
     font-size: 0.875rem !important;
     padding: 0.75rem 1.5rem !important;
+}
+
+// Thumbnail placeholder while a project has no image yet.
+.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 680 / 460;
+    background: var(--gradient-brand);
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: 1.75rem;
 }

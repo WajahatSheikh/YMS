@@ -15,7 +15,8 @@ import style from "./index.module.scss";
 
 export interface IndexProject {
     title: string;
-    client: string;
+    /** Optional: the tag is left out when the client can't be named. */
+    client?: string;
     category: string;
     href: string;
     image?: string;
@@ -152,7 +153,7 @@ const ProjectIndex = ({ projects }: { projects: IndexProject[] }) => {
                             <div className={style.rowMain}>
                                 <h3 className={style.rowTitle}>{project.title}</h3>
                                 <span className={style.meta}>
-                                    <span className={style.tag}>{project.client}</span>
+                                    {project.client && <span className={style.tag}>{project.client}</span>}
                                     <span className={style.tag}>{project.category}</span>
                                 </span>
                             </div>

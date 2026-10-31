@@ -1,14 +1,14 @@
 import PageHero from "@/app/Components/PageHero/PageHero";
 import { LinkGrid, WeekBlock } from "@/app/Components/PageBlocks/PageBlocks";
-import Services from "@/app/Components/Services/Services";
 import FAQSection from "@/app/Components/FAQ/FAQSection";
 import PageSchema from "@/app/Components/Seo/PageSchema";
 import { SERVICES, serviceHref } from "@/app/data/services";
 import { faqsByTopic } from "@/app/data/faq";
 import { pageMetadata } from "@/app/lib/seo";
 
-// /services — the hub: every capability with a link to its own page, the reels
-// from the home page's capability explorer, and how the work runs.
+// /services — the hub: every capability with a link to its own page, and how
+// the work runs. (The home page's capability explorer isn't repeated here: it
+// listed the same seven services a second time.)
 
 const PATH = "/services";
 const TITLE = "Design and development services for startups";
@@ -41,7 +41,6 @@ export default function ServicesPage() {
                     href: serviceHref(service)
                 }))}
             />
-            <Services />
             <WeekBlock
                 title="One sprint a week, a live demo every Friday"
                 intro="Working design in week one, and something clickable on staging by the end of week two."

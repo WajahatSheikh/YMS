@@ -1,24 +1,24 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import Image from "next/image";
+import style from "./index.module.scss";
 
-// A muted reel for the inner pages. Like the home page's ServiceVideo it costs
-// nothing until it nears the viewport (preload="none", poster attached late),
-// plays only while on screen, and never for people who've asked for reduced
-// motion — they get the poster.
-const InViewVideo = ({ src, poster, className }: { src: string; poster: string; className?: string }) => {
+// A muted reel for the inner pages. The poster is a real, optimised <Image>
+// that renders straight away (so it, not the video, is the page's largest
+// paint), and the video sits on top of it: it costs nothing until it nears
+// the viewport (preload="none"), plays only while on screen, and never for
+// people who've asked for reduced motion — they keep the poster.
+const InViewVideo = ({ src, poster }: { src: string; poster: string }) => {
     const ref = useRef<HTMLVideoElement>(null);
-    const [near, setNear] = useState(false);
 
     useEffect(() => {
         const video = ref.current;
         if (!video) return;
-        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
-                    setNear(true);
-                    if (reduced) return;
                     video.muted = true;
                     video.play().catch(() => {});
                 } else {
@@ -32,20 +32,21 @@ const InViewVideo = ({ src, poster, className }: { src: string; poster: string; 
     }, []);
 
     return (
-        <video
-            ref={ref}
-            className={className}
-            src={src}
-            poster={near ? poster : undefined}
-            width={640}
-            height={440}
-            muted
-            loop
-            playsInline
-            preload="none"
-            aria-hidden="true"
-            tabIndex={-1}
-        />
+        <div className={style.reel}>
+            <Image src={poster} alt="" width={640} height={440} sizes="(max-width: 991px) 100vw, 760px" />
+            <video
+                ref={ref}
+                src={src}
+                width={640}
+                height={440}
+                muted
+                loop
+                playsInline
+                preload="none"
+                aria-hidden="true"
+                tabIndex={-1}
+            />
+        </div>
     );
 };
 

@@ -5,74 +5,9 @@
     }
 }
 
-// ── Type families ─────────────────────────────────────────────────────────────
-// Weight-mapped faces so `font-weight` selects the right file. The type scale in
-// _typography.scss targets these two family names.
-
-$hauora-weights: (
-    200: "ExtraLight",
-    300: "Light",
-    400: "Regular",
-    500: "Medium",
-    600: "SemiBold",
-    700: "Bold",
-    800: "ExtraBold"
-);
-
-@each $weight, $file in $hauora-weights {
-    @font-face {
-        font-family: "Hauora";
-        src: url("../../../public/assets/fonts/Hauora-#{$file}.ttf") format("truetype");
-        font-weight: $weight;
-        font-style: normal;
-        font-display: swap;
-    }
-}
-
-$open-sauce-weights: (
-    300: "Light",
-    400: "Regular",
-    500: "Medium",
-    600: "SemiBold",
-    700: "Bold",
-    800: "ExtraBold",
-    900: "Black"
-);
-
-@each $weight, $file in $open-sauce-weights {
-    @font-face {
-        font-family: "Open Sauce Sans";
-        src: url("../../../public/assets/fonts/Open-Sauce-Sans/Open-Sauce-Sans/TTF/OpenSauceSans-#{$file}.ttf")
-            format("truetype");
-        font-weight: $weight;
-        font-style: normal;
-        font-display: swap;
-    }
-}
-
-// ── Legacy per-weight aliases ─────────────────────────────────────────────────
-// ~40 component stylesheets still say `font-family: "Hauora-Medium"`. Keep these
-// resolving until those are migrated to family + font-weight.
-
-@each $weight, $file in $hauora-weights {
-    @font-face {
-        font-family: "Hauora-#{$file}";
-        src: url("../../../public/assets/fonts/Hauora-#{$file}.ttf") format("truetype");
-        font-display: swap;
-    }
-}
-
-@font-face {
-    font-family: "Open-Sauce-Regular";
-    src: url("../../../public/assets/fonts/OpenSauceSans-Regular.ttf") format("truetype");
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Open-Sauce-Bold";
-    src: url("../../../public/assets/fonts/OpenSauceSans-Bold.ttf") format("truetype");
-    font-display: swap;
-}
+// Type families come from next/font in app/layout.tsx (Stack Sans Notch,
+// Geist, Geist Mono). The old self-hosted Hauora / Open Sauce TTF faces were
+// removed: they were 14 files and about 1.4 MB of fonts.
 
 html {
     // Root size drives every rem in the system, so it must shrink monotonically

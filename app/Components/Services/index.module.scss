@@ -456,8 +456,12 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     }
 }
 
-// Link to the service's own page, quieter than the CTA beside it.
+// Link to the service's own page, quieter than the CTA beside it. Padding
+// makes it a 32px tap target; the negative margin keeps the row height.
 .ctaNote {
+    display: inline-block;
+    padding-block: 6px;
+    margin-block: -6px;
     font-family: var(--font-sans);
     font-weight: var(--fw-medium);
     font-size: var(--text-sm);
@@ -472,6 +476,17 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     &:focus-visible {
         color: var(--text-brand);
         text-decoration-color: currentColor;
+    }
+
+    // The arrow pushes forward on hover, so the link answers with motion, not just colour.
+    span[aria-hidden="true"] {
+        display: inline-block;
+        transition: translate 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    &:hover span[aria-hidden="true"],
+    &:focus-visible span[aria-hidden="true"] {
+        translate: 4px 0;
     }
 }
 
@@ -551,11 +566,21 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     .arrow {
         opacity: 1;
         transform: translateX(-4px);
+        transition: transform 0.35s $ease-out;
 
         .trigger:hover &,
         .open & {
             transform: translateX(0);
         }
+
+        // The active row still answers the pointer: its arrow pushes forward.
+        .open .trigger:hover & {
+            transform: translateX(4px);
+        }
+    }
+
+    .open .trigger:hover .icon {
+        background: var(--bg-brand-subtle);
     }
 
     // Stage column: every panel occupies the same cell, spanning all index

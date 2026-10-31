@@ -62,7 +62,12 @@
         color: var(--text-disabled);
     }
 
+    // 32px tall tap target around 16px text; the negative margin keeps the
+    // visual spacing unchanged.
     a {
+        display: inline-block;
+        padding-block: 8px;
+        margin-block: -8px;
         color: var(--text-secondary);
         text-decoration: none;
 
@@ -170,5 +175,16 @@
     &:focus-visible {
         color: var(--text-brand);
         text-decoration-color: currentColor;
+    }
+
+    // The arrow pushes forward on hover, so the link answers with motion, not just colour.
+    span[aria-hidden="true"] {
+        display: inline-block;
+        transition: translate 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    &:hover span[aria-hidden="true"],
+    &:focus-visible span[aria-hidden="true"] {
+        translate: 4px 0;
     }
 }

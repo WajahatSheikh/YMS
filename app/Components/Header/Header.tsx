@@ -83,12 +83,27 @@ const Logo = ({ onHome }: { onHome?: () => void }) => (
     </Link>
 );
 
+// True once the page has scrolled past `offset` px. The header then gets a
+// canvas-tinted, blurred background so it never sits on top of content.
+const useScrolledPast = (offset: number) => {
+    const [past, setPast] = useState(false);
+    useEffect(() => {
+        const onScroll = () => setPast(window.scrollY > offset);
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+        return () => window.removeEventListener("scroll", onScroll);
+    }, [offset]);
+    return past;
+};
+
 // ── Portfolio header — back arrow + Book a Call ───────────────────────────────
+// Dark island, like the case-study page under it.
 const PortfolioHeader = () => {
     const { navigateTo } = usePageTransition();
+    const scrolled = useScrolledPast(24);
 
     return (
-        <header className={style.header}>
+        <header className={`${style.header} ${style.solid} ${scrolled ? style.scrolled : ""}`} data-theme="dark">
             <div className={style.inner}>
                 <button className={style.backButton} onClick={() => navigateTo("/", "Home")} aria-label="Back to home">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
@@ -128,6 +143,7 @@ const Header = () => {
     const lastScrollY = useRef(0);
     const menuOpenRef = useRef(false);
     const lenis = useLenis();
+    const scrolled = useScrolledPast(24);
 
     useEffect(() => {
         menuOpenRef.current = menuOpen;
@@ -196,7 +212,7 @@ const Header = () => {
     );
 
     return (
-        <header className={`${style.header} ${navHidden ? style.navHidden : ""}`}>
+        <header className={`${style.header} ${navHidden ? style.navHidden : ""} ${scrolled ? style.scrolled : ""}`}>
             <div className={style.inner}>
                 <Logo
                     onHome={

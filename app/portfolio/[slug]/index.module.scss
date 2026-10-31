@@ -1,9 +1,11 @@
 @import "../../styles/abstract/variables";
 
 /* ─── Layout ─────────────────────────────────────────── */
+// Theme tokens directly: --secondary-color / --white resolve on :root, so they
+// would stay light inside this dark island (data-theme="dark" on <main>).
 .page {
-    background-color: var(--secondary-color);
-    color: var(--white);
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
     min-height: 100vh;
     padding-bottom: 0;
 }
@@ -90,7 +92,7 @@
 }
 
 .body {
-    font-family: "Hauora-Regular";
+    font-family: var(--font-sans);
     font-size: 1.0625rem;
     line-height: 1.85;
     color: #a1a1aa;
@@ -141,7 +143,8 @@
 }
 
 .pill {
-    font-family: "Open-Sauce-Bold";
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
     font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -175,10 +178,11 @@
 }
 
 .heroSub {
-    font-family: "Hauora-Medium";
+    font-family: var(--font-sans);
+    font-weight: var(--fw-medium);
     font-size: 1.125rem;
     line-height: 1.75;
-    color: #71717a;
+    color: var(--text-tertiary);
     margin-bottom: 2.5rem;
 
     @media screen and (max-width: $breakpoint-sm) {
@@ -210,11 +214,11 @@
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #52525b;
+    color: var(--text-tertiary);
 }
 
 .metaValue {
-    font-family: "Open-Sauce-Regular";
+    font-family: var(--font-sans);
     font-size: 0.9375rem;
     color: #e4e4e7;
 }
@@ -305,11 +309,11 @@
     font-size: 0.6875rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #52525b;
+    color: var(--text-tertiary);
 }
 
 .statValue {
-    font-family: "Open-Sauce-Regular";
+    font-family: var(--font-sans);
     font-size: 0.9375rem;
     color: #e4e4e7;
     line-height: 1.4;
@@ -358,7 +362,7 @@
 }
 
 .problemTitle {
-    font-family: "Open-Sauce-Regular";
+    font-family: var(--font-sans);
     font-size: 1.125rem;
     font-weight: 400;
     color: #f4f4f5;
@@ -366,10 +370,10 @@
 }
 
 .problemDesc {
-    font-family: "Hauora-Regular";
+    font-family: var(--font-sans);
     font-size: 0.9375rem;
     line-height: 1.7;
-    color: #71717a;
+    color: var(--text-tertiary);
 }
 
 /* ─── Research ───────────────────────────────────────── */
@@ -434,17 +438,17 @@
 }
 
 .researchTitle {
-    font-family: "Open-Sauce-Regular";
+    font-family: var(--font-sans);
     font-size: 1.25rem;
     font-weight: 400;
     color: #f4f4f5;
 }
 
 .researchDesc {
-    font-family: "Hauora-Regular";
+    font-family: var(--font-sans);
     font-size: 0.9375rem;
     line-height: 1.7;
-    color: #71717a;
+    color: var(--text-tertiary);
     flex: 1;
 }
 
@@ -508,7 +512,7 @@
     font-size: 0.6875rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #52525b;
+    color: var(--text-tertiary);
 }
 
 /* ─── UI Showcase ────────────────────────────────────── */
@@ -560,7 +564,7 @@
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #52525b;
+    color: var(--text-tertiary);
     margin-bottom: 1.25rem;
 }
 
@@ -587,7 +591,7 @@
 }
 
 .swatchName {
-    font-family: "Open-Sauce-Regular";
+    font-family: var(--font-sans);
     font-size: 0.75rem;
     color: #a1a1aa;
     line-height: 1.3;
@@ -596,7 +600,7 @@
 .swatchHex {
     font-family: var(--font-ibm);
     font-size: 0.6875rem;
-    color: #52525b;
+    color: var(--text-tertiary);
     letter-spacing: 0.05em;
 }
 
@@ -634,9 +638,9 @@
 }
 
 .fontUsage {
-    font-family: "Hauora-Regular";
+    font-family: var(--font-sans);
     font-size: 0.8125rem;
-    color: #52525b;
+    color: var(--text-tertiary);
 }
 
 /* ─── Final Screens ──────────────────────────────────── */
@@ -729,15 +733,32 @@
 }
 
 .outcomeMetric {
-    font-family: "Open-Sauce-Regular";
+    font-family: var(--font-sans);
     font-size: 1rem;
     color: #f4f4f5;
 }
 
 .outcomeDesc {
-    font-family: "Hauora-Regular";
+    font-family: var(--font-sans);
     font-size: 0.875rem;
     line-height: 1.5;
-    color: #71717a;
+    color: var(--text-tertiary);
     margin-top: 0.25rem;
+}
+
+/* ─── Image placeholder (project image not added yet) ───────────── */
+.imagePlaceholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    padding: 1.5rem;
+    background: var(--gradient-brand);
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    letter-spacing: -0.01em;
+    text-align: center;
 }

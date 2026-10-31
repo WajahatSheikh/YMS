@@ -61,6 +61,18 @@
     }
 }
 
+// Poster image with the reel stacked on top (InViewVideo.tsx). The video is
+// transparent until its first frame, so the poster shows through until then.
+.reel {
+    position: relative;
+
+    video {
+        position: absolute;
+        inset: 0;
+        height: 100%;
+    }
+}
+
 // ── Heading ──────────────────────────────────────────────────────────────────
 .head {
     display: flex;
@@ -116,6 +128,17 @@
     &:focus-visible {
         color: var(--text-brand);
         text-decoration-color: currentColor;
+    }
+
+    // The arrow pushes forward on hover, so the link answers with motion, not just colour.
+    span[aria-hidden="true"] {
+        display: inline-block;
+        transition: translate 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    &:hover span[aria-hidden="true"],
+    &:focus-visible span[aria-hidden="true"] {
+        translate: 4px 0;
     }
 }
 

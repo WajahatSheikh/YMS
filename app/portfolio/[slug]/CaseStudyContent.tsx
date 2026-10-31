@@ -11,6 +11,37 @@ import style from "./index.module.scss";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// A case-study image, or — while the project's real image hasn't been added yet
+// (page.tsx blanks paths whose file is missing) — a labelled brand placeholder
+// of the same size, instead of a broken image.
+const CaseImage = ({
+    src,
+    alt,
+    width,
+    height,
+    className,
+    priority
+}: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+    className?: string;
+    priority?: boolean;
+}) =>
+    src ? (
+        <Image src={src} alt={alt} width={width} height={height} className={className} priority={priority} />
+    ) : (
+        <div
+            className={`${className ?? ""} ${style.imagePlaceholder}`}
+            style={{ aspectRatio: `${width} / ${height}` }}
+            role="img"
+            aria-label={`${alt} (image coming soon)`}
+        >
+            <span aria-hidden="true">{alt}</span>
+        </div>
+    );
+
 interface Props {
     project: Project;
     allProjects: Project[];
@@ -76,7 +107,8 @@ export default function CaseStudyContent({ project, allProjects }: Props) {
     );
 
     return (
-        <main id="main" ref={pageRef} className={style.page}>
+        // Dark island in both themes: the case-study layout is drawn on dark.
+        <main id="main" ref={pageRef} className={style.page} data-theme="dark">
             {/* ══════════════════════════════ HERO ══════════════════════════════ */}
             <div className={style.hero} ref={heroRef}>
                 <div className={style.container}>
@@ -122,7 +154,7 @@ export default function CaseStudyContent({ project, allProjects }: Props) {
                         {/* Right: hero image */}
                         <div className={style.heroRight} data-hero>
                             <div className={style.heroImageWrap}>
-                                <Image
+                                <CaseImage
                                     src={project.heroImage}
                                     alt={project.title}
                                     width={820}
@@ -187,7 +219,7 @@ export default function CaseStudyContent({ project, allProjects }: Props) {
                         {project.problem.points.map((point, i) => (
                             <div key={i} className={style.problemCard} data-stagger-item>
                                 <span className={style.problemNum}>0{i + 1}</span>
-                                <h4 className={style.problemTitle}>{point.title}</h4>
+                                <h3 className={style.problemTitle}>{point.title}</h3>
                                 <p className={style.problemDesc}>{point.description}</p>
                             </div>
                         ))}
@@ -213,7 +245,7 @@ export default function CaseStudyContent({ project, allProjects }: Props) {
                         {project.research.methods.map((method) => (
                             <div key={method.number} className={style.researchCard} data-stagger-item>
                                 <span className={style.researchNum}>{method.number}</span>
-                                <h4 className={style.researchTitle}>{method.title}</h4>
+                                <h3 className={style.researchTitle}>{method.title}</h3>
                                 <p className={style.researchDesc}>{method.description}</p>
                                 <span className={style.researchStat}>{method.stat}</span>
                             </div>
@@ -234,7 +266,7 @@ export default function CaseStudyContent({ project, allProjects }: Props) {
                     <div className={style.wireGrid} data-stagger-group>
                         {project.wireframeImages.map((src, i) => (
                             <div key={i} className={style.wireCard} data-stagger-item>
-                                <Image
+                                <CaseImage
                                     src={src}
                                     alt={`Wireframe ${i + 1}`}
                                     width={480}
@@ -260,7 +292,7 @@ export default function CaseStudyContent({ project, allProjects }: Props) {
                     <div className={style.uiGrid} data-stagger-group>
                         {project.uiImages.map((src, i) => (
                             <div key={i} className={style.uiCard} data-stagger-item>
-                                <Image
+                                <CaseImage
                                     src={src}
                                     alt={`UI Screen ${i + 1}`}
                                     width={520}
@@ -330,7 +362,7 @@ export default function CaseStudyContent({ project, allProjects }: Props) {
                     <div className={style.screensGrid} data-stagger-group>
                         {project.finalScreens.map((src, i) => (
                             <div key={i} className={style.screenCard} data-stagger-item>
-                                <Image
+                                <CaseImage
                                     src={src}
                                     alt={`Final Screen ${i + 1}`}
                                     width={400}

@@ -20,7 +20,8 @@ const WORK: Omit<IndexProject, "href">[] = [
     { title: "Paramount Students", client: "Paramount Students", category: "Mobile App" },
     { title: "Students Experience", client: "Paramount Students", category: "Mobile App" },
     { title: "Gasoline Application", client: "Digital Gravity", category: "Web Management" },
-    { title: "Radiant Skincare Branding", client: "Client Name", category: "Website Design" },
+    // Client tag left off until the real client name is confirmed.
+    { title: "Radiant Skincare Branding", category: "Website Design" },
     { title: "Ed-Tech Mobile Games", client: "SABAQ", category: "Game Design" },
     { title: "Strike A Balance", client: "SABAQ", category: "Game Design" }
 ];

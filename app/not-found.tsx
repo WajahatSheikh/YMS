@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ctaGlow } from "./lib/ctaGlow";
+import style from "./not-found.module.scss";
 
 // Branded 404. Next.js serves it with a real 404 status, so search engines drop
 // dead URLs instead of indexing a "soft 404"; the noindex is belt and braces.
@@ -30,20 +32,7 @@ export default function NotFound() {
             <p className="body-l" style={{ color: "var(--text-tertiary)", maxWidth: "46ch" }}>
                 The link may be old or mistyped. Everything we do is on the home page.
             </p>
-            <Link
-                href="/"
-                style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    height: "var(--control-lg)",
-                    padding: "0 var(--space-6)",
-                    borderRadius: "var(--radius-full)",
-                    background: "var(--gradient-brand)",
-                    color: "var(--text-on-brand)",
-                    fontFamily: "var(--font-sans)",
-                    fontWeight: 500
-                }}
-            >
+            <Link href="/" className={style.back} {...ctaGlow}>
                 Back to home
             </Link>
         </main>
