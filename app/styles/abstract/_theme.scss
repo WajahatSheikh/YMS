@@ -164,8 +164,7 @@
     color: var(--text-primary);
 }
 
-// White client-logo PNGs → black on light pages. Moonshot's logo is a dark
-// tile, which already reads on light, so it is left alone.
-img[src*="client-logos"]:not([src*="moonshot"]) {
+// White client-logo PNGs (all on transparent backgrounds) → black on light pages.
+img[src*="client-logos"] {
     filter: var(--logo-filter);
 }
