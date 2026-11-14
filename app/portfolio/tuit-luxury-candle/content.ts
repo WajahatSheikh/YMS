@@ -191,21 +191,6 @@ export const TUIT = {
         quoteHref: "https://www.instagram.com/tuitcandleco/"
     },
 
-    faq: [
-        {
-            question: "What did YourMomStudio design for Tüit Luxury Candle Co.?",
-            answer: "A responsive e-commerce landing page and the design system behind it. The original page existed only as one 1920 px desktop frame with 63 hand-placed layers. We rebuilt all 12 sections in Figma auto layout, designed iPad (768 px) and mobile (440 px) layouts from scratch, and moved colour, type and repeated parts into 8 colour tokens, 21 text styles and 3 components."
-        },
-        {
-            question: "How does the page change between desktop, iPad and mobile?",
-            answer: "Each size was rebuilt, not resized. Desktop uses 70 px margins with three and four product cards in a row. On iPad the best sellers become a swipe row and new arrivals a 2 by 2 grid. On mobile the margins drop to 24 px, tap targets are 44 px, display type is smaller and photos carry a dark gradient so text stays readable."
-        },
-        {
-            question: "Is the Tüit design ready for development?",
-            answer: "Yes. Every section is a named auto-layout frame with fill and hug sizing, which maps straight to flexbox and grid in code. Desktop, iPad and mobile share the same tokens, text styles and components, so one change carries across all three screens."
-        }
-    ],
-
     closing: {
         title: "Want a storefront that feels like this?",
         text: "We design and build websites, products and brands for funded startups, on one monthly subscription.",

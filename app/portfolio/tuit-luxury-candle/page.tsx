@@ -81,7 +81,7 @@ const ChapterHead = ({ no, label, title, sub }: { no: string; label: string; tit
 );
 
 export default function TuitCaseStudy() {
-    const { hero, cover, brief, phone, concept, page, system, screens, mobile, result, faq, closing } = TUIT;
+    const { hero, cover, brief, phone, concept, page, system, screens, mobile, result, closing } = TUIT;
 
     return (
         <main id="main" className={`${s.page} ${italiana.variable} ${cormorant.variable}`} data-tuit>
@@ -90,7 +90,6 @@ export default function TuitCaseStudy() {
                 title={TITLE}
                 description={DESCRIPTION}
                 crumbs={CRUMBS}
-                faqs={faq}
                 extra={[
                     {
                         "@type": "Article",
@@ -366,24 +365,9 @@ export default function TuitCaseStudy() {
                 </div>
             </section>
 
-            {/* ───────────── Questions + what next ─────────────
-                The id is not "faq" on purpose: globals.scss gives #faq
-                content-visibility: auto (for the home page), which would leave
-                this band unmeasured when ScrollTrigger reads positions. */}
-            <section className={s.band} data-ground="black" id="questions">
+            {/* ───────────── What next ───────────── */}
+            <section className={s.band} data-ground="black">
                 <div className={s.wrap}>
-                    <h2 className={s.faqTitle} data-rise>
-                        Questions about this project
-                    </h2>
-                    <div className={s.faq} data-rise-group>
-                        {faq.map((item) => (
-                            <div key={item.question} className={s.faqItem} data-rise-item>
-                                <h3>{item.question}</h3>
-                                <p>{item.answer}</p>
-                            </div>
-                        ))}
-                    </div>
-
                     <div className={s.closing}>
                         <h2 className={s.closingTitle} data-rise>
                             {closing.title}
@@ -420,7 +404,7 @@ export default function TuitCaseStudy() {
                 Back on linen, where the candle was first lit. */}
             <section className={`${s.band} ${s.nextBand}`} data-ground="linen">
                 <div className={s.wrap}>
-                    <NextCaseStudy related={relatedCaseStudies(TUIT.slug)} classes={{ link: s.nextLink, label: s.nextLabel, title: s.nextTitle, meta: s.nextMeta, tags: s.nextTags, tag: s.nextTag, thumb: s.nextThumb, icon: s.nextIcon }} />
+                    <NextCaseStudy related={relatedCaseStudies(TUIT.slug)} cta="View case study" sizes="(max-width: 767px) 92vw, 56vw" classes={{ link: s.nextLink, label: s.nextLabel, title: s.nextTitle, meta: s.nextMeta, tags: s.nextTags, tag: s.nextTag, thumb: s.nextThumb, icon: s.nextIcon }} />
                 </div>
             </section>
 

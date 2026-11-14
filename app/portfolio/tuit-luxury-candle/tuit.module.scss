@@ -1048,61 +1048,12 @@ $italic: var(--font-cormorant), Georgia, serif;
     }
 }
 
-// ── Questions + closing ──────────────────────────────────────────────────────
-.faqTitle {
-    margin: 0;
-    font-family: $italic;
-    font-style: italic;
-    font-weight: 400;
-    font-size: clamp(26px, 2.2vw, 40px);
-    line-height: 1.2;
-    color: var(--ink);
-}
-
-.faq {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(28px, 2.6vw, 48px);
-    margin-top: clamp(28px, 3vw, 56px);
-
-    @media (max-width: $breakpoint-lg) {
-        grid-template-columns: minmax(0, 1fr);
-    }
-}
-
-.faqItem {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    padding-top: 22px;
-    border-top: 1px solid var(--line);
-
-    h3 {
-        margin: 0;
-        font-family: var(--font-sans);
-        font-weight: 500;
-        font-size: clamp(19px, 1.25vw, 23px);
-        line-height: 1.35;
-        letter-spacing: -0.005em;
-        color: var(--ink);
-    }
-
-    p {
-        margin: 0;
-        font-size: 16px;
-        line-height: 1.7;
-        color: var(--muted);
-    }
-}
-
+// ── What next ────────────────────────────────────────────────────────────────
 .closing {
     display: grid;
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
     align-items: end;
     gap: clamp(36px, 6vw, 120px);
-    margin-top: clamp(80px, 9vw, 168px);
-    padding-top: clamp(40px, 4.4vw, 80px);
-    border-top: 1px solid var(--line);
 
     @media (max-width: $breakpoint-lg) {
         grid-template-columns: minmax(0, 1fr);
@@ -1254,7 +1205,11 @@ $italic: var(--font-cormorant), Georgia, serif;
 }
 
 // ── Next case study (linen) ──────────────────────────────────────────────────
-// Text left, the next study's image in the arch the concept notes use.
+// The next study's image at its own 16:11 shape (never cropped, so it stays
+// sharp) on the left, the text and a real button on the right. Hover or focus
+// lights it: a warm glow rises from the bottom of the image, the image eases
+// in, and the button fills with ember. Nothing depends on hover: on touch the
+// whole card is one large link and the button is always visible.
 .nextBand {
     padding-block: clamp(72px, 8vw, 150px);
 }
@@ -1262,21 +1217,26 @@ $italic: var(--font-cormorant), Georgia, serif;
 .nextLink {
     display: grid;
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    // The text block sits centred beside the image (empty rows above and below).
     grid-template-areas:
-        "label thumb"
-        "title thumb"
-        "meta thumb"
-        "tags thumb"
-        "icon thumb";
-    grid-template-rows: auto auto auto auto 1fr;
-    column-gap: clamp(32px, 6vw, 120px);
-    row-gap: 18px;
+        "thumb ."
+        "thumb label"
+        "thumb title"
+        "thumb meta"
+        "thumb tags"
+        "thumb icon"
+        "thumb .";
+    grid-template-rows: 1fr auto auto auto auto auto 1fr;
+    column-gap: clamp(32px, 5vw, 96px);
+    row-gap: 16px;
+    align-items: start;
     color: var(--ink);
     text-decoration: none;
 
     &:focus-visible {
         outline: 2px solid $forest;
         outline-offset: 10px;
+        border-radius: 18px;
     }
 
     @media (max-width: $breakpoint-md) {
@@ -1308,14 +1268,15 @@ $italic: var(--font-cormorant), Georgia, serif;
     grid-area: title;
     justify-self: start;
     font-family: $display;
-    font-size: clamp(48px, 7.4vw, 140px);
-    line-height: 0.96;
+    font-size: clamp(44px, 5vw, 96px);
+    line-height: 0.98;
     letter-spacing: -0.01em;
     text-transform: uppercase;
+    text-wrap: balance;
     // A line burns in under the name on hover.
+    padding-bottom: 8px;
     background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0% 2px;
-    padding-bottom: 6px;
-    transition: background-size 0.8s $ease;
+    transition: background-size 0.9s $ease;
 
     .nextLink:hover &,
     .nextLink:focus-visible & {
@@ -1327,7 +1288,7 @@ $italic: var(--font-cormorant), Georgia, serif;
     grid-area: meta;
     font-family: $italic;
     font-style: italic;
-    font-size: clamp(22px, 2vw, 34px);
+    font-size: clamp(21px, 1.8vw, 30px);
     line-height: 1.3;
     color: var(--muted);
 }
@@ -1352,10 +1313,11 @@ $italic: var(--font-cormorant), Georgia, serif;
     grid-area: thumb;
     position: relative;
     display: block;
-    aspect-ratio: 5 / 6;
+    aspect-ratio: 16 / 11;
     overflow: hidden;
-    border-radius: 999px 999px 10px 10px;
+    border-radius: clamp(14px, 1.4vw, 24px);
     background: $plate;
+    box-shadow: 0 40px 90px -56px rgba($forest, 0.6);
 
     img {
         position: absolute;
@@ -1363,35 +1325,62 @@ $italic: var(--font-cormorant), Georgia, serif;
         width: 100%;
         height: 100%;
         object-fit: cover;
-        // The arch eats the top corners: keep the subject below them.
-        object-position: 50% 70%;
         transition: scale 1.4s $ease;
     }
 
-    .nextLink:hover & img {
-        scale: 1.06;
+    // The glow: candlelight rising from the bottom edge.
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(120% 70% at 50% 115%, rgba($ember, 0.42), rgba($ember, 0) 62%);
+        opacity: 0;
+        transition: opacity 0.9s $ease;
+        pointer-events: none;
     }
 
-    @media (max-width: $breakpoint-md) {
-        aspect-ratio: 4 / 3;
+    .nextLink:hover &,
+    .nextLink:focus-visible & {
+        img {
+            scale: 1.035;
+        }
+
+        &::after {
+            opacity: 1;
+        }
     }
 }
 
+// The button: always visible, fills with ember on hover / focus.
 .nextIcon {
     grid-area: icon;
-    align-self: end;
-    display: grid;
-    place-items: center;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
+    justify-self: start;
+    margin-top: clamp(8px, 1.4vw, 24px);
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    height: 60px;
+    padding: 0 8px 0 28px;
+    border-radius: 999px;
     background: $forest;
     color: $linen;
-    transition: background-color 0.5s $ease, color 0.5s $ease;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 17px;
+    transition: background-color 0.5s $ease, color 0.5s $ease, scale 0.3s $ease;
+
+    > span {
+        white-space: nowrap;
+    }
 
     svg {
-        width: 24px;
-        height: 24px;
+        box-sizing: content-box;
+        width: 20px;
+        height: 20px;
+        padding: 12px;
+        border-radius: 50%;
+        background: $linen;
+        color: $forest;
         transition: translate 0.5s $ease;
     }
 
@@ -1403,6 +1392,10 @@ $italic: var(--font-cormorant), Georgia, serif;
         svg {
             translate: 4px 0;
         }
+    }
+
+    .nextLink:active & {
+        scale: 0.98;
     }
 }
 

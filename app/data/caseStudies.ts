@@ -14,6 +14,7 @@ export interface CaseStudyCard {
     category: string;
     year: string;
     tags: readonly string[];
+    /** 16:11, 1600 to 2000 px wide: sharp at half the page width on a retina screen. */
     image: string;
     imageAlt: string;
 }
@@ -26,7 +27,7 @@ export const CASE_STUDIES: readonly CaseStudyCard[] = [
         category: MB.category,
         year: MB.year,
         tags: ["E-commerce", "Fashion", "Website", "Responsive", "Design system"],
-        image: MB.card.image,
+        image: "/assets/images/work/mdrn-blk/mdrn-blk-next-card.webp",
         imageAlt: "MDRN BLK skatewear website on a phone beside a model in beige cargo pants"
     },
     {
@@ -36,8 +37,8 @@ export const CASE_STUDIES: readonly CaseStudyCard[] = [
         category: TUIT.category,
         year: TUIT.year,
         tags: ["E-commerce", "Luxury", "Website", "Responsive", "Design system"],
-        image: TUIT.card.image,
-        imageAlt: "Tüit Luxury Candle Co. website design"
+        image: "/assets/images/work/tuit/tuit-candle-next-card.webp",
+        imageAlt: "Tüit Luxury Candle Co. website on an iPad resting on a ribbed clay sculpture"
     },
     {
         slug: NW.slug,
@@ -46,8 +47,8 @@ export const CASE_STUDIES: readonly CaseStudyCard[] = [
         category: NW.category,
         year: NW.year,
         tags: ["Beauty", "Booking", "Website", "Responsive", "Design system"],
-        image: NW.card.image,
-        imageAlt: "Naturally White website on a monitor beside a vase of flowers"
+        image: "/assets/images/work/naturally-white/naturally-white-next-card.webp",
+        imageAlt: "Naturally White website on an iPad resting on a teal ribbed sculpture"
     }
 ];
 

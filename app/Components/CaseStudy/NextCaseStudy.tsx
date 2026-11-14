@@ -33,7 +33,21 @@ const Arrow = () => (
     </svg>
 );
 
-export default function NextCaseStudy({ related, classes, label = "Next case study" }: { related: readonly RelatedCaseStudy[]; classes: NextCaseStudyClasses; label?: string }) {
+export default function NextCaseStudy({
+    related,
+    classes,
+    label = "Next case study",
+    cta,
+    sizes = "(max-width: 767px) 92vw, 34vw"
+}: {
+    related: readonly RelatedCaseStudy[];
+    classes: NextCaseStudyClasses;
+    label?: string;
+    /** Visible button text beside the arrow (e.g. "View case study"). */
+    cta?: string;
+    /** next/image sizes for the thumbnail, matching how wide the page shows it. */
+    sizes?: string;
+}) {
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
@@ -64,9 +78,10 @@ export default function NextCaseStudy({ related, classes, label = "Next case stu
                 </span>
             )}
             <span className={classes.thumb}>
-                <Image src={study.image} alt={study.imageAlt} width={1280} height={880} sizes="(max-width: 767px) 92vw, 34vw" />
+                <Image src={study.image} alt={study.imageAlt} width={2000} height={1375} sizes={sizes} />
             </span>
-            <span className={classes.icon} aria-hidden="true">
+            <span className={classes.icon} aria-hidden={cta ? undefined : true}>
+                {cta && <span>{cta}</span>}
                 <Arrow />
             </span>
         </Link>
