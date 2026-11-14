@@ -14,8 +14,7 @@ import style from "./index.module.scss";
 //
 // Each row links to its own case study. The real ones (MDRN BLK, Naturally
 // White, Tüit) have a thumbnail and a preview reel that plays in the cursor
-// card. "Strike A Balance" still opens a placeholder page (app/data/projects.ts).
-// Add a row only when its case study is ready.
+// card. Add a row only when its case study is ready.
 
 const WORK: IndexProject[] = [
     { title: MB.client, category: MB.category, href: MB.path, image: MB.card.image, video: MB.card.video },
@@ -27,8 +26,7 @@ const WORK: IndexProject[] = [
         href: TUIT.path,
         image: TUIT.card.image,
         video: TUIT.card.video
-    },
-    { title: "Strike A Balance", client: "SABAQ", category: "Game Design", href: "/portfolio/shipstack" }
+    }
 ];
 
 const Client = () => (
