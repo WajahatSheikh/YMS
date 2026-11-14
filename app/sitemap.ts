@@ -1,12 +1,12 @@
 import type { MetadataRoute } from "next";
 import { SITE, absoluteUrl } from "./data/site";
-import { SERVICES, serviceHref } from "./data/services";
 import { TUIT } from "./portfolio/tuit-luxury-candle/content";
 import { NW } from "./portfolio/naturally-white/content";
 import { MB } from "./portfolio/mdrn-blk/content";
 import { GME } from "./portfolio/global-minds-education/content";
 
-// /sitemap.xml — only pages meant to rank.
+// /sitemap.xml — only pages meant to rank. The /services pages are switched
+// off for now (redirected to /#services in next.config.ts), so they are not listed.
 //
 // Of the /portfolio/* case studies only the real ones are listed (CASE_STUDIES).
 // The rest are placeholder projects, marked noindex (see
@@ -15,7 +15,6 @@ import { GME } from "./portfolio/global-minds-education/content";
 const CASE_STUDIES = [GME, MB, TUIT, NW].map((study) => ({ path: study.path, lastModified: new Date(study.published) }));
 const PAGES: { path: string; priority: number }[] = [
     { path: "/design-subscription", priority: 0.9 },
-    { path: "/services", priority: 0.9 },
     { path: "/pricing", priority: 0.9 },
     { path: "/process", priority: 0.7 },
     { path: "/team", priority: 0.6 },
@@ -31,12 +30,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
             lastModified,
             changeFrequency: "monthly" as const,
             priority: page.priority
-        })),
-        ...SERVICES.map((service) => ({
-            url: absoluteUrl(serviceHref(service)),
-            lastModified,
-            changeFrequency: "monthly" as const,
-            priority: 0.8
         })),
         ...CASE_STUDIES.map((study) => ({
             url: absoluteUrl(study.path),

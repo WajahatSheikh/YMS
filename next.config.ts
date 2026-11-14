@@ -36,6 +36,16 @@ const nextConfig: NextConfig = {
     },
     async headers() {
         return [{ source: "/:path*", headers: SECURITY_HEADERS }];
+    },
+    // Service pages are switched off for now: /services and every
+    // /services/<slug> land on the home page's "Services we offer" section.
+    // Temporary (307) on purpose, so browsers don't cache it for good and the
+    // pages (still in app/services) can be switched back on by deleting this.
+    async redirects() {
+        return [
+            { source: "/services", destination: "/#services", permanent: false },
+            { source: "/services/:slug", destination: "/#services", permanent: false }
+        ];
     }
 };
 
