@@ -462,7 +462,7 @@ export default function NaturallyWhiteCaseStudy() {
                 Back on the hero's lilac-to-sky gradient: a fresh start. */}
             <section className={`${s.band} ${s.nextBand}`} data-ground="hero">
                 <div className={s.wrap}>
-                    <NextCaseStudy related={relatedCaseStudies(NW.slug)} classes={{ link: s.nextLink, label: s.nextLabel, title: s.nextTitle, meta: s.nextMeta, tags: s.nextTags, tag: s.nextTag, thumb: s.nextThumb, icon: s.nextIcon }} />
+                    <NextCaseStudy related={relatedCaseStudies(NW.slug)} cta="View case study" sizes="(max-width: 767px) 92vw, 56vw" classes={{ link: s.nextLink, label: s.nextLabel, title: s.nextTitle, meta: s.nextMeta, tags: s.nextTags, tag: s.nextTag, thumb: s.nextThumb, icon: s.nextIcon }} />
                 </div>
             </section>
 
