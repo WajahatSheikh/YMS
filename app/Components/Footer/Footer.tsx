@@ -26,7 +26,7 @@ import style from "./index.module.scss";
 
 const EXPLORE = [
     { label: "Design subscription", href: "/design-subscription" },
-    { label: "Services", href: "/services" },
+    { label: "Services", href: "/#services" },
     { label: "Pricing", href: "/pricing" },
     { label: "Process", href: "/process" },
     { label: "FAQ", href: "/faq" }
@@ -40,9 +40,11 @@ const COMPANY = [
 // Profiles come from app/data/site.ts. Until a URL is set the label renders as
 // plain text styled like a link — visible, but not a link Google would flag.
 const SOCIAL = [
+    { label: "Instagram", href: SITE.social.instagram },
+    { label: "Behance", href: SITE.social.behance },
     { label: "X / Twitter", href: SITE.social.x },
-    { label: "LinkedIn", href: SITE.social.linkedin },
-    { label: "Instagram", href: SITE.social.instagram }
+    { label: "Threads", href: SITE.social.threads },
+    { label: "Clutch", href: SITE.clutch }
 ];
 
 const PhoneIcon = () => (

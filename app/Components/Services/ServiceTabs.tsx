@@ -11,7 +11,7 @@ import style from "./index.module.scss";
 // completes the next service opens (the ring's animationend is the only timer).
 // The rotation pauses while the pointer is over the band, while focus is inside
 // it, while the band is off screen or the tab is hidden, and stops for good as
-// soon as the visitor picks a tab, uses the arrows or swipes. Under reduced
+// soon as the visitor picks a tab, uses the arrow keys or swipes. Under reduced
 // motion it never starts.
 //
 // Every panel is rendered on the server and kept in the HTML (inactive ones
@@ -75,12 +75,6 @@ export const ServiceReel = ({ src, poster, alt }: { src: string; poster: string;
         </>
     );
 };
-
-const Chevron = ({ dir }: { dir: "left" | "right" }) => (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d={dir === "left" ? "M15 5l-7 7 7 7" : "M9 5l7 7-7 7"} stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-);
 
 export default function ServiceTabs({ items }: { items: ServiceTab[] }) {
     const [active, setActive] = useState(0);
@@ -154,9 +148,6 @@ export default function ServiceTabs({ items }: { items: ServiceTab[] }) {
             data-paused={paused || undefined}
         >
             <div className={style.picker}>
-                <button type="button" className={style.arrow} onClick={() => go(active - 1)} aria-label="Previous service">
-                    <Chevron dir="left" />
-                </button>
                 <div className={style.tabs} role="tablist" aria-label="Services we offer" onKeyDown={onKeyDown}>
                     {items.map((item, i) => (
                         <button
@@ -197,9 +188,6 @@ export default function ServiceTabs({ items }: { items: ServiceTab[] }) {
                         </button>
                     ))}
                 </div>
-                <button type="button" className={style.arrow} onClick={() => go(active + 1)} aria-label="Next service">
-                    <Chevron dir="right" />
-                </button>
             </div>
 
             <div className={style.cardWrap} onPointerDown={onPointerDown} onPointerUp={onPointerUp} onPointerCancel={() => (swipe.current = null)}>
@@ -218,9 +206,6 @@ export default function ServiceTabs({ items }: { items: ServiceTab[] }) {
                 ))}
             </div>
 
-            <p className={style.position} aria-live="polite">
-                <span>{String(active + 1).padStart(2, "0")}</span> / {String(count).padStart(2, "0")} · {items[active].title}
-            </p>
         </div>
     );
 }

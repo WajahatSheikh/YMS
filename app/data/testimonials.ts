@@ -19,6 +19,8 @@ export interface Testimonial {
     country: string;
     quote: string;
     highlight: string;
+    /** One sentence lifted verbatim from `quote`, shown large on the card until "Read full quote". */
+    pull: string;
     result: string;
 }
 
@@ -26,16 +28,17 @@ export const TESTIMONIALS: Testimonial[] = [
     {
         name: "Aysha Abdul Rab",
         role: "Founder",
-        company: "Global Learners Education",
-        avatar: "/assets/images/Testimonial%20Avatar/global.png",
+        company: "Global Minds Education",
+        avatar: "/assets/images/Testimonial%20Avatar/global-minds.png",
         avatarOnWhite: true,
-        logo: "/assets/images/client-logos/logo-06-global.png",
-        logoWidth: 108,
+        logo: "/assets/images/client-logos/logo-06-global-minds.png",
+        logoWidth: 117,
         project: "Website design",
         location: "Ras al-Khaimah, UAE",
         country: "UAE",
         quote: "Working with YMS was seamless. They delivered our complete website in just 1 week, on time and beyond expectations. The design quality, attention to detail and communication throughout the process was outstanding. Highly recommend",
         highlight: "They delivered our complete website in just 1 week, on time and beyond expectations.",
+        pull: "They delivered our complete website in just 1 week, on time and beyond expectations.",
         result: "Website live in 1 week"
     },
     {
@@ -50,6 +53,7 @@ export const TESTIMONIALS: Testimonial[] = [
         country: "Pakistan",
         quote: "A highly impactful collaboration on the MUSE Learning App, where complex school curriculum was transformed into fun, interactive, and engaging mobile games for kids. The work focused on turning traditional learning content into playful experiences that improve understanding and retention",
         highlight: "complex school curriculum was transformed into fun, interactive, and engaging mobile games for kids",
+        pull: "A highly impactful collaboration on the MUSE Learning App, where complex school curriculum was transformed into fun, interactive, and engaging mobile games for kids.",
         result: "Curriculum into games"
     },
     {
@@ -64,21 +68,8 @@ export const TESTIMONIALS: Testimonial[] = [
         country: "USA",
         quote: "Yourmomstudio brought our investor pitch deck to life with a clean, strategic, and visually powerful approach. The team was fast, detail-focused, and incredibly easy to collaborate with. One of the few studios that truly understands how to turn ideas into impactful presentations.",
         highlight: "One of the few studios that truly understands how to turn ideas into impactful presentations.",
+        pull: "One of the few studios that truly understands how to turn ideas into impactful presentations.",
         result: "Investor-ready deck"
-    },
-    {
-        name: "Muhammad Umair",
-        role: "Product Delivery Manager",
-        company: "Digital Gravity",
-        avatar: "/assets/images/Testimonial%20Avatar/umair.png",
-        logo: "/assets/images/client-logos/DG.png",
-        logoWidth: 66,
-        project: "Web management system",
-        location: "Dubai, UAE",
-        country: "UAE",
-        quote: "A highly professional and detail-oriented team to work with. The web management system was designed with a clear understanding of both user experience and business requirements, resulting in a platform that feels modern, scalable, and easy to navigate.",
-        highlight: "a platform that feels modern, scalable, and easy to navigate.",
-        result: "Scalable platform"
     },
     {
         name: "Suhail Sajid Panjwani",
@@ -92,6 +83,7 @@ export const TESTIMONIALS: Testimonial[] = [
         country: "Türkiye",
         quote: "Working on multiple mobile products together was a great experience. From student communities and dorm management to university admission platforms, the entire process was handled with strong product thinking, creativity, and attention to detail.",
         highlight: "handled with strong product thinking, creativity, and attention to detail.",
+        pull: "Working on multiple mobile products together was a great experience.",
         result: "Multiple products"
     }
 ];

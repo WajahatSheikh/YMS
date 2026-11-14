@@ -8,7 +8,7 @@
 //   NEXT_PUBLIC_GTM_ID       Google Tag Manager container for ad conversions
 //   GOOGLE_SITE_VERIFICATION Google Search Console HTML-tag verification code
 
-const EMAIL = "hello@yourmomstudio.com";
+const EMAIL = "yourmomstudio.agency@gmail.com";
 
 export const SITE = {
     name: "YourMomStudio",
@@ -41,10 +41,16 @@ export const SITE = {
     // `sameAs`. While a value is empty its footer label still shows but is not
     // clickable, and it is left out of the schema.
     social: {
-        x: "" as string,
-        linkedin: "" as string,
+        x: "https://x.com/your_momstudio" as string,
+        behance: "https://www.behance.net/yourmomstudio" as string,
+        threads: "https://www.threads.com/@your.momstudio" as string,
         instagram: "https://www.instagram.com/your.momstudio/" as string
-    }
+    },
+
+    // Clutch, shown in the footer only. This is the vendor portal, not a public
+    // profile page, so it is kept out of the schema.org `sameAs` list above.
+    // Swap in the public clutch.co/profile/… URL once it exists.
+    clutch: "https://vendor.clutch.co/" as string
 } as const;
 
 /** The monthly price as shown on the page, e.g. "$3,999" — matches the Service schema. */

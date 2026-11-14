@@ -195,9 +195,7 @@ export const TUIT = {
         title: "Want a storefront that feels like this?",
         text: "We design and build websites, products and brands for funded startups, on one monthly subscription.",
         links: [
-            { label: "Website design and development", href: "/services/websites" },
-            { label: "Brand identity", href: "/services/brand-identity" },
-            { label: "Product design", href: "/services/product-design" }
+            { label: "Services we offer", href: "/#services" }
         ]
     },
 

@@ -18,7 +18,7 @@ import { NAVBAR_HEIGHT, scrollToSection as scrollTo } from "@/app/lib/scrollToSe
 // must exist there. On inner pages the entries are links: to the section's own
 // page where there is one (`href`), otherwise back to the home section.
 const NAV_ITEMS = [
-    { text: "Services", id: "services", href: "/services" },
+    { text: "Services", id: "services", href: "/#services" },
     { text: "Work", id: "work", href: "/#work" },
     { text: "Testimonials", id: "testimonials", href: "/#testimonials" },
     { text: "Process", id: "process", href: "/process" },
@@ -118,7 +118,7 @@ const useHiddenOnScrollDown = () => {
 // Case studies with their own art direction (their grounds change down the
 // page). Their header floats: no band, light pills that read on any ground,
 // and it steps aside on scroll down.
-const FLOATING_CASE_STUDIES = ["/portfolio/tuit-luxury-candle", "/portfolio/naturally-white", "/portfolio/mdrn-blk"];
+const FLOATING_CASE_STUDIES = ["/portfolio/tuit-luxury-candle", "/portfolio/naturally-white", "/portfolio/mdrn-blk", "/portfolio/global-minds-education"];
 
 // ── Portfolio header — back arrow + Book a Call ───────────────────────────────
 // Dark island, like the placeholder case-study pages under it — or, with

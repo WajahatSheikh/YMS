@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { SERVICES, serviceHref } from "@/app/data/services";
+import { SERVICES } from "@/app/data/services";
 import { bookingLinkProps } from "@/app/lib/booking";
 import { ctaGlow } from "@/app/lib/ctaGlow";
 import ServiceTabs, { ServiceReel } from "./ServiceTabs";
@@ -9,9 +8,9 @@ import style from "./index.module.scss";
 //
 // A warm brand band holds a row of service icons; the active one opens a large
 // card below it: the service name and badge, an H3 headline that carries the
-// service keyword, a one-sentence summary, three "what you get" chips, a link
-// to the service's own page and a call to action that names the service (so
-// ads can attribute the lead: book-call-services-<slug>). The service's reel
+// service keyword, a one-sentence summary, three "what you get" chips and a call
+// to action that names the service (so ads can attribute the lead:
+// book-call-services-<slug>). No link out: visitors stay on the landing page. The service's reel
 // plays on the right.
 //
 // Server component: every card is rendered here and handed to ServiceTabs.tsx,
@@ -29,12 +28,6 @@ const PhoneIcon = () => (
 const CheckIcon = () => (
     <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
         <path d="M3.5 8.4 6.5 11.2 12.5 4.8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-);
-
-const ArrowIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
 );
 
@@ -96,16 +89,6 @@ const Services = () => (
                     Services we offer
                 </h2>
             </div>
-            <div className={style.headAside}>
-                <p className={style.sub}>
-                    Product design, websites, mobile apps, SaaS products, web management systems, game design and brand
-                    identity, all from one product team.
-                </p>
-                <p className={style.meta}>
-                    <span className={style.metaCount}>{String(SERVICES.length).padStart(2, "0")}</span>
-                    services · one team, from first sketch to launch
-                </p>
-            </div>
         </header>
 
         <ServiceTabs
@@ -132,10 +115,6 @@ const Services = () => (
                                 ))}
                             </ul>
                             <div className={style.actions}>
-                                <Link className={style.learn} href={serviceHref(service)}>
-                                    Learn more<span className="sr-only"> about {service.title.toLowerCase()}</span>
-                                    <ArrowIcon />
-                                </Link>
                                 <a className={style.cta} {...bookingLinkProps(`services-${service.slug}`)} {...ctaGlow}>
                                     <PhoneIcon />
                                     <span>Book a call</span>

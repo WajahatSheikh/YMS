@@ -160,9 +160,6 @@ const Soon = ({ category, onBrowse }: { category: WorkCategory; onBrowse: () => 
                     Book a call
                     <Arrow />
                 </a>
-                <a className={style.soonLink} href={category.service.href}>
-                    {category.service.label}
-                </a>
                 <button type="button" className={style.soonLink} onClick={onBrowse}>
                     See website case studies
                 </button>

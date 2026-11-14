@@ -11,7 +11,7 @@ import { pageMetadata } from "@/app/lib/seo";
 const PATH = "/team";
 const TITLE = "Our team: the people building your product";
 const DESCRIPTION =
-    "The same six people every week, in a shared Slack channel: design, frontend, backend, QA and a technical PM, with no account manager in between.";
+    "The same five people every week, in a shared Slack channel: design, frontend, backend, QA and a technical PM, with no account manager in between.";
 const CRUMBS = [{ name: "Team", path: PATH }];
 const FAQS = faqsByTopic("Team");
 
@@ -24,7 +24,7 @@ export default function TeamPage() {
             <PageHero
                 eyebrow="Team"
                 title="The people who design and build your product"
-                lead="The same six people every week, in a shared Slack channel. There’s no account manager sitting between you and the people building your product."
+                lead="The same five people every week, in a shared Slack channel. There’s no account manager sitting between you and the people building your product."
                 crumbs={CRUMBS}
                 placement="team-page"
                 secondary={{ label: "How we work", href: "/process" }}
@@ -35,7 +35,7 @@ export default function TeamPage() {
                 eyebrow="Keep exploring"
                 title="More about working with us"
                 links={[
-                    { title: "Services", text: "Everything we design and build, from product design to 2D games.", href: "/services" },
+                    { title: "Services", text: "Everything we design and build, from product design to 2D games.", href: "/#services" },
                     { title: "Process", text: "Working design in week one and a live demo every Friday.", href: "/process" },
                     { title: "Pricing", text: "One flat monthly price, or a fixed-scope project.", href: "/pricing" }
                 ]}

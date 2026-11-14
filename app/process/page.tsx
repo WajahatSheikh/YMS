@@ -41,8 +41,8 @@ export default function ProcessPage() {
                 title="More about working with us"
                 links={[
                     { title: "Design subscription", text: "What one monthly subscription includes, and how it compares to hiring.", href: "/design-subscription" },
-                    { title: "Services", text: "Everything we design and build, from product design to 2D games.", href: "/services" },
-                    { title: "The team", text: "The same six people every week, in a shared Slack channel.", href: "/team" }
+                    { title: "Services", text: "Everything we design and build, from product design to 2D games.", href: "/#services" },
+                    { title: "The team", text: "The same five people every week, in a shared Slack channel.", href: "/team" }
                 ]}
             />
         </main>

@@ -122,12 +122,23 @@
 .card {
     position: relative;
     flex: 0 0 auto;
-    width: 260px;
+    // Five across on a laptop (so the row centres), never narrower than 232.
+    width: clamp(232px, calc((100vw - 2 * clamp(var(--gutter-mobile), 5vw, var(--gutter-desktop)) - 4 * var(--space-5)) / 5), 260px);
     height: 420px;
     overflow: hidden;
     border: var(--border-thin) solid var(--border-glass);
     border-radius: var(--radius-xl);
     scroll-snap-align: start;
+
+    // Centred when the row fits; auto margins collapse to 0 once it overflows,
+    // so a scrolling row still starts at the left edge.
+    &:first-child {
+        margin-left: auto;
+    }
+
+    &:last-child {
+        margin-right: auto;
+    }
 
     // The design offsets every second card by 44px.
     &:nth-child(even) {

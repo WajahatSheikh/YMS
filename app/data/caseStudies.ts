@@ -1,4 +1,5 @@
 import { MB } from "@/app/portfolio/mdrn-blk/content";
+import { GME } from "@/app/portfolio/global-minds-education/content";
 import { NW } from "@/app/portfolio/naturally-white/content";
 import { TUIT } from "@/app/portfolio/tuit-luxury-candle/content";
 
@@ -20,6 +21,16 @@ export interface CaseStudyCard {
 }
 
 export const CASE_STUDIES: readonly CaseStudyCard[] = [
+    {
+        slug: GME.slug,
+        path: GME.path,
+        client: GME.client,
+        category: GME.category,
+        year: GME.year,
+        tags: ["Education", "Website", "Responsive", "Design system"],
+        image: "/assets/images/work/global-minds-education/gme-next-card.webp",
+        imageAlt: "Global Minds Education website in a browser beside a boarding pass graphic and a phone"
+    },
     {
         slug: MB.slug,
         path: MB.path,

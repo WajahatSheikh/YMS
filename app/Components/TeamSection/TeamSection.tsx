@@ -31,12 +31,6 @@ const MEMBERS: Member[] = [
         photo: "/assets/images/wajahat.png"
     },
     {
-        name: "Ali Abbas",
-        position: "Creative Director",
-        specialty: "Creative Director | Website Designer, Product Design & Art Direction | Turning bold ideas into visuals that convert",
-        photo: "/assets/images/ali-v2.jpg"
-    },
-    {
         name: "Hamza Mithani",
         position: "Marketing Manager",
         specialty: "Senior Marketing Manager | SEO, Paid Ads & Content Strategy | Driving growth and revenue for SaaS and digital brands",
@@ -68,7 +62,7 @@ export const TeamSection = () => (
             <p className={style.eyebrow}>Meet the team</p>
             <h2 className={style.title}>Meet your product team</h2>
             <p className={style.lead}>
-                Six specialists, one team — the same people on your product every week. You will know them all by
+                Five specialists, one team: the same people on your product every week. You will know them all by
                 name.
             </p>
         </header>

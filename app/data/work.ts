@@ -31,8 +31,6 @@ export interface WorkCategory {
     intro: string;
     /** Shown when the tab has no case studies yet. */
     soon: string;
-    /** The matching service page. */
-    service: { label: string; href: string };
     projects: WorkProject[];
 }
 
@@ -58,12 +56,12 @@ const project = (slug: string, teaser: string, reel: string, reelSmall: string):
 export const WORK_CATEGORIES: WorkCategory[] = [
     {
         id: "website-design",
-        service: { label: "Website design and development", href: "/services/websites" },
         label: "Website Design",
         name: "Website",
         intro: "Websites and online stores, designed for desktop, tablet and phone and handed over as a build-ready system.",
         soon: "Website case studies are being written up.",
         projects: [
+            project("global-minds-education", "Seven-page website for an online university partner, rebuilt phone first for desktop, iPad and mobile.", "gme-website-reel.mp4", "gme-website-preview.mp4"),
             project("mdrn-blk", "Skatewear e-commerce homepage, rebuilt for desktop, iPad and mobile around a sticker-bombed design system.", "mdrn-blk-website-reel.mp4", "mdrn-blk-website-preview.mp4"),
             project("naturally-white", "Eight-page teeth-whitening website built around one job: getting the visitor to book.", "naturally-white-website-reel.mp4", "naturally-white-website-reel-sm.mp4"),
             project("tuit-luxury-candle", "Luxury candle storefront with a calm, slow-burn design system for three screen sizes.", "tuit-candle-website-reel.mp4", "tuit-candle-website-preview.mp4")
@@ -71,7 +69,6 @@ export const WORK_CATEGORIES: WorkCategory[] = [
     },
     {
         id: "mobile-app",
-        service: { label: "Mobile app design", href: "/services/mobile-app" },
         label: "Mobile App",
         name: "Mobile app",
         intro: "iOS and Android apps, from first flows to the screens a developer can build from.",
@@ -80,7 +77,6 @@ export const WORK_CATEGORIES: WorkCategory[] = [
     },
     {
         id: "branding",
-        service: { label: "Brand identity", href: "/services/brand-identity" },
         label: "Branding",
         name: "Branding",
         intro: "Identities, logos and the visual systems that carry them across product and marketing.",
@@ -89,7 +85,6 @@ export const WORK_CATEGORIES: WorkCategory[] = [
     },
     {
         id: "saas-product",
-        service: { label: "SaaS product design", href: "/services/saas-products" },
         label: "SaaS Product",
         name: "SaaS product",
         intro: "Dashboards and web apps for startups, designed around the workflows people repeat every day.",
@@ -98,7 +93,6 @@ export const WORK_CATEGORIES: WorkCategory[] = [
     },
     {
         id: "game-design",
-        service: { label: "Game design", href: "/services/game-design" },
         label: "Game Design",
         name: "Game design",
         intro: "Learning and casual games, from game loop and levels to the interface around them.",

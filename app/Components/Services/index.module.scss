@@ -20,23 +20,13 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 // ── Header ────────────────────────────────────────────────────────────────────
-// Editorial split: eyebrow + title on the left, the pitch and a count on the
-// right, sharing a baseline. Stacks below 992.
+// Eyebrow and title.
 .head {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: end;
-    gap: var(--space-6) var(--space-16);
     width: 100%;
     max-width: 1520px;
-
-    @media (max-width: $breakpoint-lg) {
-        grid-template-columns: minmax(0, 1fr);
-    }
 }
 
-.headMain,
-.headAside {
+.headMain {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
@@ -66,65 +56,37 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     text-wrap: balance;
 }
 
-.sub {
-    margin: 0;
-    font-family: var(--font-sans);
-    font-size: var(--text-lg);
-    line-height: var(--lh-28);
-    color: var(--text-secondary);
-    text-wrap: pretty;
-}
-
-// Inline flow rather than flex, so on a narrow screen the text wraps after the
-// count instead of dropping the whole line under it.
-.meta {
-    margin: 0;
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    line-height: var(--lh-20);
-    letter-spacing: 0.02em;
-    color: var(--text-tertiary);
-    text-transform: uppercase;
-}
-
-.metaCount {
-    margin-right: var(--space-2);
-    font-family: var(--font-display);
-    font-weight: var(--fw-semibold);
-    font-size: var(--text-xl);
-    line-height: 1;
-    color: var(--text-brand);
-}
-
 // ── Band ──────────────────────────────────────────────────────────────────────
 // A warm brand field (the same in both themes) that holds the icon row and the
-// card. The card takes the page's own canvas colour, so it reads as a sheet laid
-// on the band in light and dark alike.
+// card. Light peach across the top (where the dark icons and names sit),
+// deepening to brand orange at the bottom. Two soft colour fields drift across
+// it on their own, slowly, so the band keeps moving at rest. The bottom space
+// matches the corner radius, so the card sits inside the curve.
 .band {
     --card-bg: var(--bg-raised);
+    --band-radius: clamp(24px, 2.6vw, 40px);
+    --band-ink: #2a0c00;
     position: relative;
     isolation: isolate;
     width: 100%;
     max-width: 1520px;
-    padding: clamp(24px, 2.8vw, 40px) clamp(16px, 4vw, 72px) clamp(32px, 4vw, 64px);
+    padding: clamp(22px, 2.6vw, 36px) var(--band-radius) var(--band-radius);
     overflow: hidden;
-    border-radius: clamp(24px, 2.6vw, 40px);
-    // Deep brand orange across the top (where the white icons sit), warming
-    // to peach at the bottom (where the dark position line sits).
-    background:
-        radial-gradient(70% 40% at 50% 0%, #b33a00 0%, transparent 70%),
-        radial-gradient(60% 70% at 100% 100%, #ffc29e 0%, transparent 65%),
-        radial-gradient(60% 70% at 0% 100%, #ffb07f 0%, transparent 65%),
-        linear-gradient(180deg, #b53c00 0%, #bd4202 22%, #e95f17 55%, #ff9a5e 100%);
+    border-radius: var(--band-radius);
+    background: linear-gradient(180deg, #ffe3cf 0%, #ffc39b 24%, #f9894a 62%, #e85a10 100%);
 
-    // A slow drift of light across the field: the band keeps breathing at rest.
+    // The moving colour: a layer twice the band's size with a peach light and
+    // an orange glow, sliding and turning slowly (transform only).
     &::before {
         content: "";
         position: absolute;
-        inset: -30%;
+        inset: -50%;
         z-index: -1;
-        background: radial-gradient(35% 35% at 50% 50%, rgba(255, 255, 255, 0.35), transparent 70%);
-        opacity: 0.7;
+        background:
+            radial-gradient(22% 18% at 30% 32%, rgba(255, 240, 228, 0.85), transparent 70%),
+            radial-gradient(20% 16% at 68% 40%, rgba(255, 176, 120, 0.7), transparent 70%),
+            radial-gradient(26% 22% at 42% 66%, rgba(232, 80, 2, 0.55), transparent 70%),
+            radial-gradient(22% 20% at 72% 70%, rgba(249, 115, 22, 0.6), transparent 70%);
         pointer-events: none;
     }
 
@@ -141,91 +103,50 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     @media (max-width: $breakpoint-md) {
-        padding-inline: 10px;
-        padding-top: 22px;
+        --band-radius: 12px;
+        border-radius: 22px;
+        padding-top: 20px;
     }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-    @keyframes svcDrift {
-        0%,
-        100% {
-            translate: -18% -10%;
+    @keyframes svcFlow {
+        0% {
+            translate: -8% -4%;
+            rotate: 0deg;
         }
         50% {
-            translate: 22% 12%;
+            translate: 8% 5%;
+            rotate: 8deg;
+        }
+        100% {
+            translate: -8% -4%;
+            rotate: 0deg;
         }
     }
 
     .band::before {
-        animation: svcDrift 16s ease-in-out infinite;
+        animation: svcFlow 18s ease-in-out infinite;
     }
 }
 
 // ── Icon picker ───────────────────────────────────────────────────────────────
 // Each service is an icon tile with its name underneath. The active tile turns
 // into a sheet of the card's colour, a size up, with a ring around it that
-// follows the tile's own rounded-square outline as the timer runs; a pointer
-// under its name joins it to the card. On phones the row scrolls sideways and
-// the chosen tab scrolls into view.
+// follows the tile's own rounded-square outline as the timer runs, and its
+// name goes bold. On phones the row scrolls sideways and the chosen tab
+// scrolls into view.
 .picker {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    gap: clamp(4px, 0.8vw, 12px);
-    // Room for the pointer down to the card.
-    margin-bottom: 20px;
-}
-
-.arrow {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 40px;
-    height: 40px;
-    margin-top: 8px;
-    border: 0;
-    border-radius: var(--radius-full);
-    background: transparent;
-    color: #ffffff;
-    cursor: pointer;
-    transition: background-color 0.3s ease, translate 0.35s $ease-out;
-
-    svg {
-        width: 22px;
-        height: 22px;
-    }
-
-    &:hover {
-        background: rgba(90, 22, 0, 0.25);
-    }
-
-    &:first-child:hover {
-        translate: -3px 0;
-    }
-
-    &:last-child:hover {
-        translate: 3px 0;
-    }
-
-    &:active {
-        scale: 0.92;
-    }
-
-    &:focus-visible {
-        outline: 2px solid #ffffff;
-        outline-offset: 2px;
-    }
-
-    @media (max-width: $breakpoint-md) {
-        display: none;
-    }
+    margin-bottom: clamp(18px, 2vw, 28px);
 }
 
 .tabs {
     display: flex;
     align-items: flex-start;
-    gap: clamp(2px, 0.6vw, 8px);
+    gap: clamp(20px, 2.6vw, 44px);
     padding-top: 6px;
 
     @media (max-width: $breakpoint-md) {
@@ -249,11 +170,12 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    width: 96px;
+    width: auto;
+    min-width: 64px;
     padding: 0;
     border: 0;
     background: none;
-    color: #ffffff;
+    color: var(--band-ink);
     cursor: pointer;
     scroll-snap-align: center;
 
@@ -261,13 +183,14 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
         outline: none;
 
         .tabIcon {
-            outline: 3px solid #ffffff;
+            outline: 3px solid var(--band-ink);
             outline-offset: 4px;
         }
     }
 
     @media (max-width: $breakpoint-md) {
-        width: 74px;
+        width: auto;
+        min-width: 56px;
         gap: 8px;
     }
 }
@@ -278,9 +201,9 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     place-items: center;
     width: 56px;
     height: 56px;
-    border: 2px solid rgba(255, 255, 255, 0.7);
+    border: 2px solid rgba(42, 12, 0, 0.55);
     border-radius: 18px;
-    background: rgba(90, 22, 0, 0.18);
+    background: rgba(255, 255, 255, 0.4);
     transition: scale 0.45s $ease-out, background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease,
         translate 0.45s $ease-out;
 
@@ -290,8 +213,8 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .tab:hover:not(.tabOn) & {
-        background: rgba(90, 22, 0, 0.32);
-        border-color: #ffffff;
+        background: rgba(255, 255, 255, 0.7);
+        border-color: var(--band-ink);
         translate: 0 -3px;
     }
 
@@ -318,9 +241,9 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     font-size: 13px;
     line-height: 1.25;
     text-align: center;
-    text-wrap: balance;
-    color: #ffffff;
-    opacity: 0.92;
+    white-space: nowrap;
+    color: var(--band-ink);
+    opacity: 0.9;
     transition: opacity 0.3s ease;
 
     .tab:hover & {
@@ -339,25 +262,13 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
         border-color: var(--card-bg);
         background: var(--card-bg);
         color: var(--text-brand);
+        box-shadow: 0 10px 22px -12px rgba(120, 30, 0, 0.6);
         scale: 1.1;
     }
 
     .tabName {
         font-weight: var(--fw-semibold);
         opacity: 1;
-    }
-
-    // The pointer: a small drop of the card pulled up under the name.
-    &::after {
-        content: "";
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        width: 18px;
-        height: 22px;
-        translate: -50% -1px;
-        background: var(--card-bg);
-        clip-path: polygon(50% 0, 100% 100%, 0 100%);
     }
 }
 
@@ -372,7 +283,7 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
 .ringFill {
     fill: none;
-    stroke: #ffffff;
+    stroke: var(--band-ink);
     stroke-width: 3;
     stroke-linecap: round;
     stroke-dasharray: 100;
@@ -399,8 +310,6 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 // ── Card ──────────────────────────────────────────────────────────────────────
 .cardWrap {
     position: relative;
-    max-width: 1180px;
-    margin: 0 auto;
     touch-action: pan-y;
 }
 
@@ -578,44 +487,6 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     margin-top: var(--space-2);
 }
 
-// "Learn more": a rule under the label that a second one draws over.
-.learn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 0;
-    background:
-        linear-gradient(var(--text-primary), var(--text-primary)) no-repeat 0 100% / 0% 1.5px,
-        linear-gradient(var(--border-default), var(--border-default)) no-repeat 0 100% / 100% 1.5px;
-    color: var(--text-primary);
-    font-family: var(--font-sans);
-    font-weight: var(--fw-medium);
-    font-size: var(--text-base);
-    text-decoration: none;
-    transition: background-size 0.5s $ease-out;
-
-    svg {
-        width: 18px;
-        height: 18px;
-        transition: translate 0.45s $ease-out;
-    }
-
-    &:hover,
-    &:focus-visible {
-        background-size: 100% 1.5px, 100% 1.5px;
-
-        svg {
-            translate: 5px 0;
-        }
-    }
-
-    &:focus-visible {
-        outline: 2px solid var(--border-focus);
-        outline-offset: 4px;
-        border-radius: 4px;
-    }
-}
-
 .cta {
     display: inline-flex;
     align-items: center;
@@ -683,27 +554,9 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     opacity: 1;
 }
 
-// Where you are, for everyone (and announced when the card changes).
-.position {
-    margin: var(--space-5) 0 0;
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.08em;
-    text-align: center;
-    text-transform: uppercase;
-    color: #4a1702;
-
-    span {
-        color: #2a0c00;
-        font-weight: 700;
-    }
-}
-
 @media (prefers-reduced-motion: reduce) {
     .tabIcon,
     .tabName,
-    .arrow,
-    .learn svg,
     .cta {
         transition: none !important;
     }

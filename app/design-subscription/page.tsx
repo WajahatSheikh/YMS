@@ -86,7 +86,7 @@ export default function DesignSubscriptionPage() {
                 title="More about working with us"
                 links={[
                     { title: "Pricing", text: "One flat monthly price, or a fixed-scope project.", href: "/pricing" },
-                    { title: "Services", text: "Everything we design and build, from product design to 2D games.", href: "/services" },
+                    { title: "Services", text: "Everything we design and build, from product design to 2D games.", href: "/#services" },
                     { title: "Process", text: "The first eight weeks, and how every sprint runs.", href: "/process" }
                 ]}
             />

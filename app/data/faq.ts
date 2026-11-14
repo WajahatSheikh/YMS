@@ -46,7 +46,7 @@ export const FAQS: Faq[] = [
         question: "Who will I actually be working with?",
         topic: "Team",
         answer:
-            "The same six people every week, in a shared Slack channel. There's no account manager sitting between you and the people building your product."
+            "The same five people every week, in a shared Slack channel. There's no account manager sitting between you and the people building your product."
     },
     {
         question: "What if you don't do what I need?",

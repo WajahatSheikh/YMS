@@ -232,9 +232,7 @@ export const MB = {
         title: "Want a storefront with *this much attitude?*",
         sticker: "See you at the next drop",
         links: [
-            { label: "Website design and development", href: "/services/websites" },
-            { label: "Brand identity", href: "/services/brand-identity" },
-            { label: "Product design", href: "/services/product-design" }
+            { label: "Services we offer", href: "/#services" }
         ]
     },
 

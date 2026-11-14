@@ -9,7 +9,7 @@ const LOGOS = [
     { src: "/assets/images/client-logos/logo-03-paramount.png", alt: "Paramount Students", width: 143 },
     { src: "/assets/images/client-logos/logo-04-moonshot.png", alt: "Moonshot Animations", width: 149 },
     { src: "/assets/images/client-logos/logo-05-aa-studio.png", alt: "AA-Studio", width: 154 },
-    { src: "/assets/images/client-logos/logo-06-global.png", alt: "Global Learners Education", width: 154 },
+    { src: "/assets/images/client-logos/logo-06-global-minds.png", alt: "Global Minds Education", width: 167 },
     { src: "/assets/images/client-logos/logo-07-jolly.png", alt: "Jolly", width: 77 },
     { src: "/assets/images/client-logos/logo-08-vivre.png", alt: "Vivre", width: 154 },
     { src: "/assets/images/client-logos/logo-09-skinomatics.png", alt: "Skinomatics", width: 126 },

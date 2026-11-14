@@ -22,7 +22,7 @@ const ROW_ONE: Work[] = [
     { name: "Moonshot", kind: "Mobile app", image: "/assets/images/carousel%20bottom/moonshot.png", width: 190 },
     { name: "Multinet", kind: "Website", image: "/assets/images/carousel%20bottom/multinet.png", width: 580 },
     { name: "Jolly", kind: "Mobile app", image: "/assets/images/carousel%20bottom/jolly.png", width: 190 },
-    { name: "Global Learners", kind: "Website", image: "/assets/images/carousel%20bottom/global.png", width: 580 }
+    { name: "Global Minds Education", kind: "Website", image: "/assets/images/carousel%20bottom/global.png", width: 580 }
 ];
 
 const ROW_TWO: Work[] = [
