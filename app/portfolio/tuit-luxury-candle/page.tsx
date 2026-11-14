@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Cormorant_Garamond, Italiana } from "next/font/google";
+import NextCaseStudy from "@/app/Components/CaseStudy/NextCaseStudy";
+import { relatedCaseStudies } from "@/app/data/caseStudies";
 import PageSchema from "@/app/Components/Seo/PageSchema";
 import { bookingLinkProps } from "@/app/lib/booking";
 import { SITE, absoluteUrl } from "@/app/data/site";
@@ -411,6 +413,14 @@ export default function TuitCaseStudy() {
                             </ul>
                         </div>
                     </div>
+                </div>
+            </section>
+
+            {/* ───────────── Next case study ─────────────
+                Back on linen, where the candle was first lit. */}
+            <section className={`${s.band} ${s.nextBand}`} data-ground="linen">
+                <div className={s.wrap}>
+                    <NextCaseStudy related={relatedCaseStudies(TUIT.slug)} classes={{ link: s.nextLink, label: s.nextLabel, title: s.nextTitle, meta: s.nextMeta, tags: s.nextTags, tag: s.nextTag, thumb: s.nextThumb, icon: s.nextIcon }} />
                 </div>
             </section>
 

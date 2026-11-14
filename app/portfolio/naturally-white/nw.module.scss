@@ -1633,6 +1633,167 @@ $tab-radius: 38% 38% 46% 46% / 26% 26% 44% 44%;
     }
 }
 
+// ── Next case study (hero gradient) ──────────────────────────────────────────
+// Text left, the next study's image in a browser-style window right.
+.nextBand {
+    padding-block: clamp(72px, 8vw, 150px);
+}
+
+.nextLink {
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+    grid-template-areas:
+        "label thumb"
+        "title thumb"
+        "meta thumb"
+        "tags thumb"
+        "icon thumb";
+    grid-template-rows: auto auto auto auto 1fr;
+    column-gap: clamp(32px, 6vw, 120px);
+    row-gap: 18px;
+    align-items: start;
+    color: var(--ink);
+    text-decoration: none;
+
+    &:focus-visible {
+        outline: 2px solid $ink;
+        outline-offset: 10px;
+        border-radius: 12px;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: "label" "thumb" "title" "meta" "tags" "icon";
+        grid-template-rows: none;
+    }
+}
+
+.nextLabel {
+    @extend %mono;
+    grid-area: label;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--label);
+
+    &::before {
+        content: "";
+        width: 9px;
+        height: 12px;
+        border: 1px solid currentColor;
+        border-radius: $tab-radius;
+        background: #ffffff;
+    }
+}
+
+.nextTitle {
+    grid-area: title;
+    justify-self: start;
+    font-family: $display;
+    font-weight: 600;
+    font-size: clamp(48px, 7vw, 132px);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    // An underline is drawn under the name on hover.
+    padding-bottom: 8px;
+    background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0% 3px;
+    transition: background-size 0.7s $ease;
+
+    .nextLink:hover &,
+    .nextLink:focus-visible & {
+        background-size: 100% 3px;
+    }
+}
+
+.nextMeta {
+    grid-area: meta;
+    font-family: $accent;
+    font-style: italic;
+    font-size: clamp(22px, 2vw, 34px);
+    line-height: 1.3;
+    color: var(--muted);
+}
+
+.nextTags {
+    grid-area: tags;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.nextTag {
+    padding: 7px 14px;
+    border: 1px solid rgba($ink, 0.9);
+    border-radius: 999px;
+    background: rgba(#ffffff, 0.6);
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+.nextThumb {
+    grid-area: thumb;
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border: 1px solid rgba($ink, 0.9);
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 40px 90px -56px rgba(#5a4fb0, 0.7);
+
+    // A window bar, like the homepage window in chapter 03.
+    &::before {
+        content: "";
+        display: block;
+        height: 34px;
+        border-bottom: 1px solid rgba($ink, 0.9);
+        background:
+            radial-gradient(circle at 18px 50%, #ffffff 4px, $ink 4.5px, $ink 5.5px, transparent 6px),
+            radial-gradient(circle at 34px 50%, #ffffff 4px, $ink 4.5px, $ink 5.5px, transparent 6px),
+            radial-gradient(circle at 50px 50%, #ffffff 4px, $ink 4.5px, $ink 5.5px, transparent 6px),
+            $sky;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+        transition: scale 1.2s $ease;
+    }
+
+    .nextLink:hover & img {
+        scale: 1.04;
+    }
+}
+
+.nextIcon {
+    grid-area: icon;
+    align-self: end;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: $ink;
+    color: #ffffff;
+    transition: background-color 0.4s ease, color 0.4s ease;
+
+    svg {
+        width: 24px;
+        height: 24px;
+        transition: translate 0.5s $ease;
+    }
+
+    .nextLink:hover &,
+    .nextLink:focus-visible & {
+        background: #ffffff;
+        color: $ink;
+
+        svg {
+            translate: 4px 0;
+        }
+    }
+}
+
 // ── The shade rail ───────────────────────────────────────────────────────────
 // A full-height track holding a sticky guide: one tab per chapter, lightest
 // last. NwMotion puts [data-on] on the tab of the chapter being read; that tab

@@ -62,30 +62,29 @@ export default function MbMotion() {
                 main.setAttribute("data-motion", "");
 
                 // ── tapes: a loop whose speed follows the scroll ──────────────
+                // Each loop only runs while its band is on screen.
                 const loops = gsap.utils.toArray<HTMLElement>("[data-tape]", main).map((track) => {
                     const dir = Number(track.dataset.dir || 1);
                     const speed = Number(track.dataset.speed || 1);
-                    const tween = gsap.fromTo(track, { xPercent: dir > 0 ? -50 : 0 }, { xPercent: dir > 0 ? 0 : -50, duration: 38 / speed, ease: "none", repeat: -1 });
-                    return tween;
+                    const loop = gsap.fromTo(track, { xPercent: dir > 0 ? -50 : 0 }, { xPercent: dir > 0 ? 0 : -50, duration: 38 / speed, ease: "none", repeat: -1, paused: true });
+                    ScrollTrigger.create({ trigger: track, start: "top bottom", end: "bottom top", onToggle: (self) => (self.isActive ? loop.play() : loop.pause()) });
+                    return loop;
                 });
-                let push = { v: 1 };
+                // One shared speed: kicked by scroll velocity, then eased back to
+                // cruising in the scroll direction (one reused tween, not one per event).
+                const speed = { v: 1 };
+                const applySpeed = () => loops.forEach((loop) => loop.timeScale(speed.v));
+                const cruise = gsap.quickTo(speed, "v", { duration: 1.2, ease: "power3.out", onUpdate: applySpeed });
                 const velocity = ScrollTrigger.create({
                     trigger: main,
                     start: "top top",
                     end: "bottom bottom",
                     onUpdate: (self) => {
-                        const v = gsap.utils.clamp(-6, 6, self.getVelocity() / 400);
-                        const target = (self.direction || 1) * (1 + Math.abs(v));
-                        gsap.killTweensOf(push);
-                        push = { v: target };
-                        loops.forEach((loop) => loop.timeScale(target));
-                        // Ease back to cruising speed in the scroll direction.
-                        gsap.to(push, {
-                            v: self.direction || 1,
-                            duration: 1.2,
-                            ease: "power3.out",
-                            onUpdate: () => loops.forEach((loop) => loop.timeScale(push.v))
-                        });
+                        const dir = self.direction || 1;
+                        const kick = Math.min(6, Math.abs(self.getVelocity()) / 400);
+                        speed.v = dir * (1 + kick);
+                        applySpeed();
+                        cruise(dir, speed.v);
                     }
                 });
 
@@ -159,7 +158,9 @@ export default function MbMotion() {
                 // ── the homepage: scroll scrubs the page through the window ───
                 const band = main.querySelector<HTMLElement>("[data-page-scroll]");
                 const windowEl = band?.querySelector<HTMLElement>("[data-window]");
-                const pageImg = band?.querySelector<HTMLElement>("[data-page-image]");
+                // The image that is showing (the desktop page, or the 440 px one on phones).
+                const pageImg = Array.from(band?.querySelectorAll<HTMLElement>("[data-page-image]") ?? []).find((img) => getComputedStyle(img).display !== "none");
+                const fromKey = pageImg?.hasAttribute("data-mobile") ? "fromMobile" : "from";
                 const acts = gsap.utils.toArray<HTMLElement>("[data-act]", band);
                 if (band && windowEl && pageImg) {
                     windowEl.removeAttribute("tabindex");
@@ -178,7 +179,7 @@ export default function MbMotion() {
                                 const shown = (self.progress * travel() + windowEl.clientHeight * 0.35) / pageImg.offsetHeight;
                                 let current = 0;
                                 acts.forEach((act, i) => {
-                                    if (shown >= Number(act.dataset.from) - 0.02) current = i;
+                                    if (shown >= Number(act.dataset[fromKey]) - 0.02) current = i;
                                 });
                                 acts.forEach((act, i) => act.toggleAttribute("data-on", i === current));
                             }

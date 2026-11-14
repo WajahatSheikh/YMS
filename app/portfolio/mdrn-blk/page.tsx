@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Poppins, Space_Mono } from "next/font/google";
+import NextCaseStudy from "@/app/Components/CaseStudy/NextCaseStudy";
+import { relatedCaseStudies } from "@/app/data/caseStudies";
 import PageSchema from "@/app/Components/Seo/PageSchema";
 import { bookingLinkProps } from "@/app/lib/booking";
 import { SITE, absoluteUrl } from "@/app/data/site";
@@ -25,7 +27,10 @@ import s from "./mb.module.scss";
 // live product cards are TrickCards.tsx. Without script, or under reduced
 // motion, every block is simply visible and the tapes stand still.
 
-const poppins = Poppins({ weight: ["400", "500", "600", "900"], style: ["normal", "italic"], subsets: ["latin"], variable: "--font-poppins", display: "swap" });
+// Two Poppins loads, not eight: the upright text weights, and Black Italic,
+// the only italic the brand uses.
+const poppins = Poppins({ weight: ["400", "500", "600"], style: ["normal"], subsets: ["latin"], variable: "--font-poppins", display: "swap" });
+const poppinsBlack = Poppins({ weight: "900", style: ["italic"], subsets: ["latin"], variable: "--font-poppins-black", display: "swap" });
 const mono = Space_Mono({ weight: ["400", "700"], subsets: ["latin"], variable: "--font-space-mono", display: "swap" });
 
 const TITLE = MB.seoTitle;
@@ -120,10 +125,10 @@ const Browser = ({ children, url = "mdrnblk.com", className = "" }: { children: 
 );
 
 export default function MdrnBlkCaseStudy() {
-    const { hero, tapes, chapters, brief, concept, grip, line, dropIn, tricks, stance, thumb, result, closing, next } = MB;
+    const { hero, tapes, chapters, brief, concept, grip, line, dropIn, tricks, stance, thumb, result, closing } = MB;
 
     return (
-        <main id="main" className={`${s.page} ${poppins.variable} ${mono.variable}`} data-mb>
+        <main id="main" className={`${s.page} ${poppins.variable} ${poppinsBlack.variable} ${mono.variable}`} data-mb>
             <PageSchema
                 path={MB.path}
                 title={TITLE}
@@ -207,7 +212,7 @@ export default function MdrnBlkCaseStudy() {
                             </div>
                             <div className={s.stagePhone} data-parallax="-12">
                                 <div className={s.phoneFrame}>
-                                    <Image src={hero.mobile.src} alt={hero.mobile.alt} width={hero.mobile.width} height={hero.mobile.height} sizes="(max-width: 991px) 34vw, 18vw" priority />
+                                    <Image src={hero.mobile.src} alt={hero.mobile.alt} width={hero.mobile.width} height={hero.mobile.height} sizes="(max-width: 991px) 34vw, 18vw" />
                                 </div>
                             </div>
                             <Sticker text={hero.tapes[0]} tone="yellow" className={s.stageTapeA} />
@@ -357,7 +362,7 @@ export default function MdrnBlkCaseStudy() {
                             <p className={s.pageBody}>{line.body}</p>
                             <ol className={s.acts}>
                                 {line.acts.map((act, i) => (
-                                    <li key={act.name} className={s.act} data-act={i} data-from={act.from}>
+                                    <li key={act.name} className={s.act} data-act={i} data-from={act.from} data-from-mobile={act.fromMobile}>
                                         <span className={s.actRange}>{act.range}</span>
                                         <span className={s.actName}>{act.name}</span>
                                         <span className={s.actText}>{act.text}</span>
@@ -374,7 +379,20 @@ export default function MdrnBlkCaseStudy() {
                                 sizes="(max-width: 991px) 92vw, 860px"
                                 placeholder="blur"
                                 blurDataURL={line.blur}
+                                quality={60}
+                                className={s.windowDesktop}
                                 data-page-image
+                            />
+                            <Image
+                                src={line.mobile.src}
+                                alt={line.mobile.alt}
+                                width={line.mobile.width}
+                                height={line.mobile.height}
+                                sizes="(max-width: 767px) 92vw, 1px"
+                                quality={60}
+                                className={s.windowMobile}
+                                data-page-image
+                                data-mobile
                             />
                         </div>
                     </div>
@@ -452,6 +470,7 @@ export default function MdrnBlkCaseStudy() {
                                     width={stance.screens.desktop.width}
                                     height={stance.screens.desktop.height}
                                     sizes="(max-width: 767px) 92vw, 60vw"
+                                    quality={60}
                                     data-ride
                                 />
                             </Browser>
@@ -466,6 +485,7 @@ export default function MdrnBlkCaseStudy() {
                                         width={stance.screens.ipad.width}
                                         height={stance.screens.ipad.height}
                                         sizes="(max-width: 767px) 46vw, 24vw"
+                                        quality={60}
                                         data-ride
                                     />
                                 </div>
@@ -481,6 +501,7 @@ export default function MdrnBlkCaseStudy() {
                                         width={stance.screens.mobile.width}
                                         height={stance.screens.mobile.height}
                                         sizes="(max-width: 767px) 34vw, 14vw"
+                                        quality={60}
                                         data-ride
                                     />
                                 </div>
@@ -558,13 +579,7 @@ export default function MdrnBlkCaseStudy() {
             {/* ───────────── Next case study ───────────── */}
             <section className={`${s.band} ${s.next}`} data-ground="black">
                 <div className={s.wrap}>
-                    <Link className={s.nextLink} href={next.href} data-transition data-transition-label={next.title}>
-                        <span className={s.nextLabel}>{next.label}</span>
-                        <span className={s.nextTitle}>{next.title}</span>
-                        <span className={s.nextIcon} aria-hidden="true">
-                            <Arrow />
-                        </span>
-                    </Link>
+                    <NextCaseStudy related={relatedCaseStudies(MB.slug)} classes={{ link: s.nextLink, label: s.nextLabel, title: s.nextTitle, meta: s.nextMeta, tags: s.nextTags, tag: s.nextTag, thumb: s.nextThumb, icon: s.nextIcon }} />
                 </div>
             </section>
 

@@ -57,7 +57,7 @@ export const MB = {
         no: "01",
         label: "The brief",
         title: "Same attitude. *Better structure.*",
-        body: "MDRN BLK had a homepage with the right energy and the wrong build: one long canvas of absolutely positioned groups, no shared components and no layout for tablet or phone. The job was to keep the street voice, tighten the grid and turn every block into a responsive, reusable system. The logo, Poppins, the yellow highlight and the street photography all stayed.",
+        body: "MDRN BLK, a skatewear label selling online, had a homepage with the right energy and the wrong build: one long canvas of absolutely positioned groups, no shared components and no layout for tablet or phone. The job was to keep the street voice, tighten the grid and turn every block into a responsive, reusable system. The logo, Poppins, the yellow highlight and the street photography all stayed.",
         facts: [
             { label: "Client", value: "MDRN BLK" },
             { label: "Industry", value: "Skatewear e-commerce" },
@@ -127,16 +127,19 @@ export const MB = {
         title: "One line, *top to bottom.*",
         body: "Fourteen bands, one rhythm: loud hero, tape break, product rail, full-bleed photo, product rail, sale, the look, vitals, press, feed and footer. Every band is its own auto-layout frame, so the order can change without anything breaking.",
         src: `${IMG}/mdrn-blk-skatewear-homepage-desktop-full.webp`,
-        alt: "Full MDRN BLK homepage design, from the hero and new drop to best sellers, the sale, shop the look, accessories, press and footer",
+        alt: "Full MDRN BLK skatewear homepage design, from the hero and new drop to best sellers, the sale, shop the look and footer",
         width: 1200,
         height: 6136,
         // 16px-wide preview shown while the full page loads (sharp, webp q40).
         blur: "data:image/webp;base64,UklGRtABAABXRUJQVlA4IMQBAADQCQCdASoQAFIAPtlapk2oJaOiNVv8AQAbCWUAyVNtrwLqtStu/OU67VceC0F5zp6HfdMz/cRKd1FG24pSwW1t1ilrYmC+54q7rumNEr8RMht7fwnZGgAA/ueA+2u1ekCSUVlzlPOC48v72JDKXAAU3zv7ZKXFYVMSIqS36GH+ncwwMfY4PMruGpqduK3p3+run6EF88qKbfO8KsE3BfMUAuvvASWmn2aIkqnPH5rTpW11EqE+pXqw/OlQk/1C9STbOXvke2pt+cbtsocuN/MKtlF6Vd3fb7AWy4lmDtnQr7AqVs3ZKJxDoerL/xdTT/AGt6lyG7viadCvx9o",
-        // `from`: where each act starts, as a fraction of the page image's height.
+        // On phones the window shows the 440 px page instead (desktop screens
+        // shrink past legibility there).
+        mobile: { src: `${IMG}/mdrn-blk-skatewear-homepage-mobile-full.webp`, alt: "Full MDRN BLK skatewear homepage at mobile width, from the hero to the footer", width: 600, height: 12714 },
+        // `from` / `fromMobile`: where each act starts, as a fraction of the page image's height.
         acts: [
-            { range: "01", name: "Hero → New drop", text: "Announcement bar, nav, the hero, the tape band and the new drop rail.", from: 0 },
-            { range: "02", name: "Duo → Sale → Look", text: "Two full-bleed photos, best sellers, the 25% off band and shop the look.", from: 0.2306 },
-            { range: "03", name: "Vitals → Footer", text: "Skate vitals, accessories, press, the feed and the wordmark footer.", from: 0.6151 }
+            { range: "01", name: "Hero → New drop", text: "Announcement bar, nav, the hero, the tape band and the new drop rail.", from: 0, fromMobile: 0 },
+            { range: "02", name: "Duo → Sale → Look", text: "Two full-bleed photos, best sellers, the 25% off band and shop the look.", from: 0.2306, fromMobile: 0.2297 },
+            { range: "03", name: "Vitals → Footer", text: "Skate vitals, accessories, press, the feed and the wordmark footer.", from: 0.6151, fromMobile: 0.5861 }
         ]
     },
 
@@ -221,7 +224,7 @@ export const MB = {
         points: [
             { title: "One system, three screens", text: "Desktop, iPad and mobile share the same tokens, text styles and components, so one change carries everywhere." },
             { title: "Built the way it will be coded", text: "Every band is a named auto-layout frame with fill and hug sizing, which maps straight to flex and grid." },
-            { title: "The attitude survived", text: "The stickers, the yellow highlight and the street photography hold at every size." }
+            { title: "The attitude survived", text: "The stickers, the yellow highlight and the street photography hold at every size, so the shop still reads as skatewear, not a template." }
         ]
     },
 
@@ -234,8 +237,6 @@ export const MB = {
             { label: "Product design", href: "/services/product-design" }
         ]
     },
-
-    next: { label: "Next case study", title: "Tüit Luxury Candle Co.", href: "/portfolio/tuit-luxury-candle" },
 
     card: {
         image: `${IMG}/mdrn-blk-website-design-thumbnail.webp`,

@@ -22,7 +22,8 @@ $maple: #e8d3b0;
 $ease: cubic-bezier(0.16, 1, 0.3, 1);
 $land: cubic-bezier(0.34, 1.7, 0.6, 1); // overshoot: a sticker landing
 
-$display: var(--font-poppins), "Arial Black", "Helvetica Neue", sans-serif;
+$display: var(--font-poppins), "Helvetica Neue", Arial, sans-serif;
+$black-italic: var(--font-poppins-black), "Arial Black", "Helvetica Neue", sans-serif;
 $mono: var(--font-space-mono), ui-monospace, "SFMono-Regular", monospace;
 
 %mono {
@@ -35,7 +36,7 @@ $mono: var(--font-space-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
 %shout {
-    font-family: $display;
+    font-family: $black-italic;
     font-style: italic;
     font-weight: 900;
     text-transform: none;
@@ -1139,6 +1140,20 @@ $mono: var(--font-space-mono), ui-monospace, "SFMono-Regular", monospace;
     }
 }
 
+.windowMobile {
+    display: none !important;
+}
+
+@media (max-width: $breakpoint-md) {
+    .windowDesktop {
+        display: none !important;
+    }
+
+    .windowMobile {
+        display: block !important;
+    }
+}
+
 .window {
     position: relative;
     max-height: 78vh;
@@ -1635,7 +1650,7 @@ $mono: var(--font-space-mono), ui-monospace, "SFMono-Regular", monospace;
 // iPad and phone side by side.
 .trio {
     position: relative;
-    aspect-ratio: 1760 / 860;
+    aspect-ratio: 1760 / 790;
     margin-top: clamp(48px, 5.4vw, 100px);
 
     figure {
@@ -1967,36 +1982,53 @@ $mono: var(--font-space-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
 // ── Next case study (black) ──────────────────────────────────────────────────
+// Text left, the next study's image pinned up like a moodboard photo, with the
+// shared tags as stickers.
 .next {
-    padding-block: clamp(56px, 6vw, 110px);
+    padding-block: clamp(72px, 8vw, 150px);
 }
 
 .nextLink {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: end;
-    gap: 10px 24px;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-areas:
+        "label thumb"
+        "title thumb"
+        "meta thumb"
+        "tags thumb"
+        "icon thumb";
+    grid-template-rows: auto auto auto auto 1fr;
+    column-gap: clamp(32px, 6vw, 120px);
+    row-gap: 18px;
+    align-items: start;
     color: #ffffff;
     text-decoration: none;
 
     &:focus-visible {
         outline: 3px solid $yellow;
-        outline-offset: 8px;
+        outline-offset: 10px;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: "label" "thumb" "title" "meta" "tags" "icon";
+        grid-template-rows: none;
     }
 }
 
 .nextLabel {
     @extend %mono;
-    grid-column: 1 / -1;
+    grid-area: label;
     color: $yellow;
 }
 
 .nextTitle {
     @extend %shout;
+    grid-area: title;
     justify-self: start;
     padding: 0 0.1em;
-    font-size: clamp(40px, 6vw, 116px);
-    line-height: 1;
+    font-size: clamp(48px, 7vw, 132px);
+    line-height: 0.95;
     letter-spacing: -0.045em;
     // The highlight sweeps in on hover.
     background: linear-gradient($yellow, $yellow) no-repeat 0 100% / 0% 100%;
@@ -2009,7 +2041,63 @@ $mono: var(--font-space-mono), ui-monospace, "SFMono-Regular", monospace;
     }
 }
 
+.nextMeta {
+    @extend %mono;
+    grid-area: meta;
+    color: var(--label);
+}
+
+.nextTags {
+    grid-area: tags;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.nextTag {
+    @extend %shout;
+    padding: 0.36em 0.7em 0.4em;
+    font-size: 16px;
+    line-height: 1;
+    background: $yellow;
+    color: $black;
+    rotate: -2deg;
+
+    &:nth-child(3n + 2) {
+        background: $green;
+        rotate: 2deg;
+    }
+
+    &:nth-child(3n + 3) {
+        background: #ffffff;
+        rotate: -1deg;
+    }
+}
+
+.nextThumb {
+    grid-area: thumb;
+    display: block;
+    padding: clamp(6px, 0.6vw, 11px);
+    background: #ffffff;
+    box-shadow: 0 40px 80px -40px rgba(#000000, 0.8);
+    rotate: 3deg;
+    transition: rotate 0.6s $ease, scale 0.6s $ease;
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    .nextLink:hover & {
+        rotate: 0deg;
+        scale: 1.03;
+    }
+}
+
 .nextIcon {
+    grid-area: icon;
+    align-self: end;
     display: grid;
     place-items: center;
     width: clamp(56px, 5vw, 88px);
@@ -2025,7 +2113,7 @@ $mono: var(--font-space-mono), ui-monospace, "SFMono-Regular", monospace;
     }
 
     .nextLink:hover & {
-        rotate: 45deg;
+        rotate: -45deg;
         scale: 1.08;
     }
 }
@@ -2044,8 +2132,8 @@ $mono: var(--font-space-mono), ui-monospace, "SFMono-Regular", monospace;
     pointer-events: none;
 
     @media (max-width: $breakpoint-md) {
-        right: 4px;
-        width: 13px;
+        right: 5px;
+        width: 9px;
     }
 }
 
@@ -2062,12 +2150,12 @@ $mono: var(--font-space-mono), ui-monospace, "SFMono-Regular", monospace;
     box-shadow: 0 0 0 2px #ffffff;
 
     @media (max-width: $breakpoint-md) {
-        top: calc(50svh - 90px);
-        width: 13px;
-        height: 180px;
-        border-width: 1.5px;
-        border-radius: 7px;
-        box-shadow: 0 0 0 1.5px #ffffff;
+        top: calc(50svh - 70px);
+        width: 9px;
+        height: 140px;
+        border-width: 1px;
+        border-radius: 5px;
+        box-shadow: 0 0 0 1px #ffffff;
     }
 }
 
