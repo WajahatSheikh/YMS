@@ -29,10 +29,14 @@ const geist = Geist({
     display: "swap"
 });
 
+// Not preloaded: the mono face is only used for small labels below the first
+// screen. Preloading it made its file compete with the CSS on slow phones and
+// delayed the first paint; it now loads when a label first needs it.
 const geistMono = Geist_Mono({
     variable: "--font-geist-mono",
     subsets: ["latin"],
-    display: "swap"
+    display: "swap",
+    preload: false
 });
 
 // The pre-redesign faces (IBM Plex Mono/Sans, Inter, Inter Tight) are no longer

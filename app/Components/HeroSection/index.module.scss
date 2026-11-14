@@ -96,6 +96,24 @@
 .word {
     position: relative;
     @include enters($name: word-rise);
+
+    // Phones: the same blur-in without the rise. Animating `top` re-runs
+    // layout on every frame, and on a mid-range phone that layout work landed
+    // right on top of the first paint (layout before FCP halved without it).
+    @media (max-width: $breakpoint-md) {
+        animation-name: word-focus;
+    }
+}
+
+@keyframes word-focus {
+    from {
+        opacity: 0;
+        filter: blur(0.14em);
+    }
+    to {
+        opacity: 1;
+        filter: blur(0);
+    }
 }
 
 @keyframes sub-rise {
@@ -144,8 +162,12 @@
     // On phones it also starts sooner.
     @include enters(0.58s, sub-rise);
 
+    // Phones: it starts sooner, and balancing a four-line paragraph (the most
+    // expensive line-breaking mode) gives way to the plain wrap, which paints
+    // sooner and looks close enough.
     @media (max-width: $breakpoint-md) {
         animation-delay: 0.2s;
+        text-wrap: wrap;
     }
 }
 

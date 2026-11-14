@@ -1,7 +1,13 @@
 import Script from "next/script";
 import { SITE } from "@/app/data/site";
 
-// Analytics tags, both kept off the critical rendering path (`afterInteractive`).
+// Analytics tags, kept off the critical rendering path. The small inline config
+// runs after hydration (`afterInteractive`) so the dataLayer queue exists for
+// early events (the booking modal); the 100 KB+ gtag.js library itself waits
+// for the page's load event (`lazyOnload`) and then processes that queue.
+// `afterInteractive` on the library made Next add a high-priority <link
+// rel=preload> for it in <head>, which competed with the CSS for bandwidth
+// on slow phones and pushed the first paint (and LCP) back.
 //
 // Google Analytics 4 (gtag.js) — SITE.gaId. Loads only on the live production
 // deployment (Vercel sets VERCEL_ENV=production there), so local dev, local
@@ -23,7 +29,7 @@ const isLiveSite = process.env.VERCEL_ENV === "production";
 
 const GoogleAnalytics = ({ id }: { id: string }) => (
     <>
-        <Script src={`https://www.googletagmanager.com/gtag/js?id=${id}`} strategy="afterInteractive" />
+        <Script src={`https://www.googletagmanager.com/gtag/js?id=${id}`} strategy="lazyOnload" />
         <Script id="ga4" strategy="afterInteractive">
             {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config','${id}');`}
         </Script>
