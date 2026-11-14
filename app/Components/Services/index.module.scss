@@ -1,14 +1,8 @@
 @import "../../styles/abstract/variables";
 @import "../../styles/abstract/mixins";
 
-// 05 · Expertise & Capabilities — capability explorer (see Services.tsx).
-//
-// Mobile-first: accordion cards. From 992px up the same markup becomes two
-// panes — `.item` turns into `display: contents`, so each heading drops into the
-// index column and every panel shares one stage cell in the right column. All
-// spacing is flex/grid gap.
+// 05 · Services we offer (see Services.tsx and ServiceTabs.tsx).
 
-$stage-radius: 24px;
 $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
 .section {
@@ -19,19 +13,6 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     gap: var(--space-16);
     padding: var(--space-30) var(--gutter);
     isolation: isolate;
-
-    // Soft brand light behind the stage side — the section's one focal glow.
-    &::before {
-        content: "";
-        position: absolute;
-        z-index: -1;
-        top: 30%;
-        right: -10%;
-        width: min(900px, 80vw);
-        aspect-ratio: 1;
-        background: radial-gradient(closest-side, rgba(232, 80, 2, 0.12), transparent);
-        pointer-events: none;
-    }
 
     @media (max-width: $breakpoint-md) {
         gap: var(--space-10);
@@ -115,339 +96,554 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     color: var(--text-brand);
 }
 
-// ── Explorer — mobile-first accordion ─────────────────────────────────────────
-.explorer {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
+// ── Band ──────────────────────────────────────────────────────────────────────
+// A warm brand field (the same in both themes) that holds the icon row and the
+// card. The card takes the page's own canvas colour, so it reads as a sheet laid
+// on the band in light and dark alike.
+.band {
+    --card-bg: var(--bg-raised);
+    position: relative;
+    isolation: isolate;
     width: 100%;
     max-width: 1520px;
-}
+    padding: clamp(24px, 2.8vw, 40px) clamp(16px, 4vw, 72px) clamp(32px, 4vw, 64px);
+    overflow: hidden;
+    border-radius: clamp(24px, 2.6vw, 40px);
+    // Deep brand orange across the top (where the white icons sit), warming
+    // to peach at the bottom (where the dark position line sits).
+    background:
+        radial-gradient(70% 40% at 50% 0%, #b33a00 0%, transparent 70%),
+        radial-gradient(60% 70% at 100% 100%, #ffc29e 0%, transparent 65%),
+        radial-gradient(60% 70% at 0% 100%, #ffb07f 0%, transparent 65%),
+        linear-gradient(180deg, #b53c00 0%, #bd4202 22%, #e95f17 55%, #ff9a5e 100%);
 
-.item {
-    border: var(--border-thin) solid var(--border-default);
-    border-radius: var(--radius-xl);
-    background: transparent;
-    transition: background-color 0.35s ease, border-color 0.35s ease;
-
-    // Staggered entrance as the list scrolls in.
-    opacity: 0;
-    translate: 0 20px;
-
-    .revealed & {
-        opacity: 1;
-        translate: 0 0;
-        transition:
-            opacity 0.6s ease calc(var(--i) * 70ms),
-            translate 0.7s $ease-out calc(var(--i) * 70ms),
-            background-color 0.35s ease,
-            border-color 0.35s ease;
+    // A slow drift of light across the field: the band keeps breathing at rest.
+    &::before {
+        content: "";
+        position: absolute;
+        inset: -30%;
+        z-index: -1;
+        background: radial-gradient(35% 35% at 50% 50%, rgba(255, 255, 255, 0.35), transparent 70%);
+        opacity: 0.7;
+        pointer-events: none;
     }
 
-    &.open {
-        border-color: var(--border-brand-subtle);
-        background: var(--bg-raised);
+    // Fine grain so the gradient never bands on large screens.
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        opacity: 0.12;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        mix-blend-mode: overlay;
+        pointer-events: none;
     }
-}
 
-.itemHeading {
-    position: relative;
-    margin: 0;
-}
-
-.trigger {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: var(--space-4);
-    width: 100%;
-    padding: var(--space-5);
-    border: 0;
-    background: none;
-    color: inherit;
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-
-    &:focus-visible {
-        outline: 2px solid var(--border-focus);
-        outline-offset: -2px;
-        border-radius: var(--radius-xl);
+    @media (max-width: $breakpoint-md) {
+        padding-inline: 10px;
+        padding-top: 22px;
     }
 }
 
-.number::before {
-    content: attr(data-number);
-}
+@media (prefers-reduced-motion: no-preference) {
+    @keyframes svcDrift {
+        0%,
+        100% {
+            translate: -18% -10%;
+        }
+        50% {
+            translate: 22% 12%;
+        }
+    }
 
-.number {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    line-height: var(--lh-20);
-    color: var(--text-tertiary);
-    transition: color 0.3s ease;
-
-    .open & {
-        color: var(--text-brand);
+    .band::before {
+        animation: svcDrift 16s ease-in-out infinite;
     }
 }
 
-.titleGroup {
+// ── Icon picker ───────────────────────────────────────────────────────────────
+// Each service is an icon tile with its name underneath. The active tile turns
+// into a sheet of the card's colour, a size up, with a ring around it that
+// follows the tile's own rounded-square outline as the timer runs; a pointer
+// under its name joins it to the card. On phones the row scrolls sideways and
+// the chosen tab scrolls into view.
+.picker {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-2) var(--space-3);
-    min-width: 0;
-}
-
-.itemTitle {
-    font-family: var(--font-display);
-    font-weight: var(--fw-semibold);
-    font-size: clamp(20px, 2.2vw, 30px);
-    line-height: 1.15;
-    letter-spacing: -0.01em;
-    color: var(--text-secondary);
-    transition: color 0.3s ease;
-
-    .open &,
-    .trigger:hover & {
-        color: var(--text-primary);
-    }
-}
-
-%badge {
-    display: inline-flex;
-    align-items: center;
-    padding: var(--space-1) var(--space-3);
-    border: var(--border-thin) solid var(--border-brand-subtle);
-    border-radius: var(--radius-full);
-    background-color: var(--bg-brand-faint);
-    font-family: var(--font-mono);
-    font-weight: var(--fw-medium);
-    font-size: var(--text-xs);
-    line-height: var(--lh-16);
-    letter-spacing: 0.08em;
-    color: var(--text-brand);
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-.label {
-    @extend %badge;
-}
-
-.icon {
-    display: grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    border: var(--border-thin) solid var(--border-default);
-    border-radius: var(--radius-full);
-    color: var(--text-secondary);
-    transition: border-color 0.3s ease, color 0.3s ease;
-
-    svg {
-        grid-area: 1 / 1;
-        width: 18px;
-        height: 18px;
-        transition: transform 0.4s $ease-out, opacity 0.25s ease;
-    }
-
-    .open & {
-        border-color: var(--border-brand);
-        color: var(--text-brand);
-    }
-}
-
-// Accordion: the plus turns into a close ×; the arrow is desktop-only.
-.plus {
-    .open & {
-        transform: rotate(45deg);
-    }
+    align-items: flex-start;
+    justify-content: center;
+    gap: clamp(4px, 0.8vw, 12px);
+    // Room for the pointer down to the card.
+    margin-bottom: 20px;
 }
 
 .arrow {
-    opacity: 0;
-}
-
-// Panel collapse: 0fr → 1fr animates height without measuring. Closed panels
-// are visibility:hidden — out of the tab order and the a11y tree, yet still
-// transitionable (display:none would kill the animation).
-.panel {
     display: grid;
-    grid-template-rows: 0fr;
-    visibility: hidden;
-    transition: grid-template-rows 0.45s $ease-out, visibility 0s linear 0.45s;
-
-    .open & {
-        grid-template-rows: 1fr;
-        visibility: visible;
-        transition: grid-template-rows 0.45s $ease-out, visibility 0s;
-    }
-}
-
-.panelInner {
-    min-height: 0;
-    overflow: hidden;
-}
-
-// ── Stage (one service's showcase) ────────────────────────────────────────────
-.stage {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-5);
-    padding: 0 var(--space-5) var(--space-5);
-}
-
-.media {
-    position: relative;
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-    border-radius: var(--radius-lg);
-    // Shows through until the poster/reel arrives.
-    background-image: var(--surface-warm);
-
-    video,
-    img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-}
-
-// "01 / 07" chip on the reel — always over video, so it stays light-on-dark.
-.mediaTag {
-    position: absolute;
-    top: var(--space-3);
-    left: var(--space-3);
-    padding: 4px 10px;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    margin-top: 8px;
+    border: 0;
     border-radius: var(--radius-full);
-    background: rgba(2, 2, 2, 0.6);
-    backdrop-filter: blur(8px);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    line-height: var(--lh-16);
-    letter-spacing: 0.06em;
+    background: transparent;
     color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease, translate 0.35s $ease-out;
+
+    svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    &:hover {
+        background: rgba(90, 22, 0, 0.25);
+    }
+
+    &:first-child:hover {
+        translate: -3px 0;
+    }
+
+    &:last-child:hover {
+        translate: 3px 0;
+    }
+
+    &:active {
+        scale: 0.92;
+    }
+
+    &:focus-visible {
+        outline: 2px solid #ffffff;
+        outline-offset: 2px;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        display: none;
+    }
 }
 
-.body {
+.tabs {
     display: flex;
-    flex-direction: column;
     align-items: flex-start;
-    gap: var(--space-4);
+    gap: clamp(2px, 0.6vw, 8px);
+    padding-top: 6px;
+
+    @media (max-width: $breakpoint-md) {
+        margin: 0 -10px;
+        padding: 6px 14px 0;
+        overflow-x: auto;
+        scroll-snap-type: x proximity;
+        scrollbar-width: none;
+        mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 28px), transparent 100%);
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
 }
 
-// The service name on the stage — redundant in the accordion (its title sits
-// right above), so it only appears in the two-pane layout.
-.kicker {
-    display: none;
+.tab {
+    position: relative;
+    display: flex;
+    flex: none;
+    flex-direction: column;
     align-items: center;
-    gap: var(--space-3);
-    margin: 0;
-    font-family: var(--font-display);
-    font-weight: var(--fw-semibold);
-    font-size: var(--text-3xl);
-    line-height: var(--lh-40);
-    letter-spacing: -0.01em;
-    color: var(--text-primary);
-}
-
-.kickerLabel {
-    @extend %badge;
-}
-
-.description {
-    margin: 0;
-    font-family: var(--font-sans);
-    font-size: var(--text-base);
-    line-height: var(--lh-26);
-    color: var(--text-secondary);
-    text-wrap: pretty;
-}
-
-.whatYouGet {
-    margin: var(--space-1) 0 0;
-    font-family: var(--font-mono);
-    font-weight: var(--fw-medium);
-    font-size: var(--text-xs);
-    line-height: var(--lh-16);
-    letter-spacing: 0.1em;
-    color: var(--text-brand);
-    text-transform: uppercase;
-}
-
-.tags {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-2) var(--space-5);
-    width: 100%;
-    margin: 0;
+    gap: 10px;
+    width: 96px;
     padding: 0;
-    list-style: none;
+    border: 0;
+    background: none;
+    color: #ffffff;
+    cursor: pointer;
+    scroll-snap-align: center;
 
-    @media (max-width: $breakpoint-sm) {
+    &:focus-visible {
+        outline: none;
+
+        .tabIcon {
+            outline: 3px solid #ffffff;
+            outline-offset: 4px;
+        }
+    }
+
+    @media (max-width: $breakpoint-md) {
+        width: 74px;
+        gap: 8px;
+    }
+}
+
+.tabIcon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    border-radius: 18px;
+    background: rgba(90, 22, 0, 0.18);
+    transition: scale 0.45s $ease-out, background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease,
+        translate 0.45s $ease-out;
+
+    > svg:first-child {
+        width: 24px;
+        height: 24px;
+    }
+
+    .tab:hover:not(.tabOn) & {
+        background: rgba(90, 22, 0, 0.32);
+        border-color: #ffffff;
+        translate: 0 -3px;
+    }
+
+    .tab:active & {
+        scale: 0.94;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        width: 46px;
+        height: 46px;
+        border-radius: 15px;
+
+        > svg:first-child {
+            width: 21px;
+            height: 21px;
+        }
+    }
+}
+
+.tabName {
+    max-width: 100%;
+    font-family: var(--font-sans);
+    font-weight: var(--fw-medium);
+    font-size: 13px;
+    line-height: 1.25;
+    text-align: center;
+    text-wrap: balance;
+    color: #ffffff;
+    opacity: 0.92;
+    transition: opacity 0.3s ease;
+
+    .tab:hover & {
+        opacity: 1;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        font-size: 12px;
+    }
+}
+
+.tabOn {
+    z-index: 1;
+
+    .tabIcon {
+        border-color: var(--card-bg);
+        background: var(--card-bg);
+        color: var(--text-brand);
+        scale: 1.1;
+    }
+
+    .tabName {
+        font-weight: var(--fw-semibold);
+        opacity: 1;
+    }
+
+    // The pointer: a small drop of the card pulled up under the name.
+    &::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        width: 18px;
+        height: 22px;
+        translate: -50% -1px;
+        background: var(--card-bg);
+        clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    }
+}
+
+.ring {
+    position: absolute;
+    inset: -8px;
+    width: calc(100% + 16px);
+    height: calc(100% + 16px);
+    pointer-events: none;
+    overflow: visible;
+}
+
+.ringFill {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    opacity: 0;
+
+    // Only while the tabs are rotating.
+    [data-auto] & {
+        opacity: 1;
+        animation: svcRing var(--rotate, 7s) linear forwards;
+    }
+
+    [data-auto][data-paused] & {
+        animation-play-state: paused;
+    }
+}
+
+@keyframes svcRing {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+// ── Card ──────────────────────────────────────────────────────────────────────
+.cardWrap {
+    position: relative;
+    max-width: 1180px;
+    margin: 0 auto;
+    touch-action: pan-y;
+}
+
+.card {
+    border-radius: clamp(20px, 2.2vw, 32px);
+    background: var(--card-bg);
+    box-shadow: 0 40px 90px -50px rgba(120, 30, 0, 0.55);
+
+    &[hidden] {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    @keyframes svcIn {
+        from {
+            opacity: 0;
+            translate: calc(var(--from-x, 1) * 28px) 0;
+        }
+        to {
+            opacity: 1;
+            translate: 0 0;
+        }
+    }
+
+    .card {
+        --from-x: 1;
+
+        &[data-dir="-1"] {
+            --from-x: -1;
+        }
+
+        .copy > *,
+        .media {
+            animation: svcIn 0.6s $ease-out both;
+        }
+
+        .copy > :nth-child(2) {
+            animation-delay: 40ms;
+        }
+
+        .copy > :nth-child(3) {
+            animation-delay: 80ms;
+        }
+
+        .copy > :nth-child(4) {
+            animation-delay: 120ms;
+        }
+
+        .copy > :nth-child(5) {
+            animation-delay: 160ms;
+        }
+
+        .media {
+            animation-delay: 60ms;
+        }
+    }
+}
+
+.cardInner {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: center;
+    gap: clamp(24px, 4vw, 64px);
+    padding: clamp(20px, 3.6vw, 52px);
+
+    @media (max-width: $breakpoint-lg) {
         grid-template-columns: minmax(0, 1fr);
     }
 }
 
-.tag {
+.copy {
     display: flex;
+    flex-direction: column;
     align-items: flex-start;
-    gap: var(--space-2);
+    gap: var(--space-4);
+
+    @media (max-width: $breakpoint-lg) {
+        order: 2;
+    }
+}
+
+.kicker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
     font-family: var(--font-sans);
-    font-size: var(--text-sm);
-    line-height: var(--lh-20);
-    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-base);
+    line-height: 1.3;
+    color: var(--text-primary);
+}
+
+.kickerIcon {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: var(--gradient-brand);
+    color: #ffffff;
 
     svg {
-        flex-shrink: 0;
+        width: 17px;
+        height: 17px;
+    }
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: var(--bg-chip);
+    font-size: var(--text-xs);
+    line-height: 1.3;
+    color: var(--text-secondary);
+}
+
+.headline {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: clamp(28px, 3.1vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    color: var(--text-primary);
+    text-transform: none;
+    text-wrap: balance;
+}
+
+.summary {
+    max-width: 480px;
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px 6px 8px;
+        border: var(--border-thin) solid var(--border-default);
+        border-radius: var(--radius-full);
+        font-family: var(--font-sans);
+        font-size: var(--text-sm);
+        line-height: 1.3;
+        color: var(--text-secondary);
+    }
+
+    svg {
         width: 16px;
         height: 16px;
-        margin-top: 2px;
         color: var(--text-brand);
     }
 }
 
-.ctaRow {
+.actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--space-3) var(--space-4);
+    gap: var(--space-4) var(--space-6);
     margin-top: var(--space-2);
+}
+
+// "Learn more": a rule under the label that a second one draws over.
+.learn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    background:
+        linear-gradient(var(--text-primary), var(--text-primary)) no-repeat 0 100% / 0% 1.5px,
+        linear-gradient(var(--border-default), var(--border-default)) no-repeat 0 100% / 100% 1.5px;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-base);
+    text-decoration: none;
+    transition: background-size 0.5s $ease-out;
+
+    svg {
+        width: 18px;
+        height: 18px;
+        transition: translate 0.45s $ease-out;
+    }
+
+    &:hover,
+    &:focus-visible {
+        background-size: 100% 1.5px, 100% 1.5px;
+
+        svg {
+            translate: 5px 0;
+        }
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--border-focus);
+        outline-offset: 4px;
+        border-radius: 4px;
+    }
 }
 
 .cta {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: var(--space-2);
-    height: var(--control-md);
-    padding-inline: var(--space-6);
-    border: 0;
+    height: 48px;
+    padding: 0 var(--space-5);
     border-radius: var(--radius-full);
     background: var(--gradient-brand);
-    box-shadow: inset 0 -1px 4px 2px #ffffff40;
     color: var(--text-on-cta);
     font-family: var(--font-sans);
     font-weight: var(--fw-medium);
-    font-size: var(--text-sm);
-    line-height: var(--lh-20);
+    font-size: var(--text-base);
     text-decoration: none;
-    white-space: nowrap;
-    cursor: pointer;
-
-    @include brand-cta-glow;
+    transition: translate 0.4s $ease-out, box-shadow 0.4s ease;
 
     svg {
         width: 16px;
         height: 16px;
-        transition: rotate 0.3s $ease-out;
     }
 
-    &:hover svg {
-        rotate: -12deg;
+    &:hover,
+    &:focus-visible {
+        translate: 0 -2px;
+        box-shadow: 0 14px 28px -12px rgba(232, 80, 2, 0.75);
+    }
+
+    &:active {
+        translate: 0 0;
     }
 
     &:focus-visible {
@@ -456,182 +652,59 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     }
 }
 
-// Link to the service's own page, quieter than the CTA beside it. Padding
-// makes it a 32px tap target; the negative margin keeps the row height.
-.ctaNote {
-    display: inline-block;
-    padding-block: 6px;
-    margin-block: -6px;
-    font-family: var(--font-sans);
-    font-weight: var(--fw-medium);
-    font-size: var(--text-sm);
-    line-height: var(--lh-20);
-    color: var(--text-secondary);
-    text-decoration: underline;
-    text-decoration-color: var(--border-default);
-    text-underline-offset: 5px;
-    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+.media {
+    position: relative;
+    aspect-ratio: 16 / 11;
+    overflow: hidden;
+    border: var(--border-thin) solid var(--border-default);
+    border-radius: clamp(14px, 1.6vw, 22px);
+    background: var(--bg-inset);
 
-    &:hover,
-    &:focus-visible {
-        color: var(--text-brand);
-        text-decoration-color: currentColor;
+    img,
+    .reel {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
-    // The arrow pushes forward on hover, so the link answers with motion, not just colour.
-    span[aria-hidden="true"] {
-        display: inline-block;
-        transition: translate 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    &:hover span[aria-hidden="true"],
-    &:focus-visible span[aria-hidden="true"] {
-        translate: 4px 0;
+    @media (max-width: $breakpoint-lg) {
+        order: 1;
     }
 }
 
-// ── Two-pane explorer (≥992) ──────────────────────────────────────────────────
-@media (min-width: 992px) {
-    .explorer {
-        display: grid;
-        grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-        align-items: start;
-        column-gap: clamp(40px, 4vw, 72px);
-        row-gap: 0;
-    }
+.reel {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
 
-    // Each item's heading and panel become direct grid children.
-    .item {
-        display: contents;
-    }
+.reelOn {
+    opacity: 1;
+}
 
-    // Index column
-    .itemHeading {
-        grid-column: 1;
-        border-bottom: var(--border-thin) solid var(--border-default);
+// Where you are, for everyone (and announced when the card changes).
+.position {
+    margin: var(--space-5) 0 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-transform: uppercase;
+    color: #4a1702;
 
-        // Entrance moves here, since a display:contents item has no box.
-        opacity: 0;
-        translate: -16px 0;
-
-        .revealed & {
-            opacity: 1;
-            translate: 0 0;
-            transition: opacity 0.6s ease calc(var(--i) * 70ms), translate 0.7s $ease-out calc(var(--i) * 70ms);
-        }
-
-        // Active indicator — a brand bar that grows in on the left edge.
-        &::before {
-            content: "";
-            position: absolute;
-            top: 22%;
-            bottom: 22%;
-            left: 0;
-            width: 3px;
-            border-radius: 3px;
-            background: var(--gradient-brand);
-            transform: scaleY(0);
-            transition: transform 0.4s $ease-out;
-        }
-
-        .open &::before {
-            transform: scaleY(1);
-        }
-    }
-
-    .trigger {
-        padding: var(--space-6) var(--space-2) var(--space-6) var(--space-6);
-
-        &:focus-visible {
-            border-radius: var(--radius-lg);
-        }
-    }
-
-    // Hovering a row previews the arrow; the active row keeps it.
-    .icon {
-        border-color: transparent;
-        color: var(--text-tertiary);
-
-        .trigger:hover &,
-        .open & {
-            border-color: var(--border-brand);
-            color: var(--text-brand);
-        }
-    }
-
-    .plus {
-        opacity: 0;
-    }
-
-    .arrow {
-        opacity: 1;
-        transform: translateX(-4px);
-        transition: transform 0.35s $ease-out;
-
-        .trigger:hover &,
-        .open & {
-            transform: translateX(0);
-        }
-
-        // The active row still answers the pointer: its arrow pushes forward.
-        .open .trigger:hover & {
-            transform: translateX(4px);
-        }
-    }
-
-    .open .trigger:hover .icon {
-        background: var(--bg-brand-subtle);
-    }
-
-    // Stage column: every panel occupies the same cell, spanning all index
-    // rows; only the open one is visible, so switching cross-fades in place.
-    // Sticky, so the stage stays in view while the index scrolls past.
-    .panel {
-        grid-column: 2;
-        grid-row: 1 / span var(--rows);
-        position: sticky;
-        top: calc(var(--navbar-height) + var(--space-6));
-        grid-template-rows: 1fr;
-        opacity: 0;
-        transform: translateY(14px) scale(0.985);
-        transition: opacity 0.35s ease, transform 0.5s $ease-out, visibility 0s linear 0.35s;
-
-        .open & {
-            opacity: 1;
-            transform: none;
-            transition: opacity 0.45s ease 0.05s, transform 0.6s $ease-out 0.05s, visibility 0s;
-        }
-    }
-
-    .stage {
-        gap: var(--space-6);
-        padding: var(--space-4);
-        border: var(--border-thin) solid var(--border-default);
-        border-radius: $stage-radius;
-        background: var(--bg-raised);
-        box-shadow: 0 40px 90px -50px rgba(232, 80, 2, 0.45);
-    }
-
-    .media {
-        border-radius: var(--radius-2xl);
-    }
-
-    .body {
-        padding: 0 var(--space-4) var(--space-4);
-    }
-
-    .kicker {
-        display: flex;
-        flex-wrap: wrap;
+    span {
+        color: #2a0c00;
+        font-weight: 700;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .item,
-    .itemHeading,
-    .panel {
+    .tabIcon,
+    .tabName,
+    .arrow,
+    .learn svg,
+    .cta {
         transition: none !important;
-        translate: none !important;
-        transform: none !important;
     }
 }

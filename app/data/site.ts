@@ -24,7 +24,7 @@ export const SITE = {
 
     // Every "Book a call" goes here. A Calendly link opens in the on-page
     // booking modal (app/Components/BookingModal); anything else is a plain link.
-    bookingUrl: process.env.NEXT_PUBLIC_BOOKING_URL || "https://calendly.com/yourmomstudio/business-meeting",
+    bookingUrl: process.env.NEXT_PUBLIC_BOOKING_URL || "https://calendly.com/yourmomstudio-agency/discovery-call",
 
     // Google Analytics 4 measurement ID — public by design (it ships in the page).
     // Override or clear it with NEXT_PUBLIC_GA_ID.

@@ -9,6 +9,9 @@ export interface Service {
     seo: { title: string; description: string };
     // Short category badge shown beside the title.
     label?: string;
+    /** The home page card: an H3 that carries the service keyword, and a one-sentence summary. */
+    headline: string;
+    summary: string;
     description: string;
     tags: string[];
     image?: string;
@@ -23,6 +26,8 @@ export const SERVICES: Service[] = [
     {
         title: "Product Design",
         slug: "product-design",
+        headline: "Product design that is dev‑ready on delivery",
+        summary: "We work inside your workflow and with your engineers, and ship UI and UX that is ready to build, from early MVP to scaled product.",
         seo: {
             title: "Product design agency for startups and MVPs",
             description:
@@ -46,6 +51,8 @@ export const SERVICES: Service[] = [
     {
         title: "Websites",
         slug: "websites",
+        headline: "Websites designed and built by one team",
+        summary: "Marketing sites, landing pages and replatforms on Webflow, Framer or custom code. We have shipped 50+ sites, and they go live looking exactly like the design.",
         seo: {
             title: "Website design and development for startups",
             description:
@@ -69,6 +76,8 @@ export const SERVICES: Service[] = [
     {
         title: "Mobile App",
         slug: "mobile-app",
+        headline: "Mobile apps built for one thumb and zero patience",
+        summary: "iOS and Android apps designed and built by one team, from onboarding and user flows to cross-platform development and App Store launch.",
         seo: {
             title: "Mobile app design and development (iOS and Android)",
             description:
@@ -93,6 +102,8 @@ export const SERVICES: Service[] = [
     {
         title: "SaaS Products",
         slug: "saas-products",
+        headline: "SaaS products that make complex features feel simple",
+        summary: "Dashboards, onboarding and admin experiences that turn trials into paying users, designed to grow from your first customers to a platform that scales.",
         seo: {
             title: "SaaS product design and development",
             description:
@@ -117,6 +128,8 @@ export const SERVICES: Service[] = [
     {
         title: "Web Management System",
         slug: "web-management-system",
+        headline: "Management systems that replace spreadsheets",
+        summary: "Custom admin panels and role-based dashboards for operations, clients, inventory and approvals, shaped around how your team already works.",
         seo: {
             title: "Custom web management systems and admin panels",
             description:
@@ -141,6 +154,8 @@ export const SERVICES: Service[] = [
     {
         title: "Game Design",
         slug: "game-design",
+        headline: "2D game design that earns one more round",
+        summary: "Core loop, characters, worlds and the game UI that holds it all together, for mobile casual games and branded experiences.",
         seo: {
             title: "2D game design studio",
             description:
@@ -165,6 +180,8 @@ export const SERVICES: Service[] = [
     {
         title: "Brand Identity",
         slug: "brand-identity",
+        headline: "Brand identities your team can actually use",
+        summary: "Logo, colour, typography and guidelines that stay consistent across your website, product, social media and print.",
         seo: {
             title: "Brand identity design for startups",
             description:
