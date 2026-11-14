@@ -3,7 +3,7 @@ import { PRICE_LABEL } from "./data/site";
 
 // The image shown when the site is shared (LinkedIn, Slack, WhatsApp, X…) and
 // used by ad platforms that read Open Graph. Generated at build time, 1200×630.
-export const alt = "YourMomStudio — MVP design and development on monthly subscription";
+export const alt = "YourMomStudio: MVP design and development on a monthly subscription";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -30,10 +30,10 @@ export default function OpengraphImage() {
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                     <div style={{ fontSize: 76, fontWeight: 700, lineHeight: 1.05, letterSpacing: -2, maxWidth: 960 }}>
-                        MVP design and development, on monthly subscription
+                        MVP design and development, on a monthly subscription
                     </div>
                     <div style={{ fontSize: 30, color: "#a1a1aa", maxWidth: 900 }}>
-                        A full product team for funded startups — design, engineering and QA every week.
+                        A full product team for funded startups: product design, web and mobile development and QA every week.
                     </div>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 24, fontSize: 28 }}>

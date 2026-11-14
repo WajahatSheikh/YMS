@@ -24,7 +24,7 @@ const REVEAL_ITEMS = [
     { src: `${REVEAL_BASE}/Rectangle 2.png` } // bright green
 ];
 
-const HEADLINE = "MVP design and development, on monthly subscription";
+const HEADLINE = "MVP design and development, on a monthly subscription";
 
 // Words, not lines. A line-level reveal would mean laying the headline out,
 // measuring where the browser actually broke it, and re-measuring on every
@@ -66,8 +66,8 @@ const HeroSection = () => (
             <div className={style.copy}>
                 <Headline />
                 <p className={style.sub}>
-                    A full product team for funded startups — design, engineering and QA every week, without
-                    hiring one.
+                    YourMomStudio is a full product team for funded startups: product design, web and mobile
+                    development and QA every week, without hiring one.
                 </p>
             </div>
 
