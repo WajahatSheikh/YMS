@@ -31,6 +31,17 @@ export default function GmeMotion() {
         Promise.all([import("gsap"), import("gsap/ScrollTrigger")]).then(([{ gsap }, { ScrollTrigger }]) => {
             if (cancelled) return;
             gsap.registerPlugin(ScrollTrigger);
+
+            // Sections below the hero use content-visibility: auto (faster first
+            // paint), so the page's real height arrives as each one renders.
+            // Re-measure every trigger when it does, so scroll-driven motion
+            // stays lined up with the content.
+            let refreshTimer = 0;
+            const resizeWatch = new ResizeObserver(() => {
+                window.clearTimeout(refreshTimer);
+                refreshTimer = window.setTimeout(() => ScrollTrigger.refresh(), 150);
+            });
+            resizeWatch.observe(main);
             const mm = gsap.matchMedia(main);
             const land = "back.out(2.2)";
 
@@ -103,6 +114,8 @@ export default function GmeMotion() {
             });
 
             cleanup = () => {
+                resizeWatch.disconnect();
+                window.clearTimeout(refreshTimer);
                 mm.revert();
                 progress.kill();
                 chapterTriggers.forEach((t) => t.kill());

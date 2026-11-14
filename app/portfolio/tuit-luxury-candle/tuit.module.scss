@@ -685,11 +685,16 @@ $italic: var(--font-cormorant), Georgia, serif;
         }
     }
 
+    // Acts not yet reached wait slightly faded. Below 0.9 their small text
+    // drops under 4.5:1 on sand (0.38 was 1.75:1), so the current act is also
+    // marked by a darker rule along its top edge.
     .act {
-        opacity: 0.38;
+        opacity: 0.9;
+        transition: opacity 0.6s ease, border-color 0.6s ease;
 
         &[data-on] {
             opacity: 1;
+            border-top-color: var(--ink);
         }
     }
 
@@ -1492,4 +1497,16 @@ $italic: var(--font-cormorant), Georgia, serif;
     .wickFlame::after {
         animation: tuitHalo 3.4s ease-in-out infinite;
     }
+}
+
+
+// ── First paint ───────────────────────────────────────────────────────────────
+// Sections below the hero skip layout and paint until they near the viewport
+// (content-visibility). Without it the browser laid out the whole case study
+// before its first paint: about 1.5 s of layout on a mid-range phone. The
+// placeholder height is replaced by the real one once a section has rendered,
+// and the motion component re-measures its scroll triggers when that happens.
+.page > .band:not(.hero) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
 }

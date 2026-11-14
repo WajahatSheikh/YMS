@@ -12,6 +12,10 @@
 $navy: #042540;
 $night: #121417;
 $orange: #ff6800;
+// The brand orange as text: #ff6800 on cream or white is 2.7:1, under AA. This
+// deeper step of the same hue is 4.9:1 on cream and 5.2:1 on white. Fills,
+// petals and lines keep the brand orange; text on an orange fill is ink (6.1:1).
+$orange-ink: #c2410c;
 $sun: #ffa133;
 $blue: #008cff;
 $cream: #fff6ef;
@@ -57,13 +61,13 @@ $mono: var(--font-gme-mono), ui-monospace, "SFMono-Regular", monospace;
     --ink: #{$ink};
     --muted: #4a4a4a;
     --line: rgba(24, 24, 24, 0.12);
-    --label: #{$orange};
-    --accent: #{$orange};
+    --label: #{$orange-ink};
+    --accent: #{$orange-ink};
     background: var(--ground);
     color: var(--ink);
 }
 .page [data-ground="cream"] { --ground: #{$cream}; }
-.page [data-ground="sun"] { --ground: #{$sun}; --label: #{$ink}; --accent: #ffffff; --muted: rgba(24, 24, 24, 0.78); }
+.page [data-ground="sun"] { --ground: #{$sun}; --label: #{$ink}; --accent: #5c2300; --muted: rgba(24, 24, 24, 0.78); }
 .page [data-ground="navy"],
 .page [data-ground="night"] {
     --ground: #{$navy};
@@ -357,7 +361,7 @@ $mono: var(--font-gme-mono), ui-monospace, "SFMono-Regular", monospace;
     gap: 12px;
     font-size: 10px;
 
-    span:last-child { color: $orange; }
+    span:last-child { color: $orange-ink; }
 }
 
 .route {
@@ -414,7 +418,7 @@ $mono: var(--font-gme-mono), ui-monospace, "SFMono-Regular", monospace;
     width: 30%;
     padding: 22px 18px;
     background: $orange;
-    color: #ffffff;
+    color: $ink;
 
     small { @extend %mono; font-size: 9px; }
     b { font-family: $mono; font-size: 30px; }
@@ -488,7 +492,7 @@ $mono: var(--font-gme-mono), ui-monospace, "SFMono-Regular", monospace;
         font-size: clamp(40px, 4vw, 64px);
         line-height: 1;
         letter-spacing: -0.04em;
-        color: $orange;
+        color: $orange-ink;
     }
 
     span { @extend %mono; color: var(--muted); }
@@ -519,7 +523,7 @@ $mono: var(--font-gme-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
 .legNo { @extend %mono; color: var(--muted); }
-.legCode { font-family: $mono; font-size: clamp(28px, 2.4vw, 40px); color: $orange; }
+.legCode { font-family: $mono; font-size: clamp(28px, 2.4vw, 40px); color: $orange-ink; }
 .legStep { @extend %mono; color: var(--muted); }
 
 // ── What changed ─────────────────────────────────────────────────────────────
@@ -702,7 +706,7 @@ $mono: var(--font-gme-mono), ui-monospace, "SFMono-Regular", monospace;
     border: 4px solid #ffffff;
     border-radius: 50%;
     background: $orange;
-    color: #ffffff;
+    color: $ink;
     font-weight: 600;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
 
@@ -727,7 +731,7 @@ $mono: var(--font-gme-mono), ui-monospace, "SFMono-Regular", monospace;
         height: 32px;
         border-radius: 50%;
         background: $orange;
-        color: #ffffff;
+        color: $ink;
         font-size: 14px;
         font-weight: 600;
     }
@@ -785,7 +789,7 @@ $mono: var(--font-gme-mono), ui-monospace, "SFMono-Regular", monospace;
     margin: -32px 0 40px;
     font-family: $mono;
     font-size: clamp(28px, 3.4vw, 56px);
-    color: #ffffff;
+    color: $ink;
 }
 
 .trio {
@@ -891,7 +895,7 @@ $mono: var(--font-gme-mono), ui-monospace, "SFMono-Regular", monospace;
     list-style: none;
 
     li { padding: 32px; border-radius: 22px; background: #ffffff; }
-    span { font-family: $mono; font-size: 14px; color: $orange; }
+    span { font-family: $mono; font-size: 14px; color: $orange-ink; }
     h3 { margin: 14px 0 10px; font-size: 22px; letter-spacing: -0.01em; }
     p { font-size: 16px; line-height: 1.6; color: var(--muted); }
 }
@@ -937,15 +941,16 @@ $mono: var(--font-gme-mono), ui-monospace, "SFMono-Regular", monospace;
     padding: 18px 30px;
     border-radius: 999px;
     background: $orange;
-    color: #ffffff;
+    color: $ink;
     font-weight: 600;
     font-size: 17px;
     transition: background 0.3s ease, translate 0.4s $ease;
 
     svg { width: 20px; transition: rotate 0.4s $ease; }
 
-    &:hover { background: #d95800; translate: 0 -2px; svg { rotate: 45deg; } }
-    &:active { translate: 0 1px; background: #b84a00; }
+    // Ink text on the fill, so hover and press lighten it (8.8:1 and 7.6:1).
+    &:hover { background: $sun; translate: 0 -2px; svg { rotate: 45deg; } }
+    &:active { translate: 0 1px; background: #ff8f3a; }
     &:focus-visible { outline: 3px solid $sun; outline-offset: 4px; }
 }
 
@@ -1027,7 +1032,7 @@ $mono: var(--font-gme-mono), ui-monospace, "SFMono-Regular", monospace;
     aspect-ratio: 1;
     border-radius: 50%;
     background: $orange;
-    color: #ffffff;
+    color: $ink;
     transition: rotate 0.6s $ease, scale 0.5s $land;
 
     svg { width: 40%; }
@@ -1194,4 +1199,16 @@ $mono: var(--font-gme-mono), ui-monospace, "SFMono-Regular", monospace;
     .nextIcon,
     .nextTitle,
     .railTick { transition: none; }
+}
+
+
+// ── First paint ───────────────────────────────────────────────────────────────
+// Sections below the hero skip layout and paint until they near the viewport
+// (content-visibility). Without it the browser laid out the whole case study
+// before its first paint: about 1.5 s of layout on a mid-range phone. The
+// placeholder height is replaced by the real one once a section has rendered,
+// and the motion component re-measures its scroll triggers when that happens.
+.page > .band:not(.hero) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
 }

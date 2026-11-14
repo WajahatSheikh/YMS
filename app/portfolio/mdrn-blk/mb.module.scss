@@ -2218,3 +2218,15 @@ $mono: var(--font-space-mono), ui-monospace, "SFMono-Regular", monospace;
         transition: none;
     }
 }
+
+
+// ── First paint ───────────────────────────────────────────────────────────────
+// Sections below the hero skip layout and paint until they near the viewport
+// (content-visibility). Without it the browser laid out the whole case study
+// before its first paint: about 1.5 s of layout on a mid-range phone. The
+// placeholder height is replaced by the real one once a section has rendered,
+// and the motion component re-measures its scroll triggers when that happens.
+.page > .band:not(.hero) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+}

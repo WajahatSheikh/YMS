@@ -79,7 +79,7 @@ export const SERVICES: Service[] = [
         headline: "Mobile apps built for one thumb and zero patience",
         summary: "iOS and Android apps designed and built by one team, from onboarding and user flows to cross-platform development and App Store launch.",
         seo: {
-            title: "Mobile app design and development (iOS and Android)",
+            title: "iOS and Android app design and development",
             description:
                 "iOS and Android apps designed and built by one team, from onboarding and user flows to cross-platform development and App Store launch."
         },
@@ -131,7 +131,7 @@ export const SERVICES: Service[] = [
         headline: "Management systems that replace spreadsheets",
         summary: "Custom admin panels and role-based dashboards for operations, clients, inventory and approvals, shaped around how your team already works.",
         seo: {
-            title: "Custom web management systems and admin panels",
+            title: "Web management systems and admin panels",
             description:
                 "Custom admin panels, internal tools and role-based dashboards that replace spreadsheets and manual follow-ups, shaped around how your team works."
         },
