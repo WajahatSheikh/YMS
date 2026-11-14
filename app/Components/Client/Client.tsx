@@ -12,16 +12,14 @@ import style from "./index.module.scss";
 // its monogram) and gets better as real ones are added: give an entry an
 // `image` and both the preview and the mobile row thumbnail use it.
 //
-// Each row links to its own case study. Tüit is the first real one: it has a
-// thumbnail and a preview reel that plays in the cursor card. The other five
-// still open placeholder pages (app/data/projects.ts); replace copy, thumbnail
-// and case study together as the real work lands.
+// Each row links to its own case study. The real ones (MDRN BLK, Naturally
+// White, Tüit) have a thumbnail and a preview reel that plays in the cursor
+// card. "Strike A Balance" still opens a placeholder page (app/data/projects.ts).
+// Add a row only when its case study is ready.
 
 const WORK: IndexProject[] = [
     { title: MB.client, category: MB.category, href: MB.path, image: MB.card.image, video: MB.card.video },
-    { title: "Paramount Students", client: "Paramount Students", category: "Mobile App", href: "/portfolio/vibecart" },
     { title: NW.client, category: NW.category, href: NW.path, image: NW.card.image, video: NW.card.video },
-    { title: "Gasoline Application", client: "Digital Gravity", category: "Web Management", href: "/portfolio/novabuild" },
     {
         title: TUIT.client,
         client: TUIT.clientShort,
@@ -30,7 +28,6 @@ const WORK: IndexProject[] = [
         image: TUIT.card.image,
         video: TUIT.card.video
     },
-    { title: "Ed-Tech Mobile Games", client: "SABAQ", category: "Game Design", href: "/portfolio/layerflow" },
     { title: "Strike A Balance", client: "SABAQ", category: "Game Design", href: "/portfolio/shipstack" }
 ];
 

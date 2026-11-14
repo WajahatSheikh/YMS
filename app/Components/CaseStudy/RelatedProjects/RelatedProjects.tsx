@@ -19,8 +19,10 @@ const RelatedProjects = ({ currentSlug, allProjects }: RelatedProjectsProps) => 
         const idx = allProjects.findIndex((p) => p.slug === currentSlug);
         const a = others[(idx) % others.length];
         const b = others[(idx + 2) % others.length];
-        return [a, b].filter(Boolean);
+        return [...new Set([a, b])].filter(Boolean);
     }, [currentSlug, allProjects]);
+
+    if (!related.length) return null;
 
     return (
         <div className={style.related}>
