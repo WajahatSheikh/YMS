@@ -1,4 +1,5 @@
 import { SITE, absoluteUrl } from "@/app/data/site";
+import { PAGE_UPDATED } from "@/app/data/pageDates";
 import { SERVICES } from "@/app/data/services";
 import { FAQS } from "@/app/data/faq";
 
@@ -22,6 +23,23 @@ export default function JsonLd() {
             email: SITE.email,
             description: SITE.description,
             ...(sameAs.length ? { sameAs } : {}),
+            // Who runs the studio and how to reach it: entity signals Google
+            // and AI answer engines use to tie the brand to real people.
+            founder: {
+                "@type": "Person",
+                "@id": `${SITE.url}/#wajahat-sheikh`,
+                name: "Wajahat Sheikh",
+                jobTitle: "Head of Product Design",
+                image: absoluteUrl("/assets/images/wajahat.png"),
+                worksFor: { "@id": org }
+            },
+            contactPoint: {
+                "@type": "ContactPoint",
+                contactType: "sales",
+                email: SITE.email,
+                url: absoluteUrl("/book-a-call"),
+                availableLanguage: ["English", "Urdu"]
+            },
             hasOfferCatalog: {
                 "@type": "OfferCatalog",
                 name: "Product design and development services",
@@ -46,6 +64,7 @@ export default function JsonLd() {
             url: SITE.url,
             name: SITE.title,
             description: SITE.description,
+            dateModified: PAGE_UPDATED["/"],
             isPartOf: { "@id": website },
             about: { "@id": org },
             inLanguage: "en"

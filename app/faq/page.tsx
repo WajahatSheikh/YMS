@@ -7,7 +7,7 @@ import { pageMetadata } from "@/app/lib/seo";
 // /faq — every question, with the topic filter.
 
 const PATH = "/faq";
-const TITLE = "FAQ: pricing, process, ownership and the team";
+const TITLE = "FAQ: pricing, process, ownership, team";
 const DESCRIPTION =
     "Straight answers about our design and development subscription: what’s included, how fast you see work, pausing or cancelling, and who owns the code.";
 const CRUMBS = [{ name: "FAQ", path: PATH }];

@@ -35,7 +35,7 @@ export default function TeamPage() {
                 eyebrow="Keep exploring"
                 title="More about working with us"
                 links={[
-                    { title: "Services", text: "Everything we design and build, from product design to 2D games.", href: "/#services" },
+                    { title: "Services", text: "Everything we design and build, from product design to 2D games.", href: "/services" },
                     { title: "Process", text: "Working design in week one and a live demo every Friday.", href: "/process" },
                     { title: "Pricing", text: "One flat monthly price, or a fixed-scope project.", href: "/pricing" }
                 ]}

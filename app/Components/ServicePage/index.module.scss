@@ -1,0 +1,1089 @@
+@import "../../styles/abstract/variables";
+@import "../../styles/abstract/mixins";
+
+// Service pages and the /services hub (see ServicePage.tsx and DESIGN.md).
+// Same column, gutter, type and brand as the home page. Lists are rules, not
+// cards; media frames are 16px; chips are pills.
+
+$ease: cubic-bezier(0.16, 1, 0.3, 1);
+$max: 1520px;
+
+// min-height/align-items undo the global `section` rule (globals.scss), which
+// makes every section a full screen tall and centres it.
+.block {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 0;
+    padding: clamp(56px, 7vw, 112px) var(--gutter);
+    border-top: var(--border-thin) solid var(--border-default);
+}
+
+.eyebrow {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: var(--lh-20);
+    letter-spacing: 0.06em;
+    color: var(--text-brand);
+    text-transform: uppercase;
+
+    span {
+        color: var(--text-tertiary);
+    }
+}
+
+.h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: clamp(30px, 3.4vw, 52px);
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    text-wrap: balance;
+}
+
+// ── Links and CTA ─────────────────────────────────────────────────────────────
+.cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    height: var(--control-lg);
+    padding-inline: var(--space-7);
+    border: 0;
+    border-radius: var(--radius-full);
+    background: var(--gradient-brand);
+    box-shadow: inset 0 -1px 4px 2px #ffffff40;
+    color: var(--text-on-cta);
+    font-family: var(--font-sans);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-base);
+    line-height: var(--lh-20);
+    text-decoration: none;
+    white-space: nowrap;
+
+    @include brand-cta-glow;
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+// Text link: an underline that draws over its own rule, and the arrow ships right.
+.textLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    background:
+        linear-gradient(var(--text-primary), var(--text-primary)) no-repeat 0 100% / 0% 1.5px,
+        linear-gradient(var(--border-default), var(--border-default)) no-repeat 0 100% / 100% 1.5px;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-base);
+    text-decoration: none;
+    transition: background-size 0.5s $ease;
+
+    svg {
+        width: 18px;
+        height: 18px;
+        transition: translate 0.45s $ease;
+    }
+
+    &:hover,
+    &:focus-visible {
+        background-size: 100% 1.5px, 100% 1.5px;
+
+        svg {
+            translate: 5px 0;
+        }
+    }
+
+    &:active svg {
+        translate: 8px 0;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--border-focus);
+        outline-offset: 4px;
+        border-radius: 4px;
+    }
+}
+
+// ── Hero ──────────────────────────────────────────────────────────────────────
+.hero {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    min-height: 0;
+    padding: clamp(32px, 5vw, 72px) var(--gutter) clamp(56px, 7vw, 104px);
+    isolation: isolate;
+
+    // One warm light behind the reel, the same as the home services band.
+    &::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: -10%;
+        right: -6%;
+        width: min(900px, 80vw);
+        aspect-ratio: 1;
+        background: radial-gradient(closest-side, rgba(232, 80, 2, 0.13), transparent);
+        pointer-events: none;
+    }
+}
+
+.heroInner {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: center;
+    gap: clamp(32px, 4vw, 72px);
+    width: 100%;
+    max-width: $max;
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.heroCopy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-5);
+    min-width: 0;
+}
+
+.crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-4);
+    padding: 0;
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+
+    li {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+    }
+
+    li + li::before {
+        content: "/";
+        color: var(--text-disabled);
+    }
+
+    // 32px tall tap target around 16px text; the negative margin keeps the
+    // visual spacing unchanged (the same as PageHero).
+    a {
+        display: inline-block;
+        padding-block: 8px;
+        margin-block: -8px;
+        color: var(--text-secondary);
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+            color: var(--text-brand);
+        }
+    }
+
+    [aria-current="page"] {
+        color: var(--text-primary);
+    }
+}
+
+.title {
+    margin: 0;
+    max-width: 16ch;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: clamp(40px, 5.2vw, 84px);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    color: var(--text-primary);
+    text-wrap: balance;
+}
+
+.lead {
+    max-width: 58ch;
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 27px;
+    color: var(--text-secondary);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-8);
+    margin-top: var(--space-2);
+}
+
+.updated {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+}
+
+.heroMedia {
+    position: relative;
+    margin: 0;
+}
+
+.frame {
+    position: relative;
+    overflow: hidden;
+    border: var(--border-thin) solid var(--border-default);
+    border-radius: 16px;
+    background: var(--bg-raised);
+    box-shadow: 0 40px 90px -50px rgba(232, 80, 2, 0.55);
+
+    img,
+    video {
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 11;
+        object-fit: cover;
+    }
+
+    // The reel fades in over the poster once it is actually playing.
+    video {
+        position: absolute;
+        inset: 0;
+        height: 100%;
+        transition: opacity 0.6s ease;
+    }
+}
+
+// "Product Design work by YourMomStudio": a staging tag pinned to the frame.
+.chip {
+    position: absolute;
+    left: var(--space-4);
+    bottom: var(--space-4);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    max-width: calc(100% - 2 * var(--space-4));
+    padding: 6px 12px 6px 10px;
+    border-radius: var(--radius-full);
+    background: rgba(12, 10, 9, 0.72);
+    backdrop-filter: blur(8px);
+    color: #ffffff;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+
+    i {
+        flex-shrink: 0;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #22c55e;
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
+    }
+}
+
+// ── What you get ──────────────────────────────────────────────────────────────
+.indexGrid,
+.fitGrid,
+.othersInner {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: var(--space-10) clamp(32px, 4vw, 72px);
+    width: 100%;
+    max-width: $max;
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.indexHead {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    align-self: start;
+
+    @media (min-width: 992px) {
+        position: sticky;
+        top: 120px;
+    }
+}
+
+.deliverables {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 clamp(24px, 3vw, 48px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+        padding: var(--space-6) 0;
+        border-top: var(--border-thin) solid var(--border-default);
+    }
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.deliverableName {
+    position: relative;
+    margin: 0;
+    padding-left: 18px;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: clamp(19px, 1.5vw, 23px);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--text-primary);
+
+    // A small orange square, the studio's mark for "included".
+    &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.42em;
+        width: 8px;
+        height: 8px;
+        border-radius: 2px;
+        background: var(--gradient-brand);
+    }
+}
+
+.deliverableDetail {
+    margin: 0;
+    padding-left: 18px;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--lh-24);
+    color: var(--text-tertiary);
+}
+
+// ── The week (signature) ──────────────────────────────────────────────────────
+.week {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 0;
+    padding: 0 var(--gutter);
+    border-top: var(--border-thin) solid var(--border-default);
+}
+
+.weekStage {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-areas:
+        "head head"
+        "days deploy";
+    align-items: center;
+    gap: clamp(28px, 3vw, 48px) clamp(32px, 4vw, 72px);
+    width: 100%;
+    max-width: $max;
+    min-height: 100vh;
+    padding-block: clamp(56px, 6vw, 96px);
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "head"
+            "days"
+            "deploy";
+        min-height: 0;
+    }
+}
+
+.weekHead {
+    grid-area: head;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+// While the week plays on a large screen, the section is tall and the stage
+// sticks to the top of the viewport; scroll position inside the section is
+// the week's progress (ServiceMotion).
+@media (min-width: 992px) and (min-height: 700px) {
+    .page[data-motion] .week {
+        height: 260vh;
+    }
+
+    .page[data-motion] .weekStage {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        min-height: 0;
+        padding-block: clamp(88px, 9vh, 120px) clamp(32px, 5vh, 64px);
+    }
+}
+
+// The days run down a rail; "now" is a gradient line that grows with --p.
+.days {
+    grid-area: days;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        left: 7px;
+        top: 14px;
+        bottom: 14px;
+        width: 2px;
+        border-radius: 2px;
+    }
+
+    &::before {
+        background: var(--border-default);
+    }
+
+    &::after {
+        background: var(--gradient-brand);
+        transform-origin: top;
+        transform: scaleY(var(--p, 1));
+    }
+}
+
+.day {
+    display: grid;
+    grid-template-columns: 16px 52px minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-4);
+    padding: var(--space-4) 0;
+    opacity: 1;
+    transition: opacity 0.5s $ease;
+}
+
+.dayRail {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 16px;
+    height: 24px;
+}
+
+.dayDot {
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--bg-canvas);
+    border-radius: 50%;
+    background: var(--text-brand);
+    box-shadow: 0 0 0 1px var(--border-default);
+    transition: background-color 0.4s ease, scale 0.5s $ease;
+}
+
+.dayName {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 24px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-brand);
+
+    abbr {
+        text-decoration: none;
+    }
+}
+
+.dayBody {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dayTitle {
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: clamp(18px, 1.45vw, 22px);
+    line-height: 24px;
+    letter-spacing: -0.015em;
+    color: var(--text-primary);
+}
+
+.dayNote {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 23px;
+    color: var(--text-tertiary);
+}
+
+// While the week plays: days after "now" wait in grey, "now" pulses.
+.page[data-motion] {
+    .day {
+        opacity: 0.32;
+    }
+
+    .dayDot {
+        background: var(--bg-raised);
+    }
+
+    @for $i from 0 through 4 {
+        .weekStage[data-active="#{$i}"] .day:nth-child(-n + #{$i + 1}) {
+            opacity: 1;
+
+            .dayDot {
+                background: var(--text-brand);
+            }
+        }
+
+        .weekStage[data-active="#{$i}"] .day:nth-child(#{$i + 1}) .dayDot {
+            scale: 1.35;
+            animation: nowPulse 2.4s ease-in-out infinite;
+        }
+    }
+}
+
+@keyframes nowPulse {
+    0%,
+    100% {
+        box-shadow: 0 0 0 1px var(--border-default), 0 0 0 0 rgba(232, 80, 2, 0.45);
+    }
+    50% {
+        box-shadow: 0 0 0 1px var(--border-default), 0 0 0 7px rgba(232, 80, 2, 0);
+    }
+}
+
+// The deploy: the reel's still in grey staging, with live colour wiping in
+// from the left as the week passes. Live on Friday.
+.deploy {
+    grid-area: deploy;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.deployFrame {
+    position: relative;
+    overflow: hidden;
+    border: var(--border-thin) solid var(--border-default);
+    border-radius: 16px;
+    background: var(--bg-raised);
+    aspect-ratio: 16 / 11;
+
+    img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.deployGhost {
+    filter: grayscale(1) contrast(0.9);
+    opacity: 0.55;
+}
+
+.deployLive {
+    clip-path: inset(0 calc((1 - var(--p, 1)) * 100%) 0 0);
+}
+
+.deployStatus {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.statusStaging {
+    color: var(--text-tertiary);
+}
+
+.statusLive {
+    color: var(--text-tertiary);
+    transition: color 0.4s ease;
+
+    .weekStage[data-active="4"] & {
+        color: var(--text-brand);
+    }
+}
+
+// ── Bring us in when ──────────────────────────────────────────────────────────
+.fit {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        position: relative;
+        padding: var(--space-6) 0 var(--space-6) clamp(28px, 2.4vw, 40px);
+        border-top: var(--border-thin) solid var(--border-default);
+        font-family: var(--font-display);
+        font-weight: var(--fw-medium);
+        font-size: clamp(20px, 1.9vw, 30px);
+        line-height: 1.22;
+        letter-spacing: -0.02em;
+        color: var(--text-primary);
+        text-wrap: pretty;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: calc(var(--space-6) + 0.45em);
+            width: clamp(14px, 1.2vw, 20px);
+            height: 2px;
+            background: var(--gradient-brand);
+        }
+    }
+}
+
+// ── Proof ─────────────────────────────────────────────────────────────────────
+.proofInner {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: var(--space-10) clamp(32px, 4vw, 72px);
+    width: 100%;
+    max-width: $max;
+
+    > :nth-child(n + 3) {
+        grid-column: 2;
+    }
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+
+        > :nth-child(n + 3) {
+            grid-column: 1;
+        }
+    }
+}
+
+.quote {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    margin: 0;
+
+    blockquote {
+        margin: 0;
+    }
+
+    p {
+        margin: 0;
+        font-family: var(--font-display);
+        font-weight: var(--fw-medium);
+        font-size: clamp(20px, 1.8vw, 28px);
+        line-height: 1.32;
+        letter-spacing: -0.015em;
+        color: var(--text-secondary);
+        text-wrap: pretty;
+    }
+}
+
+.quoteWho {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-4);
+}
+
+.avatar {
+    display: inline-flex;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    overflow: hidden;
+    border-radius: var(--radius-full);
+    background: var(--bg-canvas);
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    &.onWhite {
+        background: #ffffff;
+        box-shadow: inset 0 0 0 1px var(--border-default);
+
+        img {
+            object-fit: contain;
+            padding: 16%;
+        }
+    }
+}
+
+.whoText {
+    display: flex;
+    flex: 1 1 220px;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.whoName {
+    font-family: var(--font-sans);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-base);
+    line-height: var(--lh-24);
+    color: var(--text-primary);
+}
+
+.whoRole {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    line-height: var(--lh-20);
+    color: var(--text-tertiary);
+}
+
+.result {
+    margin-left: auto;
+    padding: 6px 12px;
+    border: var(--border-thin) solid var(--border-brand-subtle);
+    border-radius: var(--radius-full);
+    background: var(--bg-brand-faint);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-brand);
+}
+
+.studies {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-8) var(--space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.study {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: inherit;
+    text-decoration: none;
+
+    &:focus-visible {
+        outline: 2px solid var(--border-focus);
+        outline-offset: 6px;
+        border-radius: 16px;
+    }
+}
+
+.studyImg {
+    display: block;
+    overflow: hidden;
+    margin-bottom: var(--space-3);
+    border: var(--border-thin) solid var(--border-default);
+    border-radius: 16px;
+    aspect-ratio: 16 / 11;
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: scale 0.9s $ease;
+    }
+
+    .study:hover & img,
+    .study:focus-visible & img {
+        scale: 1.04;
+    }
+}
+
+.studyClient {
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: 22px;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--text-primary);
+}
+
+.studyCat {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+}
+
+// ── Price ─────────────────────────────────────────────────────────────────────
+.price {
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+    gap: var(--space-10) clamp(32px, 5vw, 96px);
+    width: 100%;
+    max-width: $max;
+    padding: clamp(28px, 4vw, 64px);
+    border-radius: 24px;
+    background:
+        radial-gradient(80% 120% at 0% 0%, rgba(232, 80, 2, 0.16), transparent 60%),
+        var(--bg-raised);
+    border: var(--border-thin) solid var(--border-brand-subtle);
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.priceMain {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+}
+
+.priceFigure {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: clamp(56px, 7vw, 112px);
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+    color: var(--text-primary);
+
+    span {
+        font-size: 0.32em;
+        letter-spacing: -0.01em;
+        color: var(--text-tertiary);
+    }
+}
+
+.priceText {
+    max-width: 52ch;
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 27px;
+    color: var(--text-secondary);
+}
+
+.includes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: center;
+    gap: 0 var(--space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        position: relative;
+        padding: var(--space-4) 0 var(--space-4) 26px;
+        border-top: var(--border-thin) solid var(--border-default);
+        font-family: var(--font-sans);
+        font-size: var(--text-base);
+        line-height: var(--lh-24);
+        color: var(--text-primary);
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 2px;
+            top: calc(var(--space-4) + 6px);
+            width: 12px;
+            height: 7px;
+            border-left: 2px solid var(--text-brand);
+            border-bottom: 2px solid var(--text-brand);
+            rotate: -45deg;
+        }
+    }
+
+    @media (max-width: $breakpoint-sm) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+// ── Service index (other services, and the /services hub) ────────────────────
+.serviceIndex {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-bottom: var(--border-thin) solid var(--border-default);
+}
+
+.serviceRow {
+    position: relative;
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr) 40px;
+    align-items: center;
+    gap: clamp(16px, 2vw, 32px);
+    padding: var(--space-5) 0;
+    border-top: var(--border-thin) solid var(--border-default);
+    color: inherit;
+    text-decoration: none;
+
+    // The row's hover: an orange rule draws in along the top, the thumb grows
+    // and the arrow ships right.
+    &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -1px;
+        height: 2px;
+        background: var(--gradient-brand);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.6s $ease;
+    }
+
+    &:hover::before,
+    &:focus-visible::before {
+        transform: scaleX(1);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--border-focus);
+        outline-offset: 4px;
+        border-radius: 8px;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: 76px minmax(0, 1fr) 28px;
+    }
+}
+
+.serviceThumb {
+    display: block;
+    overflow: hidden;
+    border-radius: 10px;
+    background: var(--bg-raised);
+    aspect-ratio: 16 / 11;
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: scale 0.7s $ease;
+    }
+
+    .serviceRow:hover & img,
+    .serviceRow:focus-visible & img {
+        scale: 1.08;
+    }
+}
+
+.serviceText {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+    gap: 4px var(--space-4);
+    min-width: 0;
+}
+
+.serviceName {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: clamp(22px, 2.1vw, 34px);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--text-primary);
+}
+
+.serviceLabel {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-brand);
+}
+
+.serviceDesc {
+    grid-column: 1 / -1;
+    max-width: 70ch;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 23px;
+    color: var(--text-tertiary);
+
+    @media (max-width: $breakpoint-md) {
+        display: none;
+    }
+}
+
+.serviceGo {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: var(--border-thin) solid var(--border-default);
+    border-radius: 50%;
+    color: var(--text-primary);
+    transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+
+    svg {
+        width: 18px;
+        height: 18px;
+        transition: translate 0.5s $ease;
+    }
+
+    .serviceRow:hover &,
+    .serviceRow:focus-visible & {
+        border-color: transparent;
+        background: var(--text-brand);
+        color: #ffffff;
+
+        svg {
+            translate: 3px 0;
+        }
+    }
+
+    @media (max-width: $breakpoint-md) {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .textLink,
+    .textLink svg,
+    .serviceRow::before,
+    .serviceThumb img,
+    .serviceGo,
+    .serviceGo svg,
+    .studyImg img,
+    .day,
+    .dayDot {
+        transition: none;
+    }
+}

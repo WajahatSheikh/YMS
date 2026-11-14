@@ -18,9 +18,9 @@ export const GME = {
     year: "2026",
     published: "2026-11-15",
 
-    seoTitle: "Global Minds Education online university website design",
+    seoTitle: "Global Minds Education website case study",
     seoDescription:
-        "Case study: a seven-page website for Global Minds Education, an online university partner, rebuilt in Figma auto layout for desktop, iPad and mobile around the logo's pinwheel.",
+        "Case study: a seven-page website for Global Minds Education, an online university partner, rebuilt phone first for desktop, iPad and mobile.",
 
     hero: {
         meta: ["Case study · Global Minds Education", "Seven-page website · Desktop / iPad / Mobile", "YourMomStudio · 2026"],
@@ -210,7 +210,9 @@ export const GME = {
     closing: {
         title: "Want a website students *can use on a phone?*",
         links: [
-            { label: "Services we offer", href: "/#services" }
+            { label: "Website design and development", href: "/services/websites" },
+            { label: "Product design", href: "/services/product-design" },
+            { label: "Brand identity", href: "/services/brand-identity" }
         ]
     },
 

@@ -20,7 +20,7 @@ export const TUIT = {
     // <title> (the layout appends "| YourMomStudio") and meta description.
     seoTitle: "Tüit Luxury Candle e-commerce website design",
     seoDescription:
-        "Case study: how we rebuilt Tüit Luxury Candle Co.'s desktop-only landing page as a responsive e-commerce storefront with a Figma design system for 3 screen sizes.",
+        "Case study: how we turned Tüit Luxury Candle Co.'s desktop-only landing page into a responsive e-commerce storefront for three screen sizes.",
 
     hero: {
         kicker: "E-commerce landing page, 2026",
@@ -195,7 +195,9 @@ export const TUIT = {
         title: "Want a storefront that feels like this?",
         text: "We design and build websites, products and brands for funded startups, on one monthly subscription.",
         links: [
-            { label: "Services we offer", href: "/#services" }
+            { label: "Website design and development", href: "/services/websites" },
+            { label: "Brand identity", href: "/services/brand-identity" },
+            { label: "Product design", href: "/services/product-design" }
         ]
     },
 

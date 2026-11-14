@@ -11,7 +11,7 @@ import { pageMetadata } from "@/app/lib/seo";
 // usual alternatives. The price itself lives on /pricing.
 
 const PATH = "/design-subscription";
-const TITLE = "Design and development subscription for startups";
+const TITLE = "Design and dev subscription for startups";
 const DESCRIPTION = `One monthly subscription for a full product team: design, frontend, backend, QA and a technical PM. ${PRICE_LABEL}/month, pause anytime, you own everything.`;
 const CRUMBS = [{ name: "Design subscription", path: PATH }];
 const FAQS = faqsByTopic("Process", "Ownership", "Team");
@@ -86,7 +86,7 @@ export default function DesignSubscriptionPage() {
                 title="More about working with us"
                 links={[
                     { title: "Pricing", text: "One flat monthly price, or a fixed-scope project.", href: "/pricing" },
-                    { title: "Services", text: "Everything we design and build, from product design to 2D games.", href: "/#services" },
+                    { title: "Services", text: "Everything we design and build, from product design to 2D games.", href: "/services" },
                     { title: "Process", text: "The first eight weeks, and how every sprint runs.", href: "/process" }
                 ]}
             />

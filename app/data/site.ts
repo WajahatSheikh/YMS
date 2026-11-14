@@ -19,7 +19,7 @@ export const SITE = {
     locale: "en_US",
 
     // <title> and meta description for the home page — ~60 / ~155 characters.
-    title: "MVP Design & Development on Monthly Subscription | YourMomStudio",
+    title: "MVP Design & Development Subscription | YourMomStudio",
     description:
         "A full product team for funded startups: product design, web and mobile development and QA every week, from $3,999/month. Pause or cancel anytime.",
 

@@ -82,6 +82,17 @@
     }
 }
 
+// "Updated 15 November 2026": small, quiet, after the lead.
+.updated {
+    margin: calc(-1 * var(--space-2)) 0 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: var(--lh-16);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+}
+
 .eyebrow {
     margin: 0;
     font-family: var(--font-mono);

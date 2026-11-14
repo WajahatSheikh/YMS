@@ -10,7 +10,7 @@ import { pageMetadata } from "@/app/lib/seo";
 // sprint, and the process questions.
 
 const PATH = "/process";
-const TITLE = "Our process: weekly sprints, first call to launch";
+const TITLE = "How we work: weekly sprints to launch";
 const DESCRIPTION =
     "How we work: working design in week one, something clickable on staging by week two, then a weekly sprint with a live demo every Friday.";
 const CRUMBS = [{ name: "Process", path: PATH }];
@@ -41,7 +41,7 @@ export default function ProcessPage() {
                 title="More about working with us"
                 links={[
                     { title: "Design subscription", text: "What one monthly subscription includes, and how it compares to hiring.", href: "/design-subscription" },
-                    { title: "Services", text: "Everything we design and build, from product design to 2D games.", href: "/#services" },
+                    { title: "Services", text: "Everything we design and build, from product design to 2D games.", href: "/services" },
                     { title: "The team", text: "The same five people every week, in a shared Slack channel.", href: "/team" }
                 ]}
             />

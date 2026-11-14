@@ -18,7 +18,7 @@ import { NAVBAR_HEIGHT, scrollToSection as scrollTo } from "@/app/lib/scrollToSe
 // must exist there. On inner pages the entries are links: to the section's own
 // page where there is one (`href`), otherwise back to the home section.
 const NAV_ITEMS = [
-    { text: "Services", id: "services", href: "/#services" },
+    { text: "Services", id: "services", href: "/services" },
     { text: "Work", id: "work", href: "/#work" },
     { text: "Testimonials", id: "testimonials", href: "/#testimonials" },
     { text: "Process", id: "process", href: "/process" },

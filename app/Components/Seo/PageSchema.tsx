@@ -1,4 +1,5 @@
 import { SITE, absoluteUrl } from "@/app/data/site";
+import { updatedFor } from "@/app/data/pageDates";
 import type { Faq } from "@/app/data/faq";
 
 // schema.org data for an inner page: the WebPage itself, its breadcrumb trail
@@ -28,6 +29,7 @@ export default function PageSchema({ path, title, description, crumbs, faqs, ser
     const url = absoluteUrl(path);
     const org = `${SITE.url}/#organization`;
     const trail: Crumb[] = [{ name: "Home", path: "/" }, ...crumbs];
+    const updated = updatedFor(path);
 
     const graph: Record<string, unknown>[] = [
         {
@@ -39,6 +41,7 @@ export default function PageSchema({ path, title, description, crumbs, faqs, ser
             isPartOf: { "@id": `${SITE.url}/#website` },
             about: { "@id": org },
             breadcrumb: { "@id": `${url}#breadcrumb` },
+            ...(updated ? { dateModified: updated } : {}),
             inLanguage: "en"
         },
         {

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { bookingLinkProps } from "@/app/lib/booking";
 import { ctaGlow } from "@/app/lib/ctaGlow";
 import type { Crumb } from "@/app/Components/Seo/PageSchema";
+import { formatUpdated, updatedFor } from "@/app/data/pageDates";
 import style from "./index.module.scss";
 
 // Opening block of every inner page (/services, /pricing, /process, …): a
@@ -35,6 +36,9 @@ const PhoneIcon = () => (
 
 const PageHero = ({ eyebrow, title, lead, crumbs, placement, secondary, cta = true }: PageHeroProps) => {
     const trail: Crumb[] = [{ name: "Home", path: "/" }, ...crumbs];
+    // The last-edit date on record for this page (app/data/pageDates.ts), shown
+    // under the lead and matched by dateModified in the page schema.
+    const updated = updatedFor(crumbs[crumbs.length - 1]?.path ?? "/");
 
     return (
         <section className={style.hero}>
@@ -58,6 +62,11 @@ const PageHero = ({ eyebrow, title, lead, crumbs, placement, secondary, cta = tr
                 <p className={style.eyebrow}>{eyebrow}</p>
                 <h1 className={style.title}>{title}</h1>
                 <p className={style.lead}>{lead}</p>
+                {updated && (
+                    <p className={style.updated}>
+                        Updated <time dateTime={updated}>{formatUpdated(updated)}</time>
+                    </p>
+                )}
 
                 <div className={style.actions}>
                     {cta && (

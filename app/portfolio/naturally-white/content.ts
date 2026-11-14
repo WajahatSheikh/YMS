@@ -306,7 +306,9 @@ export const NW = {
         title: "Want a website that earns the *booking*?",
         text: "We design and build websites, products and brands for funded startups, on one monthly subscription.",
         links: [
-            { label: "Services we offer", href: "/#services" }
+            { label: "Website design and development", href: "/services/websites" },
+            { label: "Brand identity", href: "/services/brand-identity" },
+            { label: "Product design", href: "/services/product-design" }
         ]
     },
 

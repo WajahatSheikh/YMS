@@ -98,6 +98,17 @@
     @include enters($name: word-rise);
 }
 
+@keyframes sub-rise {
+    from {
+        translate: 0 0.5em;
+        filter: blur(0.06em);
+    }
+    to {
+        translate: 0 0;
+        filter: blur(0);
+    }
+}
+
 @keyframes word-rise {
     from {
         opacity: 0;
@@ -126,8 +137,16 @@
     margin-inline: auto;
     text-wrap: balance;
 
-    // Lands as the last word of the headline is still settling.
-    @include enters(0.58s);
+    // Lands as the last word of the headline is still settling. This line is
+    // the page's LCP element on phones, so it rises without fading in: Google
+    // times LCP from the first frame the text is visible, and a fade from 0
+    // held it back by the length of the delay (3.9 s on a throttled phone).
+    // On phones it also starts sooner.
+    @include enters(0.58s, sub-rise);
+
+    @media (max-width: $breakpoint-md) {
+        animation-delay: 0.2s;
+    }
 }
 
 // ── CTAs ──────────────────────────────────────────────────────────────────────

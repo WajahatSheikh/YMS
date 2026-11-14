@@ -26,7 +26,7 @@ import style from "./index.module.scss";
 
 const EXPLORE = [
     { label: "Design subscription", href: "/design-subscription" },
-    { label: "Services", href: "/#services" },
+    { label: "Services", href: "/services" },
     { label: "Pricing", href: "/pricing" },
     { label: "Process", href: "/process" },
     { label: "FAQ", href: "/faq" }

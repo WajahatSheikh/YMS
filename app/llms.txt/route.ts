@@ -1,5 +1,5 @@
 import { SITE, PRICE_LABEL, absoluteUrl } from "@/app/data/site";
-import { SERVICES } from "@/app/data/services";
+import { SERVICES, serviceHref } from "@/app/data/services";
 import { FAQS } from "@/app/data/faq";
 import { INCLUDES, FIXED_SCOPE_FROM } from "@/app/data/subscription";
 import { TUIT } from "@/app/portfolio/tuit-luxury-candle/content";
@@ -30,9 +30,10 @@ export function GET() {
         "",
         "## Pages",
         "",
-        link("Home", "/", "overview, services (all on this page), selected work, testimonials, process, pricing, team and FAQ."),
+        link("Home", "/", "overview, services, selected work, testimonials, process, pricing, team and FAQ."),
         link("Design subscription", "/design-subscription", "what the subscription includes and how it compares to hiring in-house or freelancers."),
         link("Pricing", "/pricing", `${PRICE_LABEL}/month subscription or fixed-scope projects from ${fixed}.`),
+        link("Services", "/services", "every capability, with a page for each."),
         link("Book a call", "/book-a-call", "free 30-minute discovery call: pick a time on the calendar."),
         link("Process", "/process", "the first eight weeks and the weekly sprint with a Friday demo."),
         link("Team", "/team", "the people who design and build the product."),
@@ -40,7 +41,7 @@ export function GET() {
         "",
         "## Services",
         "",
-        ...SERVICES.map((service) => link(service.title, "/#services", service.seo.description)),
+        ...SERVICES.map((service) => link(service.title, serviceHref(service), service.seo.description)),
         "",
         "## Case studies",
         "",

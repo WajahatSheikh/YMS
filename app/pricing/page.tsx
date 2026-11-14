@@ -1,5 +1,5 @@
 import PageHero from "@/app/Components/PageHero/PageHero";
-import { PlanCards } from "@/app/Components/PageBlocks/PageBlocks";
+import { LinkGrid, PlanCards } from "@/app/Components/PageBlocks/PageBlocks";
 import Package from "@/app/Components/Package/Package";
 import FAQSection from "@/app/Components/FAQ/FAQSection";
 import PageSchema from "@/app/Components/Seo/PageSchema";
@@ -13,7 +13,7 @@ import { pageMetadata } from "@/app/lib/seo";
 
 const PATH = "/pricing";
 const FIXED_LABEL = `$${FIXED_SCOPE_FROM.toLocaleString("en-US")}`;
-const TITLE = `Pricing: design & dev subscription from ${PRICE_LABEL}/mo`;
+const TITLE = `Pricing: design & dev team from ${PRICE_LABEL}/month`;
 const DESCRIPTION = `A full product team for ${PRICE_LABEL}/month: design, frontend, backend, QA and a technical PM. Pause or cancel anytime. Fixed-scope projects from ${FIXED_LABEL}.`;
 const CRUMBS = [{ name: "Pricing", path: PATH }];
 const FAQS = faqsByTopic("Pricing", "Ownership");
@@ -56,6 +56,24 @@ export default function PricingPage() {
                         price: `From ${FIXED_LABEL}`,
                         text: "For a one-off build with defined deliverables.",
                         points: ["Same team, same process", "Defined deliverables", "You own all code and design"]
+                    }
+                ]}
+            />
+            <LinkGrid
+                eyebrow="Before you decide"
+                title="Compare, and see what we build"
+                links={[
+                    {
+                        title: "YourMomStudio vs DesignMe",
+                        label: "Comparison",
+                        text: "Price, team, cadence and scope side by side with another design and development subscription, with sources.",
+                        href: "/compare/designme-alternative"
+                    },
+                    {
+                        title: "All services",
+                        label: "7 services",
+                        text: "Product design, websites, mobile apps, SaaS, web systems, 2D game design and brand identity, each on its own page.",
+                        href: "/services"
                     }
                 ]}
             />

@@ -7,7 +7,10 @@ import style from "./not-found.module.scss";
 // dead URLs instead of indexing a "soft 404"; the noindex is belt and braces.
 export const metadata: Metadata = {
     title: "Page not found",
-    robots: { index: false, follow: true }
+    description: "This page does not exist or has moved. Go back to the home page, see our case studies or book a call.",
+    robots: { index: false, follow: true },
+    // The root layout's canonical points at "/"; a missing page should not claim it.
+    alternates: { canonical: null }
 };
 
 export default function NotFound() {
