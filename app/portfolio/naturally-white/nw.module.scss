@@ -1,0 +1,1727 @@
+@import "../../styles/abstract/variables";
+
+// Naturally White case study ("Shade by shade"). See page.tsx for the concept.
+//
+// The page is an island: the brand's palette and typefaces, the same in the
+// site's light and dark themes. Layout still runs on the site's gutter token,
+// and body copy and labels use the site's Geist and Geist Mono.
+//
+// Each band sets --ground / --ink / --muted / --line / --label through
+// [data-ground]; everything inside reads those. Grounds get lighter chapter by
+// chapter and end on white. Motion-only states hang off `[data-motion]`, which
+// NwMotion.tsx sets on <main>; without it every block is in its final state.
+//
+// CSS modules need a local class in every selector, so attribute selectors
+// are always scoped (`.page [data-ground]`, never a bare `[data-ground]`).
+
+$lilac: #d1d5fd;
+$sky: #daf0fb;
+$blush: #fae8f8;
+$aqua: #b1e2e6;
+$ink: #000000;
+$star: #fe9330;
+$ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+$display: var(--font-poppins), "Helvetica Neue", Arial, sans-serif;
+$accent: var(--font-accent), Georgia, "Times New Roman", serif;
+
+// A shade-guide tab: the shape every swatch on this page shares.
+$tab-radius: 38% 38% 46% 46% / 26% 26% 44% 44%;
+
+// Text links: a faint rule at rest; on hover or focus a solid one is drawn over
+// it from the left. `$lift` raises the rule off the bottom of padded links.
+@mixin drawn-link($lift: 0px) {
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor), linear-gradient(var(--line), var(--line));
+    background-repeat: no-repeat;
+    background-position: 0 calc(100% - #{$lift});
+    background-size: 0% 1px, 100% 1px;
+    transition: background-size 0.6s $ease, color 0.25s ease;
+}
+
+%mono {
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.page {
+    position: relative;
+    // Slide under the fixed site header, so the first ground reaches the top.
+    margin-top: calc(-1 * var(--navbar-height));
+    overflow-x: clip;
+    background: #ffffff;
+    color: $ink;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+
+    // The one italic word per headline.
+    em {
+        font-family: $accent;
+        font-style: italic;
+        font-weight: 400;
+        letter-spacing: -0.01em;
+    }
+}
+
+// ── Grounds: lighter with every chapter ──────────────────────────────────────
+.page [data-ground] {
+    --ink: #{$ink};
+    --muted: #{rgba($ink, 0.74)};
+    --line: #{rgba($ink, 0.18)};
+    --label: #{rgba($ink, 0.68)};
+    background: var(--ground);
+    color: var(--ink);
+}
+
+.page [data-ground="hero"] {
+    --ground: linear-gradient(180deg, #{$sky} 0%, #{$lilac} 100%);
+}
+
+.page [data-ground="lilac"] {
+    --ground: #{$lilac};
+}
+
+.page [data-ground="sky"] {
+    --ground: #{$sky};
+}
+
+.page [data-ground="blush"] {
+    --ground: #{$blush};
+}
+
+// The pastels again, most of the way to white.
+.page [data-ground="mist"] {
+    --ground: #f4f1fe;
+}
+
+.page [data-ground="dew"] {
+    --ground: #f0f9fd;
+}
+
+.page [data-ground="petal"] {
+    --ground: #fdf6fc;
+}
+
+.page [data-ground="white"] {
+    --ground: #ffffff;
+}
+
+.page [data-ground="ink"] {
+    --ground: #{$ink};
+    --ink: #ffffff;
+    --muted: #{rgba(#ffffff, 0.78)};
+    --line: #{rgba(#ffffff, 0.26)};
+    --label: #{rgba(#ffffff, 0.74)};
+}
+
+// ── Shared pieces ────────────────────────────────────────────────────────────
+// `min-height: 0` and friends undo the global `section` rule (globals.scss),
+// which makes every section a full, centred screen.
+.band {
+    display: block;
+    min-height: 0;
+    padding: clamp(72px, 9vw, 160px) var(--gutter);
+}
+
+.wrap {
+    width: 100%;
+    max-width: 1680px;
+    margin-inline: auto;
+}
+
+// A small tab between a chapter's number and its name.
+.tab {
+    display: inline-block;
+    width: 9px;
+    height: 12px;
+    border: 1px solid currentColor;
+    border-radius: $tab-radius;
+    background: #ffffff;
+}
+
+.chapterHead {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(14px, 1.4vw, 24px);
+    max-width: 1200px;
+}
+
+.chapterNo {
+    @extend %mono;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    color: var(--label);
+}
+
+.chapterTitle {
+    margin: 0;
+    font-family: $display;
+    font-weight: 600;
+    font-size: clamp(36px, 5.4vw, 96px);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    text-transform: none;
+    text-wrap: balance;
+    color: var(--ink);
+
+    em {
+        font-size: 1.06em;
+        letter-spacing: -0.02em;
+    }
+}
+
+.chapterSub {
+    max-width: 640px;
+    margin: 0;
+    font-family: $accent;
+    font-style: italic;
+    font-size: clamp(22px, 2vw, 34px);
+    line-height: 1.3;
+    color: var(--muted);
+}
+
+// ── Hero ─────────────────────────────────────────────────────────────────────
+.hero {
+    padding-top: calc(var(--navbar-height) + clamp(28px, 3.4vw, 60px));
+    padding-bottom: clamp(48px, 5vw, 96px);
+}
+
+.metaBar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+}
+
+.crumbs {
+    @extend %mono;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--label);
+
+    li + li::before {
+        content: "/";
+        margin-right: 10px;
+    }
+
+    a {
+        display: inline-block;
+        padding-block: 8px;
+        margin-block: -8px;
+        color: inherit;
+        @include drawn-link(5px);
+
+        &:hover,
+        &:focus-visible {
+            color: var(--ink);
+            background-size: 100% 1px, 100% 1px;
+        }
+    }
+}
+
+.kicker {
+    @extend %mono;
+    margin: 0;
+    color: var(--label);
+}
+
+.title {
+    margin: clamp(36px, 5vw, 88px) 0 0;
+    font-family: $display;
+    font-weight: 600;
+    font-size: clamp(52px, 11.4vw, 216px);
+    line-height: 0.94;
+    letter-spacing: -0.045em;
+    text-transform: none;
+    color: var(--ink);
+
+    em {
+        font-size: 1.08em;
+        letter-spacing: -0.03em;
+    }
+}
+
+// Each line is a mask; the line inside rises into it.
+.titleLine {
+    display: block;
+    // Room for descenders and the italic's overhang inside the mask.
+    margin: 0 -0.06em -0.1em;
+    padding: 0 0.06em 0.14em;
+    overflow: hidden;
+
+    > span {
+        display: block;
+    }
+}
+
+.titleFor {
+    display: block;
+    margin-top: clamp(14px, 1.6vw, 28px);
+    font-family: $accent;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(24px, 2.6vw, 46px);
+    line-height: 1.2;
+    letter-spacing: 0;
+    color: var(--muted);
+}
+
+// The shade guide under the title.
+.guide {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 14px clamp(16px, 2vw, 32px);
+    margin-top: clamp(32px, 3.6vw, 64px);
+}
+
+.guideTabs {
+    display: flex;
+    gap: clamp(4px, 0.5vw, 8px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        position: relative;
+        width: clamp(19px, 2.9vw, 50px);
+        aspect-ratio: 3 / 4;
+        overflow: hidden;
+        border: 1px solid rgba($ink, 0.22);
+        border-radius: $tab-radius;
+        background: var(--shade);
+    }
+}
+
+.guideNote {
+    @extend %mono;
+    margin: 0 0 4px;
+    color: var(--label);
+}
+
+.introRow {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(32px, 6vw, 120px);
+    margin-top: clamp(40px, 4.4vw, 80px);
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.introCol {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 720px;
+}
+
+.intro {
+    margin: 0;
+    font-size: clamp(19px, 1.5vw, 26px);
+    line-height: 1.45;
+    color: var(--ink);
+}
+
+.byline {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+
+    a {
+        padding-block: 4px; // 27px tap target; inline, so the line box is unchanged
+        color: var(--ink);
+        @include drawn-link(2px);
+
+        &:hover,
+        &:focus-visible {
+            background-size: 100% 1px, 100% 1px;
+        }
+    }
+}
+
+.meta {
+    margin: 0;
+
+    > div {
+        display: grid;
+        grid-template-columns: 120px minmax(0, 1fr);
+        gap: 12px;
+        padding: 14px 0;
+        border-top: 1px solid var(--line);
+
+        &:last-child {
+            border-bottom: 1px solid var(--line);
+        }
+    }
+
+    dt {
+        @extend %mono;
+        padding-top: 2px;
+        color: var(--label);
+    }
+
+    dd {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.5;
+        color: var(--ink);
+    }
+}
+
+// Hero entrance, in CSS so it paints before any script loads.
+@media (prefers-reduced-motion: no-preference) {
+    @keyframes nwLine {
+        from {
+            translate: 0 112%;
+        }
+        to {
+            translate: 0 0;
+        }
+    }
+
+    @keyframes nwFade {
+        from {
+            opacity: 0;
+            translate: 0 18px;
+        }
+        to {
+            opacity: 1;
+            translate: 0 0;
+        }
+    }
+
+    // A tab drops into the guide, then a glint crosses it now and again: the
+    // page's one thing that keeps moving while the reader doesn't.
+    @keyframes nwTab {
+        from {
+            opacity: 0;
+            translate: 0 -14px;
+        }
+        to {
+            opacity: 1;
+            translate: 0 0;
+        }
+    }
+
+    @keyframes nwGlint {
+        0%,
+        58% {
+            translate: -160% 0;
+        }
+        100% {
+            translate: 260% 0;
+        }
+    }
+
+    .titleLine > span {
+        animation: nwLine 1.4s $ease both;
+        animation-delay: calc(0.12s + var(--l, 0) * 0.14s);
+    }
+
+    .metaBar,
+    .titleFor,
+    .guideNote,
+    .introRow {
+        animation: nwFade 1.2s $ease both;
+    }
+
+    .metaBar {
+        animation-delay: 0.05s;
+    }
+
+    .titleFor {
+        animation-delay: 0.55s;
+    }
+
+    .guideTabs li {
+        animation: nwTab 0.9s $ease both;
+        animation-delay: calc(0.7s + var(--i, 0) * 0.045s);
+
+        &::after {
+            content: "";
+            position: absolute;
+            inset: -20% 0;
+            width: 60%;
+            background: linear-gradient(100deg, rgba(#ffffff, 0) 0%, rgba(#ffffff, 0.95) 50%, rgba(#ffffff, 0) 100%);
+            animation: nwGlint 3.6s ease-in-out infinite;
+            animation-delay: calc(2.2s + var(--i, 0) * 0.07s);
+            translate: -160% 0;
+        }
+    }
+
+    .guideNote {
+        animation-delay: 1.3s;
+    }
+
+    .introRow {
+        animation-delay: 0.8s;
+    }
+
+    // On a phone the intro paragraph is the largest thing on the first screen
+    // (the LCP element): it is there from the first paint, not faded in late.
+    @media (max-width: $breakpoint-md) {
+        .titleFor {
+            animation-delay: 0.3s;
+        }
+
+        .introRow {
+            animation: none;
+        }
+    }
+}
+
+// ── Full-bleed renders (parallax) ────────────────────────────────────────────
+// The image is taller than its frame and centred, so it can drift ±9% of the
+// frame without showing an edge. Without motion it simply sits centred.
+.render {
+    position: relative;
+    height: clamp(300px, 62vw, 94vh);
+    margin: 0;
+    overflow: hidden;
+    background: $sky;
+
+    img {
+        position: absolute;
+        top: -9%;
+        left: 0;
+        width: 100%;
+        height: 118%;
+        object-fit: cover;
+    }
+}
+
+// ── Marquee (the brand site's own) ───────────────────────────────────────────
+.marquee {
+    overflow: hidden;
+    padding: clamp(18px, 2vw, 34px) 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.marqueeTrack {
+    display: flex;
+    width: max-content;
+}
+
+.marqueeRow {
+    display: flex;
+    flex: none;
+    align-items: center;
+    margin: 0;
+    font-family: $display;
+    font-weight: 600;
+    font-size: clamp(26px, 3.6vw, 60px);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+
+    > span {
+        display: inline-flex;
+        align-items: center;
+        gap: clamp(20px, 2.6vw, 48px);
+        padding-right: clamp(20px, 2.6vw, 48px);
+    }
+
+    em {
+        font-size: 1.1em;
+    }
+
+    i {
+        width: 0.34em;
+        height: 0.46em;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    @keyframes nwMarquee {
+        to {
+            translate: -50% 0;
+        }
+    }
+
+    .marqueeTrack {
+        animation: nwMarquee 36s linear infinite;
+    }
+}
+
+// ── 01 · brief ───────────────────────────────────────────────────────────────
+.columns {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(28px, 4vw, 80px);
+    margin-top: clamp(48px, 5.6vw, 104px);
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-top: 22px;
+    border-top: 1px solid var(--ink);
+
+    h3 {
+        margin: 0;
+        font-family: $display;
+        font-weight: 600;
+        font-size: clamp(20px, 1.5vw, 26px);
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+        text-transform: none;
+        color: var(--ink);
+    }
+
+    p {
+        margin: 0;
+        font-size: 17px;
+        line-height: 1.6;
+        color: var(--muted);
+    }
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 28px 24px;
+    margin: clamp(48px, 5vw, 88px) 0 0;
+    padding-top: clamp(28px, 3vw, 48px);
+    border-top: 1px solid var(--line);
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    // The number leads (order), and every cell starts at the top of its row.
+    > div {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    dt {
+        @extend %mono;
+        color: var(--label);
+    }
+
+    dd {
+        order: -1;
+        margin: 0;
+        font-family: $display;
+        font-weight: 600;
+        font-size: clamp(48px, 5vw, 92px);
+        line-height: 1;
+        letter-spacing: -0.04em;
+        font-variant-numeric: tabular-nums;
+        color: var(--ink);
+    }
+}
+
+// ── 02 · the look ────────────────────────────────────────────────────────────
+.pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(16px, 2vw, 40px);
+    margin-top: clamp(40px, 4.6vw, 88px);
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.pairItem {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    margin: 0;
+    overflow: hidden;
+    border-radius: clamp(18px, 2vw, 36px);
+    background: $lilac;
+
+    // The second one sits lower, so the pair reads as a step, not a grid.
+    &:nth-child(2) {
+        margin-top: clamp(0px, 5vw, 96px);
+
+        @media (max-width: $breakpoint-md) {
+            margin-top: 0;
+        }
+    }
+
+    img {
+        position: absolute;
+        top: -7%;
+        left: 0;
+        width: 100%;
+        height: 114%;
+        object-fit: cover;
+    }
+}
+
+// ── 03 · the homepage ────────────────────────────────────────────────────────
+// Default (no script / reduced motion): the window is a plain scroll area.
+.pageGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: center;
+    gap: clamp(28px, 5vw, 110px);
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+    }
+}
+
+.pageCopy {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(24px, 3vw, 56px);
+}
+
+.acts {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid var(--line);
+
+    @media (max-width: $breakpoint-lg) {
+        flex-direction: row;
+        gap: 16px;
+        border-bottom: 0;
+    }
+}
+
+.act {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    column-gap: 16px;
+    row-gap: 4px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    color: var(--act-ink, #{$ink});
+    transition: color 0.5s ease;
+
+    @media (max-width: $breakpoint-lg) {
+        flex: 1;
+        grid-template-columns: minmax(0, 1fr);
+        padding: 10px 0 0;
+    }
+}
+
+.actRange {
+    @extend %mono;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    align-self: start;
+    padding-top: 0.55em;
+    color: inherit;
+
+    // The act's own tab.
+    &::after {
+        content: "";
+        width: 8px;
+        height: 11px;
+        border: 1px solid currentColor;
+        border-radius: $tab-radius;
+        background: var(--act-tab, #{$ink});
+        transition: background-color 0.5s ease;
+    }
+
+    @media (max-width: $breakpoint-lg) {
+        padding-top: 0;
+        font-size: 11px;
+    }
+}
+
+.actName {
+    font-family: $display;
+    font-weight: 600;
+    font-size: clamp(22px, 2.2vw, 40px);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: inherit;
+}
+
+.actText {
+    grid-column: 2;
+    font-size: 15px;
+    line-height: 1.55;
+    color: inherit;
+
+    @media (max-width: $breakpoint-lg) {
+        display: none;
+    }
+}
+
+.window {
+    position: relative;
+    max-height: 78vh;
+    overflow-y: auto;
+    border: 1px solid rgba($ink, 0.9);
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 40px 90px -56px rgba(#5a4fb0, 0.6);
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $ink;
+        outline-offset: 4px;
+    }
+}
+
+// With motion: the band becomes a long track, the stage pins, and the scroll
+// position moves the page through the window (NwMotion sets the transform).
+.page[data-motion] {
+    .pageBand {
+        height: 340vh;
+        padding-block: 0;
+    }
+
+    .pageStage {
+        position: sticky;
+        top: 0;
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        height: 100svh;
+    }
+
+    .window {
+        height: min(76vh, 780px);
+        max-height: none;
+        overflow: hidden;
+
+        @media (max-width: $breakpoint-lg) {
+            height: 52svh;
+        }
+    }
+
+    // Inactive acts stay readable (AA on blush); the current one goes to full
+    // ink and its tab fills.
+    .act {
+        --act-ink: #{rgba($ink, 0.6)};
+        --act-tab: transparent;
+
+        &[data-on] {
+            --act-ink: #{$ink};
+            --act-tab: #{$ink};
+        }
+    }
+
+    @media (max-width: $breakpoint-lg) {
+        .pageGrid {
+            padding-top: var(--navbar-height);
+        }
+
+        .pageCopy {
+            gap: 18px;
+        }
+    }
+}
+
+// ── 04 · the system ──────────────────────────────────────────────────────────
+// The palette as a shade guide: seven tabs hanging from one bar.
+.palette {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: clamp(12px, 1.6vw, 32px);
+    margin: clamp(48px, 5.6vw, 104px) 0 0;
+    padding: clamp(18px, 2vw, 34px) 0 0;
+    list-style: none;
+    border-top: 2px solid var(--ink);
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        row-gap: 36px;
+    }
+
+    @media (max-width: 480px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.swatch {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.swatchTab {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    margin-bottom: 14px;
+    border: 1px solid rgba($ink, 0.9);
+    border-radius: $tab-radius;
+    background: var(--shade);
+    // It swings from the bar it hangs on.
+    transform-origin: 50% -12%;
+    transition: rotate 0.9s $ease, translate 0.9s $ease;
+
+    // The stem up to the bar.
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        width: 1px;
+        height: clamp(18px, 2vw, 34px);
+        background: var(--ink);
+    }
+}
+
+.swatch:hover .swatchTab {
+    rotate: -5deg;
+    translate: 0 4px;
+}
+
+.swatch:nth-child(even):hover .swatchTab {
+    rotate: 5deg;
+}
+
+.swatchHex {
+    @extend %mono;
+    position: absolute;
+    right: 0;
+    bottom: 16%;
+    left: 0;
+    font-size: 11px;
+    text-align: center;
+    color: $ink;
+}
+
+.swatchDark .swatchHex {
+    color: #ffffff;
+}
+
+.swatchName {
+    margin: 0;
+    font-family: $display;
+    font-weight: 600;
+    font-size: clamp(18px, 1.4vw, 24px);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    text-transform: none;
+    color: var(--ink);
+}
+
+.swatchUse {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--muted);
+}
+
+.typeRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(16px, 2vw, 40px);
+    margin-top: clamp(48px, 5.6vw, 104px);
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.typeCard {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: clamp(280px, 26vw, 440px);
+    padding: clamp(22px, 2.4vw, 44px);
+    border-radius: clamp(18px, 2vw, 36px);
+    background: $lilac;
+
+    &:nth-child(2) {
+        background: $blush;
+    }
+}
+
+.typeLabel {
+    @extend %mono;
+    margin: 0;
+    color: rgba($ink, 0.68);
+}
+
+.typeAa {
+    margin: auto 0 0;
+    font-family: $display;
+    font-weight: 600;
+    font-size: clamp(96px, 12vw, 220px);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+}
+
+.typeSample {
+    display: block;
+    width: min(100%, 520px);
+    height: auto;
+    margin: auto 0 6px;
+}
+
+.typeName {
+    margin: 10px 0 0;
+    font-family: $display;
+    font-weight: 600;
+    font-size: clamp(20px, 1.6vw, 28px);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    text-transform: none;
+}
+
+.typeMeta {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.55;
+    color: rgba($ink, 0.74);
+}
+
+.parts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: clamp(16px, 2vw, 40px);
+    margin: clamp(48px, 5.6vw, 104px) 0 0;
+    padding: 0;
+    list-style: none;
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.part {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 0;
+
+    figcaption {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px 10px;
+        font-size: 15px;
+        line-height: 1.5;
+        color: var(--muted);
+    }
+
+    strong {
+        font-weight: 600;
+        color: var(--ink);
+    }
+}
+
+// Same plate for every component; the component sits in it at its own
+// proportions, never stretched.
+.partImage {
+    --pad: clamp(18px, 2.2vw, 40px);
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: clamp(14px, 1.4vw, 24px);
+    background: #ffffff;
+
+    // Fitted inside the plate whatever its shape (the product card is tall).
+    img {
+        position: absolute;
+        top: var(--pad);
+        left: var(--pad);
+        width: calc(100% - 2 * var(--pad));
+        height: calc(100% - 2 * var(--pad));
+        object-fit: contain;
+        filter: drop-shadow(0 18px 22px rgba(#5a4fb0, 0.2));
+        transition: scale 1.2s $ease;
+    }
+}
+
+.part:hover .partImage img {
+    scale: 1.04;
+}
+
+// ── 05 · the pages ───────────────────────────────────────────────────────────
+.pagesGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+    gap: clamp(28px, 4vw, 88px);
+    margin-top: clamp(40px, 4.6vw, 88px);
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.pagesList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid var(--line);
+}
+
+.pageRow {
+    border-top: 1px solid var(--line);
+
+    button {
+        display: grid;
+        grid-template-columns: 44px minmax(0, 1fr) auto 20px;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: clamp(14px, 1.3vw, 22px) 0;
+        border: 0;
+        background: none;
+        color: var(--muted);
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        transition: color 0.3s ease, padding 0.6s $ease;
+
+        &:focus-visible {
+            outline: 2px solid $ink;
+            outline-offset: 2px;
+            border-radius: 8px;
+        }
+    }
+}
+
+.pageNum {
+    @extend %mono;
+    color: var(--label);
+}
+
+.pageName {
+    font-family: $display;
+    font-weight: 600;
+    font-size: clamp(22px, 2.2vw, 40px);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+}
+
+.pageKind {
+    @extend %mono;
+    font-size: 11px;
+    color: var(--label);
+    transition: color 0.3s ease;
+
+    @media (max-width: 480px) {
+        display: none;
+    }
+}
+
+// A tab that lights when its page is chosen.
+.pageMark {
+    width: 12px;
+    height: 16px;
+    border: 1px solid currentColor;
+    border-radius: $tab-radius;
+    background: transparent;
+    transition: background-color 0.4s ease, rotate 0.6s $ease, scale 0.6s $ease;
+}
+
+// Every row answers the pointer, the chosen one included: its tab tips.
+.pageRow button:hover .pageMark,
+.pageRow button:focus-visible .pageMark {
+    rotate: -16deg;
+    scale: 1.2;
+}
+
+.pageRow button:hover .pageKind {
+    color: var(--ink);
+}
+
+.pageRowOn {
+    button {
+        padding-left: clamp(6px, 0.8vw, 14px);
+        color: var(--ink);
+    }
+
+    .pageMark {
+        background: $star;
+        rotate: -8deg;
+    }
+}
+
+// The chosen row opens (0fr → 1fr animates the height without measuring it).
+.pageBody {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.7s $ease;
+
+    > div {
+        min-height: 0;
+        overflow: hidden;
+    }
+}
+
+.pageRowOn .pageBody {
+    grid-template-rows: 1fr;
+}
+
+.pageText {
+    max-width: 480px;
+    margin: 0;
+    padding: 0 0 clamp(16px, 1.4vw, 24px) 56px;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--muted);
+
+    @media (max-width: $breakpoint-lg) {
+        padding-left: 0;
+    }
+}
+
+// The preview inside the row: narrow screens only (desktop has the side one).
+.pageInline {
+    display: none;
+    margin-bottom: 20px;
+    overflow: hidden;
+    border: 1px solid rgba($ink, 0.9);
+    border-radius: 12px;
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    @media (max-width: $breakpoint-lg) {
+        display: block;
+    }
+}
+
+.pagesPreview {
+    position: sticky;
+    top: calc(var(--navbar-height) + 24px);
+    overflow: hidden;
+    border: 1px solid rgba($ink, 0.9);
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 40px 90px -56px rgba(#3d8fb5, 0.7);
+
+    @media (max-width: $breakpoint-lg) {
+        display: none;
+    }
+}
+
+.previewBar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba($ink, 0.9);
+    background: $sky;
+
+    i {
+        width: 9px;
+        height: 9px;
+        border: 1px solid $ink;
+        border-radius: 50%;
+        background: #ffffff;
+    }
+
+    span {
+        @extend %mono;
+        margin-left: 10px;
+        font-size: 11px;
+        color: rgba($ink, 0.74);
+    }
+}
+
+.previewStack {
+    position: relative;
+    aspect-ratio: 1024 / 439;
+
+    img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        scale: 1.04;
+        transition: opacity 0.5s ease, scale 1.1s $ease;
+    }
+
+    .previewOn {
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+// ── 06 · in the hand ─────────────────────────────────────────────────────────
+.mobileBand {
+    padding-inline: 0;
+
+    > .wrap {
+        width: auto;
+        margin-inline: var(--gutter);
+    }
+}
+
+.phones {
+    display: flex;
+    justify-content: center;
+    gap: clamp(14px, 2vw, 40px);
+    margin: clamp(56px, 6.4vw, 120px) 0 clamp(40px, 4.4vw, 80px);
+    padding: 0 var(--gutter);
+    list-style: none;
+
+    &:focus-visible {
+        outline: 2px solid $ink;
+        outline-offset: 6px;
+    }
+
+    // A swipe row on phones.
+    @media (max-width: $breakpoint-md) {
+        justify-content: flex-start;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: var(--gutter);
+        scrollbar-width: none;
+        margin-bottom: 0;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+}
+
+.phone {
+    flex: 0 1 clamp(150px, 15vw, 280px);
+
+    // Alternate ones sit lower: a row of screens, not a grid.
+    &:nth-child(even) {
+        margin-top: clamp(24px, 4vw, 72px);
+    }
+
+    figure {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin: 0;
+    }
+
+    figcaption {
+        @extend %mono;
+        display: flex;
+        gap: 10px;
+        font-size: 11px;
+        color: var(--label);
+
+        span {
+            color: var(--ink);
+        }
+    }
+
+    @media (max-width: $breakpoint-md) {
+        flex: 0 0 62vw;
+        scroll-snap-align: start;
+
+        &:nth-child(even) {
+            margin-top: 0;
+        }
+    }
+}
+
+.phoneFrame {
+    overflow: hidden;
+    border: clamp(4px, 0.45vw, 8px) solid #0b0b10;
+    border-radius: clamp(20px, 2.2vw, 42px);
+    background: #ffffff;
+    box-shadow: 0 34px 70px -44px rgba(#b05aa6, 0.75);
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+}
+
+.swipeHint {
+    @extend %mono;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0 0;
+    color: var(--label);
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        display: flex;
+    }
+}
+
+.specs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    margin: 0;
+    padding-top: clamp(24px, 2.6vw, 44px);
+    border-top: 1px solid var(--line);
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: 36px;
+    }
+
+    > div {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    dt {
+        @extend %mono;
+        color: var(--label);
+    }
+
+    dd {
+        order: -1;
+        margin: 0;
+        font-family: $display;
+        font-weight: 600;
+        font-size: clamp(30px, 3vw, 54px);
+        line-height: 1.05;
+        letter-spacing: -0.035em;
+        color: var(--ink);
+    }
+}
+
+// ── 07 · the result ──────────────────────────────────────────────────────────
+.points {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(28px, 4vw, 80px);
+    margin: clamp(48px, 5.6vw, 104px) 0 0;
+    padding: 0;
+    list-style: none;
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    li {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding-top: 22px;
+        border-top: 1px solid var(--ink);
+    }
+
+    h3 {
+        margin: 0;
+        font-family: $display;
+        font-weight: 600;
+        font-size: clamp(20px, 1.5vw, 26px);
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+        text-transform: none;
+        color: var(--ink);
+    }
+
+    p {
+        margin: 0;
+        font-size: 17px;
+        line-height: 1.6;
+        color: var(--muted);
+    }
+}
+
+.screens {
+    margin: clamp(48px, 6vw, 112px) 0 0;
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+}
+
+// ── What next (the one dark band) ────────────────────────────────────────────
+.closingBand .closing {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+}
+
+.closing {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: end;
+    gap: clamp(32px, 6vw, 120px);
+    margin-top: clamp(72px, 9vw, 168px);
+    padding-top: clamp(40px, 4.4vw, 80px);
+    border-top: 1px solid var(--line);
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.closingTitle {
+    margin: 0;
+    font-family: $display;
+    font-weight: 600;
+    font-size: clamp(40px, 6.2vw, 112px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    text-transform: none;
+    text-wrap: balance;
+    color: var(--ink);
+
+    em {
+        font-size: 1.07em;
+        color: $sky;
+    }
+}
+
+.closingSide {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+
+    > p {
+        max-width: 460px;
+        margin: 0;
+        font-size: 18px;
+        line-height: 1.55;
+        color: var(--muted);
+    }
+}
+
+.closingActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 32px;
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    height: 60px;
+    padding: 0 8px 0 30px;
+    border-radius: 999px;
+    background: #ffffff;
+    color: $ink;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 17px;
+    text-decoration: none;
+    transition: background-color 0.5s $ease;
+
+    i {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: $ink;
+        color: #ffffff;
+    }
+
+    svg {
+        width: 20px;
+        height: 20px;
+        transition: translate 0.5s $ease;
+    }
+
+    &:hover,
+    &:focus-visible {
+        background: $sky;
+
+        svg {
+            translate: 4px 0;
+        }
+    }
+
+    &:active i {
+        scale: 0.94;
+    }
+
+    &:focus-visible {
+        outline: 2px solid #ffffff;
+        outline-offset: 4px;
+    }
+}
+
+.textLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding-block: 10px;
+    color: var(--ink);
+    font-weight: 500;
+    font-size: 17px;
+    text-decoration: underline;
+    text-decoration-color: var(--line);
+    text-underline-offset: 6px;
+    transition: text-decoration-color 0.3s ease;
+
+    span {
+        display: inline-grid;
+        transition: translate 0.5s $ease;
+    }
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    &:hover,
+    &:focus-visible {
+        text-decoration-color: currentColor;
+
+        span {
+            translate: 5px 0;
+        }
+    }
+}
+
+.related {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 24px;
+    margin: 0;
+    padding: 20px 0 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+
+    a {
+        @extend %mono;
+        display: inline-block;
+        padding-block: 8px;
+        color: var(--label);
+        @include drawn-link(5px);
+
+        &:hover,
+        &:focus-visible {
+            color: var(--ink);
+            background-size: 100% 1px, 100% 1px;
+        }
+    }
+}
+
+// ── The shade rail ───────────────────────────────────────────────────────────
+// A full-height track holding a sticky guide: one tab per chapter, lightest
+// last. NwMotion puts [data-on] on the tab of the chapter being read; that tab
+// is held out, the way a shade is held up against a tooth.
+.railTrack {
+    position: absolute;
+    top: 0;
+    right: max(8px, calc(var(--gutter) * 0.2 - 9px));
+    bottom: 0;
+    width: 18px;
+    pointer-events: none;
+
+    @media (max-width: $breakpoint-md) {
+        right: 5px;
+        width: 10px;
+    }
+}
+
+.rail {
+    position: sticky;
+    top: calc(50vh - 110px);
+    top: calc(50svh - 110px);
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        position: relative;
+        width: 18px;
+        height: 24px;
+        border: 1px solid rgba($ink, 0.55);
+        border-radius: $tab-radius;
+        background: var(--shade);
+        transition: translate 0.7s $ease, scale 0.7s $ease, border-color 0.4s ease;
+
+        @media (max-width: $breakpoint-md) {
+            width: 10px;
+            height: 14px;
+        }
+    }
+
+    span {
+        @extend %mono;
+        position: absolute;
+        top: 50%;
+        right: calc(100% + 10px);
+        padding: 2px 6px;
+        border-radius: 5px;
+        background: #ffffff;
+        color: $ink;
+        font-size: 10px;
+        line-height: 1.4;
+        opacity: 0;
+        translate: 6px -50%;
+        transition: opacity 0.4s ease, translate 0.7s $ease;
+
+        // Only where the gutter has room for it.
+        @media (max-width: $breakpoint-xl) {
+            display: none;
+        }
+    }
+
+    li[data-on] {
+        border-color: $ink;
+        translate: -12px 0;
+        scale: 1.22;
+
+        @media (max-width: $breakpoint-md) {
+            translate: -4px 0;
+            scale: 1.3;
+        }
+
+        span {
+            opacity: 1;
+            translate: 0 -50%;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rail li,
+    .rail span,
+    .swatchTab,
+    .pageBody,
+    .partImage img,
+    .previewStack img {
+        transition: none;
+    }
+}

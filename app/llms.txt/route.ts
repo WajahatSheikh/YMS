@@ -2,6 +2,9 @@ import { SITE, PRICE_LABEL, absoluteUrl } from "@/app/data/site";
 import { SERVICES, serviceHref } from "@/app/data/services";
 import { FAQS } from "@/app/data/faq";
 import { INCLUDES, FIXED_SCOPE_FROM } from "@/app/data/subscription";
+import { TUIT } from "@/app/portfolio/tuit-luxury-candle/content";
+import { NW } from "@/app/portfolio/naturally-white/content";
+import { MB } from "@/app/portfolio/mdrn-blk/content";
 
 // /llms.txt — a plain-text map of the site for AI assistants and answer
 // engines (format: https://llmstxt.org). Built from the same data files as the
@@ -37,6 +40,12 @@ export function GET() {
         "## Services",
         "",
         ...SERVICES.map((service) => link(service.title, serviceHref(service), service.seo.description)),
+        "",
+        "## Case studies",
+        "",
+        link(`${TUIT.client}: ${TUIT.category.toLowerCase()} design`, TUIT.path, TUIT.seoDescription),
+        link(`${NW.client}: ${NW.category.toLowerCase()}`, NW.path, NW.seoDescription),
+        link(`${MB.client}: ${MB.category.toLowerCase()} design`, MB.path, MB.seoDescription),
         "",
         "## FAQ",
         "",

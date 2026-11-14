@@ -1,4 +1,6 @@
-import { projects } from "@/app/data/projects";
+import { MB } from "@/app/portfolio/mdrn-blk/content";
+import { NW } from "@/app/portfolio/naturally-white/content";
+import { TUIT } from "@/app/portfolio/tuit-luxury-candle/content";
 import ProjectIndex, { type IndexProject } from "./ProjectIndex";
 import style from "./index.module.scss";
 
@@ -10,20 +12,26 @@ import style from "./index.module.scss";
 // its monogram) and gets better as real ones are added: give an entry an
 // `image` and both the preview and the mobile row thumbnail use it.
 //
-// The Figma card set repeated "Gasoline Application" three times and "Radiant
-// skincare branding" twice; an index makes repeats obvious, so it lists each
-// project once. There are six case-study pages, one per project, and each row
-// links to its own. Replace copy, thumbnail and case study together as the real
-// work lands.
+// Each row links to its own case study. Tüit is the first real one: it has a
+// thumbnail and a preview reel that plays in the cursor card. The other five
+// still open placeholder pages (app/data/projects.ts); replace copy, thumbnail
+// and case study together as the real work lands.
 
-const WORK: Omit<IndexProject, "href">[] = [
-    { title: "Paramount Students", client: "Paramount Students", category: "Mobile App" },
-    { title: "Students Experience", client: "Paramount Students", category: "Mobile App" },
-    { title: "Gasoline Application", client: "Digital Gravity", category: "Web Management" },
-    // Client tag left off until the real client name is confirmed.
-    { title: "Radiant Skincare Branding", category: "Website Design" },
-    { title: "Ed-Tech Mobile Games", client: "SABAQ", category: "Game Design" },
-    { title: "Strike A Balance", client: "SABAQ", category: "Game Design" }
+const WORK: IndexProject[] = [
+    { title: MB.client, category: MB.category, href: MB.path, image: MB.card.image, video: MB.card.video },
+    { title: "Paramount Students", client: "Paramount Students", category: "Mobile App", href: "/portfolio/vibecart" },
+    { title: NW.client, category: NW.category, href: NW.path, image: NW.card.image, video: NW.card.video },
+    { title: "Gasoline Application", client: "Digital Gravity", category: "Web Management", href: "/portfolio/novabuild" },
+    {
+        title: TUIT.client,
+        client: TUIT.clientShort,
+        category: TUIT.category,
+        href: TUIT.path,
+        image: TUIT.card.image,
+        video: TUIT.card.video
+    },
+    { title: "Ed-Tech Mobile Games", client: "SABAQ", category: "Game Design", href: "/portfolio/layerflow" },
+    { title: "Strike A Balance", client: "SABAQ", category: "Game Design", href: "/portfolio/shipstack" }
 ];
 
 const Client = () => (
@@ -39,12 +47,7 @@ const Client = () => (
             </p>
         </header>
 
-        <ProjectIndex
-            projects={WORK.map((project, index) => ({
-                ...project,
-                href: `/portfolio/${projects[index % projects.length].slug}`
-            }))}
-        />
+        <ProjectIndex projects={WORK} />
     </section>
 );
 

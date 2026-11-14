@@ -96,11 +96,55 @@ const useScrolledPast = (offset: number) => {
     return past;
 };
 
+// True while the reader scrolls down (past the header's own height), false as
+// soon as they scroll up: the header steps aside and comes back.
+const useHiddenOnScrollDown = () => {
+    const [hidden, setHidden] = useState(false);
+    useEffect(() => {
+        let last = window.scrollY;
+        const onScroll = () => {
+            const y = window.scrollY;
+            if (y < NAVBAR_HEIGHT) setHidden(false);
+            else if (y > last + 10) setHidden(true);
+            else if (y < last - 5) setHidden(false);
+            last = y;
+        };
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
+    return hidden;
+};
+
+// Case studies with their own art direction (their grounds change down the
+// page). Their header floats: no band, light pills that read on any ground,
+// and it steps aside on scroll down.
+const FLOATING_CASE_STUDIES = ["/portfolio/tuit-luxury-candle", "/portfolio/naturally-white", "/portfolio/mdrn-blk"];
+
 // ── Portfolio header — back arrow + Book a Call ───────────────────────────────
-// Dark island, like the case-study page under it.
-const PortfolioHeader = () => {
+// Dark island, like the placeholder case-study pages under it — or, with
+// `floating`, pills over an art-directed case study.
+const PortfolioHeader = ({ floating = false }: { floating?: boolean }) => {
     const { navigateTo } = usePageTransition();
     const scrolled = useScrolledPast(24);
+    const hidden = useHiddenOnScrollDown();
+
+    if (floating) {
+        return (
+            <header className={`${style.header} ${hidden ? style.navHidden : ""}`} data-theme="light">
+                <div className={style.inner}>
+                    <button className={style.backButton} onClick={() => navigateTo("/#work", "Work")} aria-label="Back to all work">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                            <path d="M15 9H3M3 9L8 4M3 9L8 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        <span>Work</span>
+                    </button>
+                    <div className={style.right}>
+                        <BookACall placement="header-case-study" />
+                    </div>
+                </div>
+            </header>
+        );
+    }
 
     return (
         <header className={`${style.header} ${style.solid} ${scrolled ? style.scrolled : ""}`} data-theme="dark">
@@ -190,7 +234,7 @@ const Header = () => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, [isPortfolio]);
 
-    if (isPortfolio) return <PortfolioHeader />;
+    if (isPortfolio) return <PortfolioHeader floating={FLOATING_CASE_STUDIES.includes(pathname ?? "")} />;
 
     const scrollToSection = (id: string) => {
         setMenuOpen(false);

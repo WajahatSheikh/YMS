@@ -1,0 +1,2132 @@
+@import "../../styles/abstract/variables";
+
+// MDRN BLK case study ("Drop in"). See page.tsx for the concept.
+//
+// The page is an island: MDRN BLK's palette and type, the same in the site's
+// light and dark themes. Layout runs on the site's gutter token.
+//
+// Each band sets --ground / --ink / --muted / --line / --label / --chip-* through
+// [data-ground]; everything inside reads those. Motion-only states hang off
+// `.page[data-motion]`, which MbMotion.tsx sets; without it every block is in
+// its final state. CSS modules need a local class in every selector, so
+// attribute selectors are always scoped (`.page [data-ground]`).
+
+$black: #0b0b0b;
+$yellow: #f6eb16;
+$pink: #ec078d;
+$green: #71c043;
+$sky: #c8e4eb;
+$sand: #ebe4da;
+$grey: #f3f3f5;
+$maple: #e8d3b0;
+$ease: cubic-bezier(0.16, 1, 0.3, 1);
+$land: cubic-bezier(0.34, 1.7, 0.6, 1); // overshoot: a sticker landing
+
+$display: var(--font-poppins), "Arial Black", "Helvetica Neue", sans-serif;
+$mono: var(--font-space-mono), ui-monospace, "SFMono-Regular", monospace;
+
+%mono {
+    font-family: $mono;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.5;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+%shout {
+    font-family: $display;
+    font-style: italic;
+    font-weight: 900;
+    text-transform: none;
+}
+
+.page {
+    position: relative;
+    // Slide under the fixed site header, so the first ground reaches the top.
+    margin-top: calc(-1 * var(--navbar-height));
+    overflow-x: clip;
+    background: $black;
+    color: #ffffff;
+    font-family: $display;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+
+    // The brand's highlight chip.
+    mark {
+        padding: 0 0.12em;
+        background: linear-gradient(var(--chip-bg), var(--chip-bg)) no-repeat 0 72% / 100% 74%;
+        color: var(--chip-ink);
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+    }
+}
+
+// ── Grounds ──────────────────────────────────────────────────────────────────
+.page [data-ground] {
+    --ink: #{$black};
+    --muted: #{rgba($black, 0.74)};
+    --line: #{rgba($black, 0.16)};
+    --label: #{rgba($black, 0.68)};
+    --accent: #{$black};
+    --chip-bg: #{$yellow};
+    --chip-ink: #{$black};
+    background: var(--ground);
+    color: var(--ink);
+}
+
+.page [data-ground="black"] {
+    --ground: #{$black};
+    --ink: #ffffff;
+    --muted: #{rgba(#ffffff, 0.74)};
+    --line: #{rgba(#ffffff, 0.2)};
+    --label: #{rgba(#ffffff, 0.68)};
+    --accent: #{$yellow};
+}
+
+.page [data-ground="sand"] {
+    --ground: #{$sand};
+}
+
+.page [data-ground="grey"] {
+    --ground: #{$grey};
+}
+
+.page [data-ground="white"] {
+    --ground: #ffffff;
+}
+
+.page [data-ground="sky"] {
+    --ground: #{$sky};
+}
+
+.page [data-ground="yellow"] {
+    --ground: #{$yellow};
+    --chip-bg: #{$black};
+    --chip-ink: #{$yellow};
+}
+
+// ── Shared pieces ────────────────────────────────────────────────────────────
+// `min-height: 0` and friends undo the global `section` rule (globals.scss),
+// which makes every section a full, centred screen.
+.band {
+    display: block;
+    min-height: 0;
+    padding: clamp(80px, 9vw, 168px) var(--gutter);
+}
+
+.wrap {
+    width: 100%;
+    max-width: 1720px;
+    margin-inline: auto;
+}
+
+.chapterHead {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: end;
+    gap: clamp(20px, 5vw, 120px);
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.chapterNo {
+    @extend %mono;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0 0 clamp(18px, 2vw, 32px);
+    color: var(--label);
+
+    span {
+        color: var(--accent);
+    }
+
+    i {
+        width: 56px;
+        height: 1px;
+        background: currentColor;
+    }
+}
+
+.chapterTitle {
+    @extend %shout;
+    margin: 0;
+    font-size: clamp(44px, 6.6vw, 128px);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+    color: var(--ink);
+}
+
+.chapterBody {
+    max-width: 560px;
+    margin: 0;
+    font-size: clamp(16px, 1.2vw, 19px);
+    line-height: 1.65;
+    color: var(--muted);
+}
+
+// The brand's tape sticker.
+.sticker {
+    @extend %shout;
+    display: inline-block;
+    padding: 0.36em 0.7em 0.4em;
+    font-size: clamp(15px, 1.15vw, 20px);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    background: $yellow;
+    color: $black;
+    box-shadow: 0 10px 24px -12px rgba($black, 0.5);
+
+    &[data-tone="pink"] {
+        background: $pink;
+        color: #ffffff;
+        // White on pink passes AA only as large bold text.
+        font-size: max(19px, 1.15vw);
+    }
+
+    &[data-tone="green"] {
+        background: $green;
+    }
+
+    &[data-tone="black"] {
+        background: $black;
+        color: $yellow;
+    }
+
+    &[data-tone="white"] {
+        background: #ffffff;
+    }
+}
+
+// Browser window: three dots, an address pill, then the screen.
+.browser {
+    overflow: hidden;
+    border-radius: clamp(10px, 1vw, 16px);
+    background: #ffffff;
+    box-shadow: 0 50px 90px -50px rgba($black, 0.7);
+}
+
+.chrome {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: clamp(22px, 2.2vw, 40px);
+    padding: 0 clamp(10px, 1vw, 16px);
+    background: #f1f1f1;
+    border-bottom: 1px solid #e2e2e2;
+
+    i {
+        width: clamp(7px, 0.55vw, 10px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: $pink;
+
+        &:nth-child(2) {
+            background: $yellow;
+        }
+
+        &:nth-child(3) {
+            background: $green;
+        }
+    }
+
+    span {
+        @extend %mono;
+        margin-left: 8px;
+        padding: 3px 12px;
+        border-radius: 99px;
+        background: #ffffff;
+        font-size: clamp(8px, 0.6vw, 11px);
+        color: rgba($black, 0.7);
+        text-transform: none;
+        letter-spacing: 0.04em;
+    }
+}
+
+.screen {
+    position: relative;
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+}
+
+.phoneFrame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 288 / 640;
+    border: clamp(4px, 0.45vw, 9px) solid $black;
+    border-radius: clamp(20px, 2.4vw, 44px);
+    background: #ffffff;
+    box-shadow: 0 40px 80px -40px rgba($black, 0.7);
+
+    // The island.
+    &::before {
+        content: "";
+        position: absolute;
+        top: 3%;
+        left: 50%;
+        z-index: 1;
+        width: 30%;
+        height: 4%;
+        translate: -50% 0;
+        border-radius: 99px;
+        background: $black;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top;
+    }
+}
+
+// ── Cover ────────────────────────────────────────────────────────────────────
+.hero {
+    padding-top: calc(var(--navbar-height) + clamp(24px, 3vw, 52px));
+    padding-bottom: clamp(64px, 7vw, 128px);
+}
+
+.metaBar {
+    @extend %mono;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-content: space-between;
+    gap: 8px 24px;
+    color: var(--label);
+
+    p {
+        margin: 0;
+        font: inherit;
+        letter-spacing: inherit;
+        text-transform: inherit;
+    }
+
+    p:last-child {
+        text-align: right;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: minmax(0, 1fr);
+
+        p:last-child {
+            text-align: left;
+        }
+    }
+}
+
+.crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li + li::before {
+        content: "/";
+        margin-right: 10px;
+    }
+
+    a {
+        display: inline-block;
+        padding-block: 8px;
+        margin-block: -8px;
+        color: inherit;
+        text-decoration: underline;
+        text-decoration-color: var(--line);
+        text-underline-offset: 4px;
+        background: linear-gradient($yellow, $yellow) no-repeat 0 100% / 0% 100%;
+        transition: background-size 0.4s $ease, color 0.2s ease, text-decoration-color 0.2s ease;
+
+        &:hover,
+        &:focus-visible {
+            background-size: 100% 100%;
+            color: $black;
+            text-decoration-color: transparent;
+        }
+    }
+}
+
+.title {
+    margin: clamp(22px, 3vw, 48px) 0 0;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: 1;
+    text-transform: none;
+}
+
+.titleWords {
+    @extend %shout;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.2em;
+    font-size: clamp(96px, 20.5vw, 410px);
+    line-height: 0.84;
+    letter-spacing: -0.055em;
+    color: #ffffff;
+}
+
+// Each word drops into its own mask.
+.titleMask {
+    display: block;
+    margin: -0.04em -0.08em -0.12em;
+    padding: 0.04em 0.08em 0.12em;
+    overflow: hidden;
+
+    > span {
+        display: block;
+    }
+}
+
+.titleFor {
+    display: inline-block;
+    margin-top: clamp(14px, 1.6vw, 26px);
+    padding: 0.5em 0.9em;
+    background: $yellow;
+    color: $black;
+    font-family: $mono;
+    font-weight: 700;
+    font-size: clamp(11px, 1vw, 16px);
+    line-height: 1.2;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    rotate: -1.5deg;
+}
+
+.coverGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    align-items: start;
+    gap: clamp(32px, 4vw, 80px);
+    margin-top: clamp(40px, 5vw, 96px);
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.coverCopy {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    max-width: 520px;
+}
+
+.intro {
+    margin: 0;
+    font-size: clamp(19px, 1.55vw, 26px);
+    line-height: 1.45;
+    color: #ffffff;
+}
+
+.byline {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+
+    a {
+        padding-block: 4px;
+        color: #ffffff;
+        text-decoration: underline;
+        text-decoration-color: rgba(#ffffff, 0.35);
+        text-underline-offset: 3px;
+        background: linear-gradient($yellow, $yellow) no-repeat 0 100% / 0% 100%;
+        transition: background-size 0.4s $ease, color 0.2s ease, text-decoration-color 0.2s ease;
+
+        &:hover,
+        &:focus-visible {
+            background-size: 100% 100%;
+            color: $black;
+            text-decoration-color: transparent;
+        }
+    }
+}
+
+.cue {
+    @extend %mono;
+    margin: 12px 0 0;
+    color: $yellow;
+
+    span {
+        display: inline-block;
+    }
+}
+
+// The cover stage: browser, phone and two tape stickers.
+.stage {
+    position: relative;
+    padding: 4% 14% 8% 0;
+
+    @media (max-width: $breakpoint-md) {
+        padding: 6% 18% 14% 0;
+    }
+}
+
+.stageBrowser {
+    position: relative;
+}
+
+.stagePhone {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 24%;
+    rotate: 4deg;
+
+    @media (max-width: $breakpoint-md) {
+        width: 30%;
+    }
+}
+
+.stageTapeA,
+.stageTapeB {
+    position: absolute;
+    z-index: 2;
+    font-family: $mono;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.stageTapeA {
+    top: 0;
+    left: 6%;
+    font-size: clamp(11px, 1vw, 17px);
+    rotate: -3deg;
+}
+
+.stageTapeB {
+    right: 18%;
+    bottom: 10%;
+    // Large bold text, so white on pink passes.
+    font-size: clamp(19px, 1.3vw, 22px);
+    rotate: 2deg;
+
+    @media (max-width: $breakpoint-md) {
+        display: none;
+    }
+}
+
+// Hero entrance, in CSS so it paints before any script loads: each word
+// drops in from above and lands with a little bounce, like a skater dropping
+// into a ramp.
+@media (prefers-reduced-motion: no-preference) {
+    @keyframes mbDrop {
+        0% {
+            translate: 0 -112%;
+        }
+        62% {
+            translate: 0 7%;
+        }
+        80% {
+            translate: 0 -2.5%;
+        }
+        100% {
+            translate: 0 0;
+        }
+    }
+
+    @keyframes mbFade {
+        from {
+            opacity: 0;
+            translate: 0 16px;
+        }
+        to {
+            opacity: 1;
+            translate: 0 0;
+        }
+    }
+
+    @keyframes mbSlap {
+        0% {
+            opacity: 0;
+            scale: 1.7;
+        }
+        100% {
+            opacity: 1;
+            scale: 1;
+        }
+    }
+
+    @keyframes mbBob {
+        0%,
+        100% {
+            translate: 0 0;
+        }
+        50% {
+            translate: 0 5px;
+        }
+    }
+
+    .titleMask > span {
+        animation: mbDrop 1.05s cubic-bezier(0.3, 0.8, 0.35, 1) both;
+        animation-delay: calc(0.1s + var(--w, 0) * 0.16s);
+    }
+
+    .titleFor {
+        animation: mbSlap 0.5s $land both;
+        animation-delay: 0.75s;
+    }
+
+    .metaBar,
+    .stage {
+        animation: mbFade 1s $ease both;
+    }
+
+    .metaBar {
+        animation-delay: 0.05s;
+    }
+
+    .stage {
+        animation-delay: 0.55s;
+    }
+
+    .stageTapeA,
+    .stageTapeB {
+        animation: mbSlap 0.5s $land both;
+        animation-delay: 1.15s;
+    }
+
+    .stageTapeB {
+        animation-delay: 1.3s;
+    }
+
+    .cue span {
+        animation: mbBob 1.6s ease-in-out infinite;
+    }
+
+    // The intro is the phone's LCP element: there from the first paint.
+    .coverCopy {
+        animation: mbFade 1s $ease both;
+        animation-delay: 0.6s;
+
+        @media (max-width: $breakpoint-md) {
+            animation: none;
+        }
+    }
+}
+
+// ── Tape bands ───────────────────────────────────────────────────────────────
+.tapes {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow: hidden;
+    padding: clamp(24px, 3vw, 56px) 0;
+}
+
+.tape {
+    width: 106%;
+    margin-left: -3%;
+    padding: clamp(8px, 0.9vw, 16px) 0;
+    overflow: hidden;
+    background: #ffffff;
+    color: $black;
+    rotate: -2.2deg;
+
+    &[data-tone="yellow"] {
+        margin-top: -0.6%;
+        background: $yellow;
+        rotate: 1.4deg;
+    }
+}
+
+.tapeTrack {
+    display: flex;
+    width: max-content;
+}
+
+.tapeRow {
+    @extend %shout;
+    display: flex;
+    flex: none;
+    margin: 0;
+    font-size: clamp(24px, 3.2vw, 58px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    span {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    i {
+        padding: 0 0.6em;
+        font-style: normal;
+        font-size: 0.6em;
+    }
+}
+
+.tapeNote {
+    @extend %mono;
+    margin: 0;
+    color: var(--label);
+}
+
+// ── 01 · brief ───────────────────────────────────────────────────────────────
+.facts {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 24px;
+    margin: clamp(48px, 5.4vw, 100px) 0 0;
+
+    @media (max-width: $breakpoint-xl) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    > div {
+        padding-top: 16px;
+        border-top: 2px solid var(--ink);
+    }
+
+    dt {
+        @extend %mono;
+        color: var(--label);
+    }
+
+    dd {
+        margin: 8px 0 0;
+        font-weight: 500;
+        font-size: clamp(15px, 1.1vw, 18px);
+        line-height: 1.4;
+    }
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 24px;
+    margin: clamp(40px, 4.4vw, 80px) 0 0;
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    > div {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    dt {
+        @extend %mono;
+        color: var(--label);
+    }
+
+    dd {
+        @extend %shout;
+        order: -1;
+        margin: 0;
+        font-size: clamp(60px, 6.4vw, 124px);
+        line-height: 0.9;
+        letter-spacing: -0.05em;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+// ── 02 · concept ─────────────────────────────────────────────────────────────
+// The moodboard: photos pinned on a 1760 × 1000 board (positions from Figma).
+.board {
+    position: relative;
+    aspect-ratio: 1760 / 1000;
+    margin: clamp(56px, 6vw, 110px) 0 0;
+    padding: 0;
+    list-style: none;
+
+    @media (max-width: $breakpoint-md) {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 28px 14px;
+        aspect-ratio: auto;
+    }
+}
+
+.polaroid {
+    position: absolute;
+    top: var(--y);
+    left: var(--x);
+    width: var(--pw);
+    rotate: var(--r);
+    transition: rotate 0.6s $ease, scale 0.6s $ease;
+
+    figure {
+        margin: 0;
+        padding: clamp(5px, 0.6vw, 11px);
+        background: #ffffff;
+        box-shadow: 0 30px 60px -36px rgba($black, 0.6);
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    &:hover {
+        z-index: 3;
+        rotate: 0deg;
+        scale: 1.04;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        position: relative;
+        top: auto;
+        left: auto;
+        width: auto;
+
+        &:nth-child(even) {
+            margin-top: 22px;
+        }
+    }
+}
+
+.polaroidSticker {
+    position: absolute;
+    z-index: 2;
+    top: -0.9em;
+    left: 8%;
+    rotate: -4deg;
+
+    .polaroid:nth-child(even) & {
+        right: 6%;
+        left: auto;
+        rotate: 6deg;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        font-size: 13px;
+
+        &[data-tone="pink"] {
+            font-size: 19px;
+        }
+    }
+}
+
+.principles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(24px, 3vw, 64px);
+    margin: clamp(56px, 6vw, 110px) 0 0;
+    padding: 0;
+    list-style: none;
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    li {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 18px;
+        border-top: 2px solid var(--ink);
+    }
+
+    span {
+        @extend %mono;
+        color: var(--label);
+    }
+
+    h3 {
+        @extend %shout;
+        margin: 0;
+        font-size: clamp(24px, 2.2vw, 38px);
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+    }
+
+    p {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--muted);
+    }
+}
+
+// ── 03 · grip ────────────────────────────────────────────────────────────────
+.colourTapes {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1.2vw, 22px);
+    margin: clamp(48px, 5.4vw, 100px) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.colourTape {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding: clamp(14px, 1.5vw, 26px) clamp(18px, 2vw, 36px);
+    background: var(--tape);
+    color: var(--tape-ink);
+    rotate: var(--r);
+    transition: rotate 0.6s $ease, translate 0.6s $ease;
+
+    &:hover {
+        rotate: 0deg;
+        translate: 10px 0;
+    }
+
+    h3 {
+        @extend %shout;
+        margin: 0;
+        font-size: clamp(30px, 3.6vw, 66px);
+        line-height: 1;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+    }
+
+    p {
+        @extend %mono;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 22px;
+        margin: 0;
+        font-size: 11px;
+    }
+}
+
+.kit {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: center;
+    gap: clamp(32px, 5vw, 96px);
+    margin-top: clamp(56px, 6vw, 110px);
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.kitType {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px clamp(24px, 3vw, 48px);
+
+    dl {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        margin: 0;
+    }
+
+    dt {
+        font-weight: 600;
+        font-size: clamp(20px, 1.6vw, 28px);
+    }
+
+    dd {
+        @extend %mono;
+        margin: 4px 0 0;
+        font-size: 11px;
+        color: var(--label);
+    }
+}
+
+.kitMono {
+    font-family: $mono;
+    font-weight: 400 !important;
+}
+
+.kitAa {
+    @extend %shout;
+    margin: 0;
+    font-size: clamp(130px, 15vw, 290px);
+    line-height: 0.8;
+    letter-spacing: -0.06em;
+    color: $yellow;
+}
+
+.kitParts {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.kitLabel {
+    @extend %mono;
+    margin: 0;
+    color: var(--label);
+}
+
+.kitStickers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.kitButtons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.specButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 52px;
+    padding: 0 22px 0 26px;
+    border-radius: 99px;
+    background: #ffffff;
+    color: $black;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background-color 0.3s ease, translate 0.5s $ease;
+
+    svg {
+        width: 16px;
+        height: 16px;
+        transition: translate 0.5s $ease;
+    }
+
+    &:hover,
+    &.specButtonOn {
+        background: $yellow;
+
+        svg {
+            translate: 2px -2px;
+        }
+    }
+
+    &:hover {
+        translate: 0 -2px;
+    }
+}
+
+.specIcon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: $black;
+    transition: background-color 0.3s ease, rotate 0.5s $ease;
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    &:hover,
+    &.specIconOn {
+        background: $yellow;
+        rotate: 45deg;
+    }
+}
+
+// ── 04 · the line ────────────────────────────────────────────────────────────
+// Default (no script / reduced motion): the window is a plain scroll area.
+.pageGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: center;
+    gap: clamp(28px, 5vw, 110px);
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 22px;
+    }
+
+    .chapterHead {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .chapterTitle {
+        font-size: clamp(40px, 4.6vw, 92px);
+    }
+}
+
+.pageCopy {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(18px, 2vw, 32px);
+}
+
+.pageBody {
+    max-width: 520px;
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted);
+
+    @media (max-width: $breakpoint-lg) {
+        display: none;
+    }
+}
+
+.acts {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-bottom: 2px solid var(--ink);
+
+    @media (max-width: $breakpoint-lg) {
+        flex-direction: row;
+        gap: 12px;
+        border-bottom: 0;
+    }
+}
+
+.act {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    column-gap: 14px;
+    row-gap: 4px;
+    padding: 14px 0;
+    border-top: 2px solid var(--ink);
+    transition: background-color 0.4s ease, padding 0.5s $ease;
+
+    @media (max-width: $breakpoint-lg) {
+        flex: 1;
+        grid-template-columns: minmax(0, 1fr);
+        padding: 8px 0 0;
+    }
+}
+
+.actRange {
+    @extend %mono;
+    padding-top: 0.5em;
+    color: var(--label);
+}
+
+.actName {
+    @extend %shout;
+    font-size: clamp(20px, 1.9vw, 34px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+
+    @media (max-width: $breakpoint-lg) {
+        font-size: 15px;
+    }
+}
+
+.actText {
+    grid-column: 2;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--muted);
+
+    @media (max-width: $breakpoint-lg) {
+        display: none;
+    }
+}
+
+.window {
+    position: relative;
+    max-height: 78vh;
+    overflow-y: auto;
+    border: 2px solid $black;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 10px 10px 0 $yellow;
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    &:focus-visible {
+        outline: 3px solid $pink;
+        outline-offset: 4px;
+    }
+}
+
+.page[data-motion] {
+    .pageBand {
+        height: 340vh;
+        padding-block: 0;
+    }
+
+    .pageStage {
+        position: sticky;
+        top: 0;
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        height: 100svh;
+    }
+
+    .window {
+        height: min(76vh, 780px);
+        max-height: none;
+        overflow: hidden;
+
+        @media (max-width: $breakpoint-lg) {
+            height: 50svh;
+        }
+    }
+
+    // The current act gets the highlight chip; the others stay readable.
+    .act[data-on] {
+        padding-left: 10px;
+        background: $yellow;
+    }
+
+    @media (max-width: $breakpoint-lg) {
+        .pageGrid {
+            padding-top: var(--navbar-height);
+        }
+
+        .act[data-on] {
+            padding-left: 6px;
+        }
+    }
+}
+
+// ── 05 · drop in ─────────────────────────────────────────────────────────────
+// Desktop: a 1760 × 676 stage (Figma), browser in the middle, notes either side
+// with leader lines to their pins. Narrow: browser, then the notes as a list.
+.annotated {
+    position: relative;
+    aspect-ratio: 1760 / 676;
+    margin-top: clamp(48px, 5.4vw, 100px);
+
+    @media (max-width: 1100px) {
+        aspect-ratio: auto;
+    }
+}
+
+.annotatedBrowser {
+    position: absolute;
+    top: 0;
+    left: 17.045%;
+    width: 65.909%;
+
+    @media (max-width: 1100px) {
+        position: relative;
+        left: auto;
+        width: 100%;
+    }
+}
+
+.pin {
+    position: absolute;
+    top: var(--py);
+    left: var(--px);
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: clamp(22px, 1.8vw, 32px);
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    background: $pink;
+    color: #ffffff;
+    font-family: $mono;
+    font-weight: 700;
+    font-size: clamp(10px, 0.8vw, 13px);
+    transition: scale 0.5s $land, background-color 0.3s ease, color 0.3s ease;
+
+    // A ring that keeps breathing while nothing else moves.
+    &::after {
+        content: "";
+        position: absolute;
+        inset: -6px;
+        border: 2px solid $pink;
+        border-radius: 50%;
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    @keyframes mbPing {
+        0% {
+            opacity: 0.8;
+            scale: 0.7;
+        }
+        100% {
+            opacity: 0;
+            scale: 1.7;
+        }
+    }
+
+    .pin::after {
+        animation: mbPing 2.2s ease-out infinite;
+        animation-delay: calc(var(--px) * 0.02s);
+    }
+}
+
+// Pointing at a note lights its pin.
+@for $n from 1 through 5 {
+    .annotated:has([data-note="#{$n}"]:hover) [data-pin="#{$n}"] {
+        scale: 1.4;
+        background: $yellow;
+        color: $black;
+    }
+}
+
+.notes {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @media (max-width: 1100px) {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 24px;
+    }
+
+    @media (max-width: 520px) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.note {
+    position: absolute;
+    top: var(--ny);
+    width: 13.86%;
+    display: flex;
+    gap: 10px;
+    padding: clamp(8px, 0.8vw, 14px);
+    background: $black;
+    color: #ffffff;
+    font-family: $mono;
+    font-size: clamp(10px, 0.78vw, 13px);
+    line-height: 1.4;
+    cursor: default;
+    transition: translate 0.4s $ease, background-color 0.3s ease, color 0.3s ease;
+
+    span {
+        color: $yellow;
+    }
+
+    // The leader to its pin.
+    &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        height: 2px;
+        width: var(--lw-n, 0%);
+        background: $black;
+    }
+
+    &[data-side="left"] {
+        left: 0;
+
+        &::after {
+            left: 100%;
+        }
+    }
+
+    &[data-side="right"] {
+        right: 0;
+
+        &::after {
+            right: 100%;
+        }
+    }
+
+    &:hover {
+        background: $yellow;
+        color: $black;
+
+        span {
+            color: $black;
+        }
+    }
+
+    @media (max-width: 1100px) {
+        position: static;
+        width: auto;
+
+        &::after {
+            display: none;
+        }
+    }
+}
+
+// ── 06 · tricks ──────────────────────────────────────────────────────────────
+.tricksBand {
+    padding-inline: 0;
+
+    > .wrap {
+        width: auto;
+        margin-inline: var(--gutter);
+    }
+
+    .tapes {
+        margin-top: clamp(56px, 6vw, 110px);
+    }
+}
+
+.trickRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: clamp(18px, 2vw, 32px);
+    margin-top: clamp(48px, 5.4vw, 100px);
+
+    @media (max-width: $breakpoint-md) {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 12px;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+}
+
+.card {
+    flex: 0 1 clamp(280px, 27vw, 440px);
+    overflow: hidden;
+    border: 3px solid transparent;
+    border-radius: 20px;
+    background: #ffffff;
+    color: $black;
+    transition: translate 0.5s $ease, border-color 0.3s ease, box-shadow 0.5s $ease;
+
+    &:hover,
+    &:focus-within,
+    &:active {
+        translate: 0 -10px;
+        border-color: $yellow;
+        box-shadow: 0 30px 60px -30px rgba($yellow, 0.45);
+    }
+
+    @media (max-width: $breakpoint-md) {
+        flex: 0 0 78vw;
+        scroll-snap-align: start;
+    }
+}
+
+.cardMedia {
+    position: relative;
+    overflow: hidden;
+    background: #f2f2f2;
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+        transition: scale 0.8s $ease;
+    }
+
+    .sticker {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        font-size: 14px;
+    }
+
+    .card:hover & img {
+        scale: 1.04;
+    }
+}
+
+.like {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: #ffffff;
+    color: $black;
+    cursor: pointer;
+    transition: background-color 0.3s ease, scale 0.4s $land;
+
+    svg {
+        width: 20px;
+        height: 20px;
+        fill: transparent;
+        transition: fill 0.3s ease;
+    }
+
+    &:hover,
+    &:focus-visible {
+        background: $yellow;
+        scale: 1.12;
+    }
+
+    &:active {
+        scale: 0.88;
+    }
+
+    &[aria-pressed="true"] {
+        color: $pink;
+
+        svg {
+            fill: currentColor;
+        }
+    }
+
+    &:focus-visible {
+        outline: 3px solid $pink;
+        outline-offset: 2px;
+    }
+}
+
+.quick {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+    background: rgba(#ffffff, 0.92);
+    font-family: $mono;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-transform: uppercase;
+    translate: 0 100%;
+    transition: translate 0.5s $ease;
+
+    .card:hover &,
+    .card:focus-within & {
+        translate: 0 0;
+    }
+}
+
+.cardBody {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px 12px;
+    padding: 18px 18px 18px;
+
+    h3 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 17px;
+        line-height: 1.3;
+        text-transform: none;
+    }
+}
+
+.price {
+    margin: 0;
+    font-weight: 600;
+    font-size: 17px;
+}
+
+.swatches {
+    @extend %mono;
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-size: 11px;
+    color: rgba($black, 0.7);
+
+    i {
+        width: 12px;
+        height: 12px;
+        border: 1px solid rgba($black, 0.25);
+        border-radius: 50%;
+    }
+
+    i:last-of-type {
+        margin-right: 6px;
+    }
+}
+
+.bag {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 50px;
+    margin-top: 10px;
+    border: 2px solid $black;
+    border-radius: 99px;
+    background: #ffffff;
+    color: $black;
+    font: 600 15px $display;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, scale 0.3s $land, translate 0.4s $ease;
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .card:hover &,
+    &:focus-visible {
+        background: $black;
+        color: #ffffff;
+    }
+
+    &:hover {
+        translate: 0 -2px;
+
+        svg {
+            rotate: -12deg;
+        }
+    }
+
+    svg {
+        transition: rotate 0.4s $land;
+    }
+
+    &:active {
+        scale: 0.96;
+    }
+
+    &[aria-pressed="true"] {
+        border-color: $black;
+        background: $yellow;
+        color: $black;
+    }
+
+    &:focus-visible {
+        outline: 3px solid $pink;
+        outline-offset: 3px;
+    }
+}
+
+.trickNote {
+    @extend %mono;
+    align-self: center;
+    max-width: 260px;
+    margin: 0;
+    color: var(--label);
+
+    span {
+        display: block;
+        margin-top: 8px;
+        color: $yellow;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        display: none;
+    }
+}
+
+// ── 07 · switch stance ───────────────────────────────────────────────────────
+// A 1760 × 860 stage (Figma): browser, iPad and phone. Narrow: browser on top,
+// iPad and phone side by side.
+.trio {
+    position: relative;
+    aspect-ratio: 1760 / 860;
+    margin-top: clamp(48px, 5.4vw, 100px);
+
+    figure {
+        position: absolute;
+        margin: 0;
+    }
+
+    figcaption {
+        @extend %mono;
+        margin-top: 14px;
+        color: var(--label);
+    }
+
+    @media (max-width: $breakpoint-md) {
+        display: grid;
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+        align-items: end;
+        gap: 28px 16px;
+        aspect-ratio: auto;
+
+        figure {
+            position: static;
+        }
+    }
+}
+
+.trioDesktop {
+    top: 4%;
+    left: 0;
+    width: 64%;
+
+    .screen {
+        aspect-ratio: 1126 / 631;
+        overflow: hidden;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        grid-column: 1 / -1;
+        width: auto;
+    }
+}
+
+.trioTablet {
+    top: 14%;
+    left: 58%;
+    width: 25%;
+    z-index: 1;
+
+    @media (max-width: $breakpoint-md) {
+        width: auto;
+    }
+}
+
+.trioPhone {
+    top: 21.6%;
+    left: 85%;
+    width: 14.5%;
+    z-index: 2;
+
+    @media (max-width: $breakpoint-md) {
+        width: auto;
+    }
+
+    .phoneFrame {
+        aspect-ratio: 239 / 516;
+    }
+}
+
+.tabletFrame {
+    overflow: hidden;
+    border: clamp(6px, 0.85vw, 15px) solid $black;
+    border-radius: clamp(16px, 1.8vw, 32px);
+    background: #ffffff;
+    box-shadow: 0 40px 80px -40px rgba($black, 0.7);
+
+    .deviceScreen {
+        aspect-ratio: 410 / 568;
+    }
+}
+
+.deviceScreen {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: initial;
+    }
+}
+
+// ── 08 · thumb first ─────────────────────────────────────────────────────────
+.thumbBand {
+    padding-inline: 0;
+
+    > .wrap {
+        width: auto;
+        margin-inline: var(--gutter);
+    }
+}
+
+.phones {
+    display: flex;
+    justify-content: center;
+    gap: clamp(14px, 2vw, 40px);
+    margin: clamp(64px, 7vw, 130px) 0 0;
+    padding: 24px var(--gutter) 0;
+    list-style: none;
+
+    &:focus-visible {
+        outline: 3px solid $pink;
+        outline-offset: 6px;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        justify-content: flex-start;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: var(--gutter);
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+}
+
+.phoneItem {
+    flex: 0 1 clamp(150px, 16vw, 290px);
+
+    &:nth-child(even) {
+        margin-top: clamp(28px, 4vw, 76px);
+    }
+
+    figure {
+        position: relative;
+        margin: 0;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        flex: 0 0 62vw;
+        scroll-snap-align: start;
+
+        &:nth-child(even) {
+            margin-top: 0;
+        }
+    }
+}
+
+.phoneLabel {
+    position: absolute;
+    z-index: 2;
+    top: -16px;
+    left: -6px;
+    font-family: $mono;
+    font-style: normal;
+    font-weight: 700;
+    font-size: clamp(10px, 0.75vw, 13px);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    rotate: -3deg;
+
+    .phoneItem:nth-child(even) & {
+        rotate: 2deg;
+    }
+}
+
+.swipeHint {
+    @extend %mono;
+    display: none;
+    margin: 18px 0 0;
+    color: var(--label);
+
+    @media (max-width: $breakpoint-md) {
+        display: block;
+    }
+}
+
+// ── 09 · result ──────────────────────────────────────────────────────────────
+.points {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(24px, 3vw, 64px);
+    margin: clamp(48px, 5.4vw, 100px) 0 0;
+    padding: 0;
+    list-style: none;
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    li {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 18px;
+        border-top: 2px solid var(--ink);
+    }
+
+    span {
+        @extend %mono;
+        color: var(--label);
+    }
+
+    h3 {
+        @extend %shout;
+        margin: 0;
+        font-size: clamp(24px, 2.2vw, 38px);
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+    }
+
+    p {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--muted);
+    }
+}
+
+// ── What next (yellow) ───────────────────────────────────────────────────────
+.closingTitle {
+    @extend %shout;
+    max-width: 1500px;
+    margin: 0;
+    font-size: clamp(48px, 7.6vw, 150px);
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+}
+
+.closingRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    margin-top: clamp(40px, 4.4vw, 80px);
+}
+
+.closingActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+}
+
+.button {
+    @extend %shout;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    height: 64px;
+    padding: 0 26px 0 30px;
+    border-radius: 99px;
+    background: $black;
+    color: $yellow;
+    font-size: 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease, translate 0.5s $ease;
+
+    svg {
+        width: 20px;
+        height: 20px;
+        transition: translate 0.5s $ease, rotate 0.5s $ease;
+    }
+
+    &:hover,
+    &:focus-visible {
+        background: #ffffff;
+        color: $black;
+        translate: 0 -3px;
+
+        svg {
+            rotate: 45deg;
+        }
+    }
+
+    &:active {
+        translate: 0 0;
+    }
+
+    &:focus-visible {
+        outline: 3px solid $black;
+        outline-offset: 4px;
+    }
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    a {
+        display: inline-flex;
+        align-items: center;
+        height: 52px;
+        padding: 0 22px;
+        border: 2px solid $black;
+        border-radius: 99px;
+        color: $black;
+        font-weight: 500;
+        font-size: 15px;
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease, translate 0.5s $ease;
+
+        &:hover,
+        &:focus-visible {
+            background: $black;
+            color: $yellow;
+            translate: 0 -2px;
+        }
+
+        &:focus-visible {
+            outline: 3px solid $black;
+            outline-offset: 3px;
+        }
+    }
+}
+
+.closingSticker {
+    font-size: clamp(20px, 1.8vw, 30px);
+    rotate: -6deg;
+}
+
+// ── Next case study (black) ──────────────────────────────────────────────────
+.next {
+    padding-block: clamp(56px, 6vw, 110px);
+}
+
+.nextLink {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 10px 24px;
+    color: #ffffff;
+    text-decoration: none;
+
+    &:focus-visible {
+        outline: 3px solid $yellow;
+        outline-offset: 8px;
+    }
+}
+
+.nextLabel {
+    @extend %mono;
+    grid-column: 1 / -1;
+    color: $yellow;
+}
+
+.nextTitle {
+    @extend %shout;
+    justify-self: start;
+    padding: 0 0.1em;
+    font-size: clamp(40px, 6vw, 116px);
+    line-height: 1;
+    letter-spacing: -0.045em;
+    // The highlight sweeps in on hover.
+    background: linear-gradient($yellow, $yellow) no-repeat 0 100% / 0% 100%;
+    transition: background-size 0.6s $ease, color 0.3s ease;
+
+    .nextLink:hover &,
+    .nextLink:focus-visible & {
+        background-size: 100% 100%;
+        color: $black;
+    }
+}
+
+.nextIcon {
+    display: grid;
+    place-items: center;
+    width: clamp(56px, 5vw, 88px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: $yellow;
+    color: $black;
+    transition: rotate 0.6s $ease, scale 0.5s $land;
+
+    svg {
+        width: 40%;
+        height: 40%;
+    }
+
+    .nextLink:hover & {
+        rotate: 45deg;
+        scale: 1.08;
+    }
+}
+
+// ── The deck ─────────────────────────────────────────────────────────────────
+// A maple skateboard on the right edge. Grip tape fills it from the nose as you
+// read, and each chapter slaps its sticker on. MbMotion puts [data-on] on the
+// stickers; the grip's scale is set directly.
+.deckTrack {
+    position: absolute;
+    top: 0;
+    right: max(8px, calc(var(--gutter) * 0.28 - 14px));
+    bottom: 0;
+    z-index: 20;
+    width: 28px;
+    pointer-events: none;
+
+    @media (max-width: $breakpoint-md) {
+        right: 4px;
+        width: 13px;
+    }
+}
+
+.deck {
+    position: sticky;
+    top: calc(50vh - 150px);
+    top: calc(50svh - 150px);
+    width: 28px;
+    height: 300px;
+    overflow: hidden;
+    border: 2px solid $black;
+    border-radius: 14px;
+    background: $maple;
+    box-shadow: 0 0 0 2px #ffffff;
+
+    @media (max-width: $breakpoint-md) {
+        top: calc(50svh - 90px);
+        width: 13px;
+        height: 180px;
+        border-width: 1.5px;
+        border-radius: 7px;
+        box-shadow: 0 0 0 1.5px #ffffff;
+    }
+}
+
+.deckGrip {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(rgba(#ffffff, 0.12) 1px, transparent 1.2px) 0 0 / 4px 4px, #1b1b1b;
+    transform: scaleY(0);
+    transform-origin: top;
+}
+
+.deckBolt {
+    position: absolute;
+    left: 50%;
+    width: 10px;
+    height: 4px;
+    translate: -50% 0;
+    border-radius: 2px;
+    background: repeating-linear-gradient(90deg, #c9c9c9 0 2px, transparent 2px 6px);
+    top: 14%;
+
+    & + & {
+        top: auto;
+        bottom: 14%;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        width: 6px;
+        height: 3px;
+    }
+}
+
+.deckSticker {
+    position: absolute;
+    top: var(--sy);
+    left: var(--sx);
+    width: 46%;
+    height: 7%;
+    border: 1px solid $black;
+    border-radius: 2px;
+    background: var(--c);
+    rotate: var(--sr);
+    scale: 0;
+    transition: scale 0.5s $land;
+
+    &[data-on] {
+        scale: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .deckSticker,
+    .polaroid,
+    .colourTape,
+    .card,
+    .pin,
+    .note,
+    .nextTitle,
+    .nextIcon {
+        transition: none;
+    }
+}

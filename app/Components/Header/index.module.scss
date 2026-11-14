@@ -255,6 +255,10 @@ $logo-mark-width: 64px;
     cursor: pointer;
     transition: background-color 0.25s ease;
 
+    svg {
+        transition: translate 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
     span {
         font-family: var(--font-sans);
         font-weight: var(--fw-medium);
@@ -264,6 +268,12 @@ $logo-mark-width: 64px;
 
     &:hover {
         background-color: var(--bg-glass-strong);
+    }
+
+    // The arrow leans the way the button goes.
+    &:hover svg,
+    &:focus-visible svg {
+        translate: -4px 0;
     }
 }
 

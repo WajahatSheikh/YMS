@@ -14,8 +14,10 @@ const apply = (theme: Theme) => {
     const root = document.documentElement;
     root.dataset.theme = theme;
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", THEME_COLOR[theme]);
+    // sessionStorage, not localStorage: the choice lasts for this visit (every
+    // page in this tab), and the next visit opens in the light default again.
     try {
-        localStorage.setItem(THEME_STORAGE_KEY, theme);
+        sessionStorage.setItem(THEME_STORAGE_KEY, theme);
     } catch {
         // Private mode or storage blocked: the switch still works for this visit.
     }

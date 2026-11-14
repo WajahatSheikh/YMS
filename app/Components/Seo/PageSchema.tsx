@@ -18,11 +18,13 @@ interface PageSchemaProps {
     /** Trail after "Home", ending with this page. */
     crumbs: Crumb[];
     /** Must be exactly the FAQs visible on the page. */
-    faqs?: Faq[];
+    faqs?: readonly Pick<Faq, "question" | "answer">[];
     service?: { name: string; description: string; serviceType: string };
+    /** Further nodes for the page's @graph, e.g. the Article of a case study. */
+    extra?: Record<string, unknown>[];
 }
 
-export default function PageSchema({ path, title, description, crumbs, faqs, service }: PageSchemaProps) {
+export default function PageSchema({ path, title, description, crumbs, faqs, service, extra }: PageSchemaProps) {
     const url = absoluteUrl(path);
     const org = `${SITE.url}/#organization`;
     const trail: Crumb[] = [{ name: "Home", path: "/" }, ...crumbs];
@@ -75,6 +77,8 @@ export default function PageSchema({ path, title, description, crumbs, faqs, ser
             }))
         });
     }
+
+    if (extra) graph.push(...extra);
 
     // `<` is escaped so no string in the data can ever close the script tag.
     const json = JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c");

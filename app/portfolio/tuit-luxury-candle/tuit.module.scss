@@ -1,0 +1,1349 @@
+@import "../../styles/abstract/variables";
+
+// Tüit case study ("Slow burn"). See page.tsx for the concept.
+//
+// The page is an island: Tüit's palette and display faces, the same in the
+// site's light and dark themes. Layout still runs on the site's gutter and
+// spacing tokens, and body/labels use the site's Geist and Geist Mono.
+//
+// Each band sets --ground / --ink / --muted / --line through [data-ground];
+// everything inside reads those, so a band can change ground without touching
+// its contents. Motion-only states hang off `[data-motion]`, which
+// TuitMotion.tsx sets on <main>; without it every block is in its final state.
+
+$linen: #ede8e1;
+$sand: #e2dac9;
+$forest: #122b23;
+$taupe: #5e5a54;
+$ember: #ffbf1e;
+$ember-text: #ffd468; // ember for small text on dark grounds (AA)
+$plate: #ece8e3; // the mock-up images' own backdrop
+$ease: cubic-bezier(0.16, 1, 0.3, 1);
+$wick-inset: 44px; // how far the wick's flame stays from the top and bottom edges
+
+$display: var(--font-italiana), "Times New Roman", serif;
+$italic: var(--font-cormorant), Georgia, serif;
+
+// Text links: a faint rule at rest; on hover or focus a solid one is drawn over
+// it from the left. `$lift` raises the rule off the bottom of padded links.
+@mixin drawn-link($lift: 0px) {
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor), linear-gradient(var(--line), var(--line));
+    background-repeat: no-repeat;
+    background-position: 0 calc(100% - #{$lift});
+    background-size: 0% 1px, 100% 1px;
+    transition: background-size 0.6s $ease, color 0.25s ease;
+}
+
+.page {
+    position: relative;
+    // Slide under the fixed site header, so the first ground reaches the top.
+    margin-top: calc(-1 * var(--navbar-height));
+    overflow-x: clip;
+    background: $linen;
+    color: $forest;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+}
+
+// ── Grounds ──────────────────────────────────────────────────────────────────
+.page [data-ground] {
+    background: var(--ground);
+    color: var(--ink);
+}
+
+.page [data-ground="linen"] {
+    --ground: #{$linen};
+    --ink: #{$forest};
+    --muted: #{rgba($forest, 0.74)};
+    --line: #{rgba($forest, 0.3)};
+    --label: #{rgba($forest, 0.74)};
+}
+
+.page [data-ground="sand"] {
+    --ground: #{$sand};
+    --ink: #{$forest};
+    --muted: #{rgba($forest, 0.76)};
+    --line: #{rgba($forest, 0.3)};
+    --label: #{rgba($forest, 0.76)};
+}
+
+.page [data-ground="taupe"] {
+    --ground: #{$taupe};
+    --ink: #{$linen};
+    --muted: #{rgba($linen, 0.84)};
+    --line: #{rgba($linen, 0.34)};
+    --label: #{rgba($linen, 0.84)};
+}
+
+.page [data-ground="ink"] {
+    --ground: #{$forest};
+    --ink: #{$sand};
+    --muted: #{rgba($sand, 0.8)};
+    --line: #{rgba($sand, 0.3)};
+    --label: #{rgba($sand, 0.8)};
+}
+
+.page [data-ground="black"] {
+    --ground: #000000;
+    --ink: #{$linen};
+    --muted: #{rgba($linen, 0.76)};
+    --line: #{rgba($linen, 0.26)};
+    --label: #{rgba($linen, 0.76)};
+}
+
+// ── Shared pieces ────────────────────────────────────────────────────────────
+// `min-height: 0` and friends undo the global `section` rule (globals.scss),
+// which makes every section a full, centred screen.
+.band {
+    display: block;
+    min-height: 0;
+    padding: clamp(72px, 9vw, 168px) var(--gutter);
+}
+
+.wrap {
+    width: 100%;
+    max-width: 1680px;
+    margin-inline: auto;
+}
+
+%mono {
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+// A small flame between the chapter number and its name.
+.ember {
+    display: inline-block;
+    width: 6px;
+    height: 10px;
+    border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+    background: $ember;
+    box-shadow: 0 0 10px 1px rgba($ember, 0.55);
+}
+
+.chapterHead {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(14px, 1.4vw, 24px);
+    max-width: 1500px;
+}
+
+.chapterNo {
+    @extend %mono;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    color: var(--label);
+}
+
+.chapterTitle {
+    margin: 0;
+    font-family: $display;
+    font-weight: 400;
+    font-size: clamp(36px, 4.3vw, 84px);
+    line-height: 1.04;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--ink);
+}
+
+.chapterSub {
+    margin: 0;
+    font-family: $italic;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(20px, 1.5vw, 28px);
+    line-height: 1.35;
+    color: var(--muted);
+}
+
+// ── Cover ────────────────────────────────────────────────────────────────────
+.hero {
+    padding-top: calc(var(--navbar-height) + clamp(20px, 3vw, 56px));
+    padding-bottom: clamp(48px, 6vw, 104px);
+}
+
+.metaBar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+}
+
+.crumbs {
+    @extend %mono;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--label);
+
+    li + li::before {
+        content: "/";
+        margin-right: 10px;
+    }
+
+    a {
+        display: inline-block;
+        padding-block: 8px;
+        margin-block: -8px;
+        color: inherit;
+        @include drawn-link(5px);
+
+        &:hover,
+        &:focus-visible {
+            background-size: 100% 1px, 100% 1px;
+        }
+    }
+}
+
+.kicker {
+    @extend %mono;
+    margin: 0;
+    color: var(--label);
+}
+
+.title {
+    margin: clamp(28px, 4vw, 72px) 0 0;
+    font-family: $display;
+    font-weight: 400;
+    font-size: clamp(52px, 12.4vw, 238px);
+    line-height: 0.94;
+    letter-spacing: -0.005em;
+    text-transform: uppercase;
+    color: var(--ink);
+}
+
+// Each line rises out of its own mask, like wax settling.
+.titleLine {
+    display: block;
+    overflow: hidden;
+    // Room for the descender-less caps' top serifs inside the mask.
+    padding-top: 0.04em;
+
+    > span {
+        display: block;
+    }
+}
+
+.titleFor {
+    display: block;
+    margin-top: 0.5em;
+    font-family: $italic;
+    font-style: italic;
+    font-size: clamp(22px, 2.5vw, 48px);
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--muted);
+}
+
+.introRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(32px, 6vw, 140px);
+    margin-top: clamp(36px, 4.5vw, 84px);
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.introCol {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 900px;
+}
+
+.intro {
+    margin: 0;
+    font-size: clamp(19px, 1.5vw, 29px);
+    line-height: 1.45;
+    color: var(--ink);
+}
+
+.byline {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+
+    a {
+        color: var(--ink);
+        padding-block: 4px; // 27px tap target; inline, so the line box is unchanged
+        @include drawn-link(2px);
+
+        &:hover,
+        &:focus-visible {
+            background-size: 100% 1px, 100% 1px;
+        }
+    }
+}
+
+.meta {
+    margin: 0;
+
+    > div {
+        display: grid;
+        grid-template-columns: minmax(96px, 0.3fr) minmax(0, 1fr);
+        gap: 16px;
+        padding: 14px 0;
+        border-top: 1px solid var(--line);
+    }
+
+    dt {
+        @extend %mono;
+        color: var(--label);
+    }
+
+    dd {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.5;
+        color: var(--ink);
+    }
+}
+
+// Hero entrance, in CSS so it paints before any script loads.
+@media (prefers-reduced-motion: no-preference) {
+    @keyframes tuitLine {
+        from {
+            translate: 0 108%;
+        }
+        to {
+            translate: 0 0;
+        }
+    }
+
+    @keyframes tuitFade {
+        from {
+            opacity: 0;
+            translate: 0 18px;
+        }
+        to {
+            opacity: 1;
+            translate: 0 0;
+        }
+    }
+
+    .titleLine > span {
+        animation: tuitLine 1.5s $ease both;
+        animation-delay: calc(0.15s + var(--l, 0) * 0.14s);
+    }
+
+    .metaBar,
+    .titleFor,
+    .introRow {
+        animation: tuitFade 1.2s $ease both;
+    }
+
+    .metaBar {
+        animation-delay: 0.05s;
+    }
+
+    .titleFor {
+        animation-delay: 0.6s;
+    }
+
+    .introRow {
+        animation-delay: 0.75s;
+    }
+
+    // On a phone the intro paragraph is the largest thing on the first screen
+    // (the LCP element): it is there from the first paint, not faded in late.
+    @media (max-width: $breakpoint-md) {
+        .titleFor {
+            animation-delay: 0.3s;
+        }
+
+        .introRow {
+            animation: none;
+        }
+    }
+}
+
+// ── Full-bleed renders (parallax) ────────────────────────────────────────────
+// The image is taller than its frame and centred, so it can drift ±9% of the
+// frame without showing an edge. Without motion it simply sits centred.
+.render {
+    position: relative;
+    height: clamp(300px, 62vw, 94vh);
+    margin: 0;
+    overflow: hidden;
+
+    img {
+        position: absolute;
+        top: -9%;
+        left: 0;
+        width: 100%;
+        height: 118%;
+        object-fit: cover;
+    }
+}
+
+// ── No. 1 · brief ────────────────────────────────────────────────────────────
+.columns {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(28px, 2.6vw, 48px);
+    margin-top: clamp(40px, 4.4vw, 80px);
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+
+    h3 {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+        margin: 0;
+        font-family: var(--font-sans);
+        font-weight: 500;
+        font-size: clamp(20px, 1.35vw, 25px);
+        line-height: 1.3;
+        letter-spacing: -0.005em;
+        color: var(--ink);
+    }
+
+    p {
+        margin: 0;
+        font-size: clamp(16px, 1vw, 18px);
+        line-height: 1.65;
+        color: var(--muted);
+    }
+}
+
+.px {
+    @extend %mono;
+    color: $ember-text;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 28px 24px;
+    margin: clamp(48px, 5vw, 88px) 0 0;
+    padding-top: clamp(28px, 3vw, 48px);
+    border-top: 1px solid var(--line);
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    > div {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 6px;
+    }
+
+    dt {
+        @extend %mono;
+        color: var(--label);
+    }
+
+    dd {
+        margin: 0;
+        // Italic serif, not the display face: Italiana's 1 reads as a capital I.
+        font-family: $italic;
+        font-style: italic;
+        font-weight: 400;
+        font-size: clamp(52px, 4.8vw, 88px);
+        line-height: 1;
+        font-variant-numeric: lining-nums;
+        color: var(--ink);
+    }
+}
+
+// ── No. 2 · concept ──────────────────────────────────────────────────────────
+.notes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: clamp(24px, 2.6vw, 48px);
+    margin: clamp(44px, 5vw, 96px) 0 0;
+    padding: 0;
+    list-style: none;
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 56px;
+    }
+}
+
+.note {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(14px, 1.3vw, 24px);
+
+    // The heart note sits lower, like the middle of a chord.
+    &:nth-child(2) {
+        margin-top: clamp(0px, 3.8vw, 72px);
+
+        @media (max-width: $breakpoint-md) {
+            margin-top: 0;
+        }
+    }
+}
+
+.arch {
+    position: relative;
+    aspect-ratio: 5 / 6;
+    overflow: hidden;
+    border-radius: 999px 999px 8px 8px;
+    background: rgba($sand, 0.08);
+
+    img {
+        position: absolute;
+        top: -8%;
+        left: 0;
+        width: 100%;
+        height: 116%;
+        object-fit: cover;
+        transition: scale 1.4s $ease;
+    }
+
+    .note:hover & img {
+        scale: 1.04;
+    }
+}
+
+.noteLabel {
+    @extend %mono;
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    color: var(--label);
+}
+
+.noteName {
+    margin: 0;
+    font-family: $display;
+    font-weight: 400;
+    font-size: clamp(48px, 4.2vw, 80px);
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--ink);
+}
+
+.noteText {
+    margin: 0;
+    font-size: clamp(16px, 1vw, 19px);
+    line-height: 1.65;
+    color: var(--muted);
+}
+
+// ── No. 3 · the page ─────────────────────────────────────────────────────────
+// Default (no script / reduced motion): the window is a plain scroll area.
+.pageGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: center;
+    gap: clamp(28px, 5vw, 110px);
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 28px;
+    }
+}
+
+.pageCopy {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(24px, 3vw, 56px);
+}
+
+.acts {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid var(--line);
+
+    @media (max-width: $breakpoint-lg) {
+        flex-direction: row;
+        border-bottom: 0;
+        gap: 16px;
+    }
+}
+
+.act {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    column-gap: 16px;
+    row-gap: 4px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    transition: opacity 0.6s ease;
+
+    @media (max-width: $breakpoint-lg) {
+        flex: 1;
+        grid-template-columns: minmax(0, 1fr);
+        padding: 10px 0 0;
+    }
+}
+
+.actRange {
+    @extend %mono;
+    padding-top: 0.5em;
+    white-space: nowrap;
+    color: var(--label);
+
+    @media (max-width: $breakpoint-lg) {
+        padding-top: 0;
+        font-size: 11px;
+    }
+}
+
+.actName {
+    font-family: $display;
+    font-size: clamp(22px, 2.3vw, 42px);
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--ink);
+}
+
+.actText {
+    grid-column: 2;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--muted);
+
+    @media (max-width: $breakpoint-lg) {
+        display: none;
+    }
+}
+
+.window {
+    position: relative;
+    max-height: 78vh;
+    overflow-y: auto;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 40px 90px -50px rgba($forest, 0.55);
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $forest;
+        outline-offset: 4px;
+    }
+}
+
+// With motion: the band becomes a long track, the stage pins, and the scroll
+// position moves the page through the window (TuitMotion sets the transform).
+.page[data-motion] {
+    .pageBand {
+        height: 340vh;
+        padding-block: 0;
+    }
+
+    .pageStage {
+        position: sticky;
+        top: 0;
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        height: 100svh;
+    }
+
+    .window {
+        height: min(76vh, 780px);
+        max-height: none;
+        overflow: hidden;
+
+        @media (max-width: $breakpoint-lg) {
+            height: 52svh;
+        }
+    }
+
+    .act {
+        opacity: 0.38;
+
+        &[data-on] {
+            opacity: 1;
+        }
+    }
+
+    @media (max-width: $breakpoint-lg) {
+        .pageGrid {
+            padding-top: var(--navbar-height);
+        }
+
+        .pageCopy {
+            gap: 18px;
+        }
+    }
+}
+
+// ── No. 4 · the system ───────────────────────────────────────────────────────
+.jars {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: end;
+    gap: clamp(14px, 1.6vw, 30px);
+    margin: clamp(56px, 6vw, 112px) 0 0;
+    padding: 0;
+    list-style: none;
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        row-gap: 56px;
+    }
+}
+
+.jarItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+// A candle jar poured in one colour: outline, wick, flame.
+.jar {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 5 / 6;
+    margin-bottom: clamp(14px, 1.4vw, 24px);
+    border: 1px solid $forest;
+    border-radius: clamp(18px, 1.8vw, 30px);
+    background: var(--wax);
+    color: $forest;
+    box-shadow: 0 26px 30px -26px rgba($forest, 0.4);
+    transition: translate 0.7s $ease, box-shadow 0.7s $ease;
+
+    // Every other jar is poured a little taller.
+    .jarItem:nth-child(even) & {
+        aspect-ratio: 5 / 6.9;
+    }
+
+    .jarItem:hover & {
+        translate: 0 -8px;
+        box-shadow: 0 34px 34px -26px rgba($forest, 0.45);
+    }
+}
+
+.jarDark {
+    color: $linen;
+}
+
+.jarWick {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    width: 1px;
+    height: 12px;
+    background: $forest;
+}
+
+.jarFlame {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    width: 9px;
+    height: 16px;
+    margin-left: -4.5px;
+    border-radius: 50% 50% 50% 50% / 64% 64% 36% 36%;
+    background: $ember;
+    box-shadow: 0 0 14px 3px rgba($ember, 0.6);
+    transform-origin: 50% 100%;
+    transition: scale 0.7s $ease;
+
+    .jarItem:hover & {
+        scale: 1.45;
+    }
+}
+
+.jarHex {
+    @extend %mono;
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    font-size: 12px;
+
+    @media (max-width: $breakpoint-md) {
+        bottom: 10px;
+        left: 10px;
+        font-size: 10px;
+    }
+}
+
+.jarName {
+    margin: 0;
+    font-family: $display;
+    font-size: clamp(20px, 1.7vw, 32px);
+    line-height: 1.15;
+    text-transform: uppercase;
+    color: var(--ink);
+
+    // Three jars across on a phone: keep "Forest wick" on one line.
+    @media (max-width: 480px) {
+        font-size: 16px;
+    }
+}
+
+.jarToken {
+    margin: 4px 0 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--muted);
+}
+
+.jarUse {
+    margin: 2px 0 0;
+    font-family: $italic;
+    font-style: italic;
+    font-size: clamp(16px, 1.1vw, 20px);
+    line-height: 1.4;
+    color: var(--muted);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    // Flames never sit perfectly still.
+    @keyframes tuitFlicker {
+        0%,
+        100% {
+            transform: scale(1, 1) rotate(-1.5deg);
+        }
+        30% {
+            transform: scale(0.94, 1.08) rotate(2deg);
+        }
+        55% {
+            transform: scale(1.05, 0.95) rotate(-2.5deg);
+        }
+        80% {
+            transform: scale(0.97, 1.05) rotate(1deg);
+        }
+    }
+
+    .jarFlame,
+    .wickFlame {
+        animation: tuitFlicker 2.6s ease-in-out infinite;
+        animation-delay: calc(var(--i, 0) * -0.43s);
+    }
+}
+
+.kit {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, 1.6vw, 28px);
+    margin: clamp(56px, 6vw, 112px) 0 0;
+    padding: clamp(18px, 2.4vw, 44px);
+    border: 1px solid var(--line);
+    border-radius: clamp(16px, 1.6vw, 28px);
+    background: $plate;
+
+    figcaption {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+}
+
+.kitTitle {
+    font-weight: 500;
+    font-size: clamp(20px, 1.35vw, 25px);
+    color: var(--ink);
+}
+
+.kitCount {
+    @extend %mono;
+    color: var(--label);
+}
+
+// ── No. 5 · the screens ──────────────────────────────────────────────────────
+.plate {
+    margin: clamp(40px, 4.4vw, 80px) 0 0;
+    overflow: hidden;
+    border-radius: clamp(16px, 1.6vw, 28px);
+    background: $plate;
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+}
+
+// ── No. 6 · in the hand ──────────────────────────────────────────────────────
+.strip {
+    margin: clamp(36px, 4vw, 72px) calc(-1 * var(--gutter)) 0;
+    overflow: hidden;
+
+    // The screens carry their own captions and bottom air: pull the next rule up.
+    @media (min-width: 768px) {
+        margin-bottom: calc(-1 * clamp(24px, 4vw, 72px));
+    }
+
+    img {
+        display: block;
+        width: 106%;
+        max-width: none;
+        height: auto;
+        margin-left: -3%;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $ember;
+        outline-offset: -2px;
+    }
+
+    // Phones are too small at phone width, so the strip becomes a swipe row.
+    @media (max-width: $breakpoint-md) {
+        overflow-x: auto;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        img {
+            width: auto;
+            height: 440px;
+            margin-left: 0;
+        }
+    }
+}
+
+.swipeHint {
+    @extend %mono;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0 0;
+    color: var(--label);
+
+    svg {
+        width: 16px;
+        height: 16px;
+        color: $ember-text;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        display: flex;
+    }
+}
+
+// ── No. 7 · the result ───────────────────────────────────────────────────────
+.resultBand {
+    padding-top: 0;
+
+    > .wrap {
+        padding-top: clamp(72px, 9vw, 168px);
+        border-top: 1px solid var(--line);
+    }
+}
+
+.resultRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(40px, 6vw, 120px);
+    margin-top: clamp(40px, 4.4vw, 80px);
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.points {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid var(--line);
+
+    li {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 26px 0;
+        border-top: 1px solid var(--line);
+    }
+
+    h3 {
+        margin: 0;
+        font-family: var(--font-sans);
+        font-weight: 500;
+        font-size: clamp(20px, 1.35vw, 25px);
+        line-height: 1.3;
+        color: var(--ink);
+    }
+
+    p {
+        margin: 0;
+        font-size: clamp(16px, 1vw, 18px);
+        line-height: 1.65;
+        color: var(--muted);
+    }
+}
+
+.quote {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin: 0;
+    padding-top: 12px;
+
+    blockquote {
+        margin: 0;
+    }
+
+    p {
+        margin: 0;
+        font-family: $italic;
+        font-style: italic;
+        font-weight: 400;
+        font-size: clamp(30px, 2.9vw, 54px);
+        line-height: 1.28;
+        color: var(--ink);
+    }
+
+    figcaption a {
+        @extend %mono;
+        display: inline-block;
+        padding-block: 6px;
+        color: var(--label);
+        @include drawn-link(3px);
+
+        &:hover,
+        &:focus-visible {
+            color: var(--ink);
+            background-size: 100% 1px, 100% 1px;
+        }
+    }
+}
+
+// ── Questions + closing ──────────────────────────────────────────────────────
+.faqTitle {
+    margin: 0;
+    font-family: $italic;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(26px, 2.2vw, 40px);
+    line-height: 1.2;
+    color: var(--ink);
+}
+
+.faq {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(28px, 2.6vw, 48px);
+    margin-top: clamp(28px, 3vw, 56px);
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.faqItem {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+
+    h3 {
+        margin: 0;
+        font-family: var(--font-sans);
+        font-weight: 500;
+        font-size: clamp(19px, 1.25vw, 23px);
+        line-height: 1.35;
+        letter-spacing: -0.005em;
+        color: var(--ink);
+    }
+
+    p {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.7;
+        color: var(--muted);
+    }
+}
+
+.closing {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: end;
+    gap: clamp(36px, 6vw, 120px);
+    margin-top: clamp(80px, 9vw, 168px);
+    padding-top: clamp(40px, 4.4vw, 80px);
+    border-top: 1px solid var(--line);
+
+    @media (max-width: $breakpoint-lg) {
+        grid-template-columns: minmax(0, 1fr);
+        align-items: start;
+    }
+}
+
+.closingTitle {
+    margin: 0;
+    font-family: $display;
+    font-weight: 400;
+    font-size: clamp(40px, 5.6vw, 108px);
+    line-height: 1;
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--ink);
+}
+
+.closingSide {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+
+    > p {
+        margin: 0;
+        font-size: clamp(17px, 1.2vw, 21px);
+        line-height: 1.55;
+        color: var(--muted);
+    }
+}
+
+.closingActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 18px 32px;
+}
+
+// Tüit's own button: a pill with an arrow in a circle. On hover the circle
+// slides forward and a second arrow rises into it.
+.button {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    height: 60px;
+    padding: 0 8px 0 30px;
+    border-radius: 999px;
+    background: $linen;
+    color: $forest;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 17px;
+    text-decoration: none;
+    transition: background-color 0.5s $ease, padding 0.5s $ease;
+
+    i {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        overflow: hidden;
+        border-radius: 50%;
+        background: $forest;
+        color: $linen;
+        transition: background-color 0.5s $ease, color 0.5s $ease;
+    }
+
+    svg {
+        width: 20px;
+        height: 20px;
+        transition: translate 0.5s $ease;
+    }
+
+    &:hover,
+    &:focus-visible {
+        background: $ember;
+
+        svg {
+            translate: 4px 0;
+        }
+    }
+
+    &:active i {
+        scale: 0.94;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $linen;
+        outline-offset: 4px;
+    }
+}
+
+.textLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding-block: 10px;
+    color: var(--ink);
+    font-weight: 500;
+    font-size: 17px;
+    text-decoration: underline;
+    text-decoration-color: var(--line);
+    text-underline-offset: 6px;
+    transition: text-decoration-color 0.3s ease;
+
+    span {
+        display: inline-grid;
+        transition: translate 0.5s $ease;
+    }
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    &:hover,
+    &:focus-visible {
+        text-decoration-color: currentColor;
+
+        span {
+            translate: 5px 0;
+        }
+    }
+}
+
+.related {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 24px;
+    margin: 0;
+    padding: 20px 0 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+
+    a {
+        @extend %mono;
+        display: inline-block;
+        padding-block: 8px;
+        color: var(--label);
+        @include drawn-link(5px);
+
+        &:hover,
+        &:focus-visible {
+            color: var(--ink);
+            background-size: 100% 1px, 100% 1px;
+        }
+    }
+}
+
+// ── The wick ─────────────────────────────────────────────────────────────────
+// Two full-height tracks, each holding a viewport-tall sticky layer: the line
+// (blended, so it reads on every ground) and the flame (never blended). `--burn`
+// (0 → 1, set on <main>) is how far down the page the reader is: the wick above
+// the flame is gone, what's left runs on to the bottom.
+.wickTrack {
+    position: absolute;
+    top: 0;
+    right: calc(var(--gutter) * 0.42 - 10px);
+    bottom: 0;
+    width: 20px;
+    pointer-events: none;
+    // Where the flame starts: under the top edge, or on a phone under the
+    // header's Book a call pill, which reaches almost to the wick.
+    --wick-top: #{$wick-inset};
+
+    @media (max-width: $breakpoint-md) {
+        right: 0;
+        --wick-top: 112px;
+    }
+}
+
+.wickLine,
+.wickFlameBox {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+}
+
+.wickLine {
+    mix-blend-mode: difference;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: calc(var(--wick-top) + var(--burn, 0) * (100% - var(--wick-top) - #{$wick-inset}));
+        bottom: 0;
+        left: 50%;
+        width: 1px;
+        background: rgba(255, 255, 255, 0.5);
+    }
+}
+
+.wickFlame {
+    position: absolute;
+    // Always on screen: lit just under the top edge, burnt down to just above
+    // the bottom one.
+    top: calc(var(--wick-top) + var(--burn, 0) * (100% - var(--wick-top) - #{$wick-inset}) - 16px);
+    left: 50%;
+    width: 8px;
+    height: 15px;
+    margin-left: -4px;
+    border-radius: 50% 50% 50% 50% / 64% 64% 36% 36%;
+    background: $ember;
+    box-shadow: 0 0 16px 4px rgba($ember, 0.55);
+    transform-origin: 50% 100%;
+
+    // The halo: the page's one thing that keeps moving while the reader doesn't.
+    &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 116px;
+        height: 116px;
+        margin: -58px 0 0 -58px;
+        border-radius: 50%;
+        background: radial-gradient(closest-side, rgba($ember, 0.5), rgba($ember, 0));
+        opacity: 0.55;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    @keyframes tuitHalo {
+        0%,
+        100% {
+            opacity: 0.28;
+            scale: 0.78;
+        }
+        45% {
+            opacity: 1;
+            scale: 1.12;
+        }
+        70% {
+            opacity: 0.55;
+            scale: 0.92;
+        }
+    }
+
+    .wickFlame::after {
+        animation: tuitHalo 3.4s ease-in-out infinite;
+    }
+}

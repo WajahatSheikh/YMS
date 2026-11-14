@@ -20,6 +20,8 @@ export interface IndexProject {
     category: string;
     href: string;
     image?: string;
+    /** A short muted reel for the cursor preview; `image` is its poster. */
+    video?: string;
 }
 
 const monogram = (title: string) =>
@@ -38,6 +40,27 @@ export const Thumb = ({ project, sizes }: { project: IndexProject; sizes: string
             {monogram(project.title)}
         </span>
     );
+
+// Preview reel: nothing is fetched until its row is first hovered or focused;
+// it then plays while that row is active and rewinds when the pointer leaves.
+// People who've asked for reduced motion keep the poster.
+const PreviewReel = ({ src, poster, playing }: { src: string; poster?: string; playing: boolean }) => {
+    const ref = useRef<HTMLVideoElement>(null);
+
+    useEffect(() => {
+        const video = ref.current;
+        if (!video) return;
+        if (playing && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            video.muted = true;
+            video.play().catch(() => {});
+        } else {
+            video.pause();
+            if (video.readyState > 0) video.currentTime = 0;
+        }
+    }, [playing]);
+
+    return <video ref={ref} src={src} poster={poster} width={640} height={440} muted loop playsInline preload="none" tabIndex={-1} />;
+};
 
 const ArrowIcon = () => (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -175,7 +198,11 @@ const ProjectIndex = ({ projects }: { projects: IndexProject[] }) => {
             <div ref={previewRef} className={`${style.preview} ${active !== null ? style.previewOn : ""}`} aria-hidden="true">
                 {projects.map((project, index) => (
                     <span key={project.title} className={`${style.previewItem} ${active === index ? style.previewItemOn : ""}`}>
-                        <Thumb project={project} sizes="340px" />
+                        {project.video ? (
+                            <PreviewReel src={project.video} poster={project.image} playing={active === index} />
+                        ) : (
+                            <Thumb project={project} sizes="340px" />
+                        )}
                         <span className={style.previewCaption}>{project.title}</span>
                     </span>
                 ))}
