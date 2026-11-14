@@ -1,6 +1,6 @@
 # YourMomStudio: inner pages design notes
 
-Scope: `/services`, the seven `/services/<slug>` pages, and `/compare/designme-alternative`.
+Scope: `/services` and the seven `/services/<slug>` pages. Rule: the site never names another agency or studio (no comparison pages).
 They live inside the existing site, so they reuse its tokens:
 - Stack Sans Notch display, Geist body, Geist Mono labels
 - brand orange `#e85002`, `--gradient-brand`
@@ -102,6 +102,6 @@ Genericness check: a generic build would use a centred hero, three feature cards
 
 ## Decisions recorded in QA
 
-- **Hub (`/services`) and the compare page are still at rest.** They have no week strip; their life is in the hovers (index rows draw an orange rule, the thumb grows and the arrow ships right) and the reveals. A decorative idle wobble was not added just to pass a check.
+- **The hub (`/services`) is still at rest.** It has no week strip; their life is in the hovers (index rows draw an orange rule, the thumb grows and the arrow ships right) and the reveals. A decorative idle wobble was not added just to pass a check.
 - **The hero reel only plays on screens 992px and wider, after load.** On phones the poster stays a still: the playing video's first frame became the LCP element (11.9 s on a throttled phone), and with the still it is 1.8 s.
 - **The week strip uses CSS `position: sticky` in a tall section, not a GSAP pin.** This is the same approach as the Tüit case study. The global `section` rule fought the pin spacer.

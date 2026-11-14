@@ -13,8 +13,7 @@ export const PAGE_UPDATED: Record<string, string> = {
     "/process": "2026-11-15",
     "/team": "2026-11-15",
     "/faq": "2026-11-15",
-    "/services": "2026-11-15",
-    "/compare/designme-alternative": "2026-11-15"
+    "/services": "2026-11-15"
 };
 
 /** Service pages share one date unless a page is edited on its own. */

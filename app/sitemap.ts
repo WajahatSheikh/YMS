@@ -23,7 +23,6 @@ const PAGES: { path: string; priority: number }[] = [
     { path: "/services", priority: 0.9 },
     { path: "/pricing", priority: 0.9 },
     { path: "/book-a-call", priority: 0.8 },
-    { path: "/compare/designme-alternative", priority: 0.7 },
     { path: "/process", priority: 0.7 },
     { path: "/team", priority: 0.6 },
     { path: "/faq", priority: 0.6 }

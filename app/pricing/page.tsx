@@ -61,14 +61,8 @@ export default function PricingPage() {
             />
             <LinkGrid
                 eyebrow="Before you decide"
-                title="Compare, and see what we build"
+                title="See what we design and build"
                 links={[
-                    {
-                        title: "YourMomStudio vs DesignMe",
-                        label: "Comparison",
-                        text: "Price, team, cadence and scope side by side with another design and development subscription, with sources.",
-                        href: "/compare/designme-alternative"
-                    },
                     {
                         title: "All services",
                         label: "7 services",
