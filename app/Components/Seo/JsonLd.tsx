@@ -19,7 +19,9 @@ export default function JsonLd() {
             name: SITE.name,
             alternateName: SITE.alternateNames,
             url: SITE.url,
-            logo: absoluteUrl("/assets/images/YourMomStudio.png"),
+            // The square orange mark (same as the favicon), which reads at every
+            // size Google shows a brand logo; the wide wordmark did not.
+            logo: absoluteUrl("/icons/icon-512.png"),
             email: SITE.email,
             description: SITE.description,
             ...(sameAs.length ? { sameAs } : {}),
