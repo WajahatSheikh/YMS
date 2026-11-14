@@ -16,6 +16,7 @@ const CASE_STUDIES = [GME, MB, TUIT, NW].map((study) => ({ path: study.path, las
 const PAGES: { path: string; priority: number }[] = [
     { path: "/design-subscription", priority: 0.9 },
     { path: "/pricing", priority: 0.9 },
+    { path: "/book-a-call", priority: 0.8 },
     { path: "/process", priority: 0.7 },
     { path: "/team", priority: 0.6 },
     { path: "/faq", priority: 0.6 }

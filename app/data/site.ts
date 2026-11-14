@@ -12,6 +12,9 @@ const EMAIL = "yourmomstudio.agency@gmail.com";
 
 export const SITE = {
     name: "YourMomStudio",
+    // Other names people search for us by: schema.org alternateName, which helps
+    // Google show "YourMomStudio" (not the domain) as the site name in results.
+    alternateNames: ["Your Mom Studio", "yourmomstudio.com", "YMS"],
     url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://yourmomstudio.com").replace(/\/$/, ""),
     locale: "en_US",
 

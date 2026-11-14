@@ -20,6 +20,8 @@ interface PageHeroProps {
     /** data-cta placement: book-call-<placement>. */
     placement: string;
     secondary?: { label: string; href: string };
+    /** Show the "Book a call" button (off on /book-a-call, where the calendar is the page). */
+    cta?: boolean;
 }
 
 const PhoneIcon = () => (
@@ -31,7 +33,7 @@ const PhoneIcon = () => (
     </svg>
 );
 
-const PageHero = ({ eyebrow, title, lead, crumbs, placement, secondary }: PageHeroProps) => {
+const PageHero = ({ eyebrow, title, lead, crumbs, placement, secondary, cta = true }: PageHeroProps) => {
     const trail: Crumb[] = [{ name: "Home", path: "/" }, ...crumbs];
 
     return (
@@ -58,10 +60,12 @@ const PageHero = ({ eyebrow, title, lead, crumbs, placement, secondary }: PageHe
                 <p className={style.lead}>{lead}</p>
 
                 <div className={style.actions}>
-                    <a className={style.cta} {...bookingLinkProps(placement)} {...ctaGlow}>
-                        <PhoneIcon />
-                        <span>Book a call</span>
-                    </a>
+                    {cta && (
+                        <a className={style.cta} {...bookingLinkProps(placement)} {...ctaGlow}>
+                            <PhoneIcon />
+                            <span>Book a call</span>
+                        </a>
+                    )}
                     {secondary && (
                         <Link className={style.secondary} href={secondary.href}>
                             {secondary.label}

@@ -16,6 +16,7 @@ export default function JsonLd() {
             "@type": "Organization",
             "@id": org,
             name: SITE.name,
+            alternateName: SITE.alternateNames,
             url: SITE.url,
             logo: absoluteUrl("/assets/images/YourMomStudio.png"),
             email: SITE.email,
@@ -35,6 +36,7 @@ export default function JsonLd() {
             "@id": website,
             url: SITE.url,
             name: SITE.name,
+            alternateName: SITE.alternateNames,
             publisher: { "@id": org },
             inLanguage: "en"
         },

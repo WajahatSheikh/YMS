@@ -33,6 +33,7 @@ export function GET() {
         link("Home", "/", "overview, services (all on this page), selected work, testimonials, process, pricing, team and FAQ."),
         link("Design subscription", "/design-subscription", "what the subscription includes and how it compares to hiring in-house or freelancers."),
         link("Pricing", "/pricing", `${PRICE_LABEL}/month subscription or fixed-scope projects from ${fixed}.`),
+        link("Book a call", "/book-a-call", "free 30-minute discovery call: pick a time on the calendar."),
         link("Process", "/process", "the first eight weeks and the weekly sprint with a Friday demo."),
         link("Team", "/team", "the people who design and build the product."),
         link("FAQ", "/faq", "pricing, process, ownership and team questions."),

@@ -23,7 +23,7 @@ export const GME = {
         "Case study: a seven-page website for Global Minds Education, an online university partner, rebuilt in Figma auto layout for desktop, iPad and mobile around the logo's pinwheel.",
 
     hero: {
-        meta: ["Case study · Global Minds Education", "Seven-page website · Desktop / iPad / Mobile", "Yourmomstudio · 2026"],
+        meta: ["Case study · Global Minds Education", "Seven-page website · Desktop / iPad / Mobile", "YourMomStudio · 2026"],
         title: ["Study abroad,", "from home."],
         titleFor: "Global Minds Education website",
         intro: "Global Minds Education connects students in the UAE and Pakistan with degrees from universities in the UK, Switzerland and the US. We rebuilt their website so it works the way those students browse: on a phone.",
@@ -55,7 +55,7 @@ export const GME = {
             { label: "Role", value: "UI/UX design, art direction" },
             { label: "Screens", value: "Desktop 1440 · iPad 768 · Mobile 440" },
             { label: "Delivered", value: "7 auto-layout pages, tokens, UI kit" },
-            { label: "Studio", value: "Yourmomstudio" }
+            { label: "Studio", value: "YourMomStudio" }
         ],
         stats: [
             { value: 7, label: "Pages" },

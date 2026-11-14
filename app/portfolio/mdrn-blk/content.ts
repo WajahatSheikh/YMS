@@ -23,7 +23,7 @@ export const MB = {
         "Case study: the MDRN BLK skatewear e-commerce homepage, rebuilt in Figma auto layout for desktop, iPad and mobile with a sticker-bombed design system.",
 
     hero: {
-        meta: ["Case study · MDRN BLK", "E-commerce homepage · Desktop / iPad / Mobile", "Yourmomstudio · 2026"],
+        meta: ["Case study · MDRN BLK", "E-commerce homepage · Desktop / iPad / Mobile", "YourMomStudio · 2026"],
         title: ["Drop", "in."],
         titleFor: "MDRN BLK skatewear e-commerce website",
         intro: "A homepage for MDRN BLK that shops like a session: quick to read, loud where it counts and easy on the thumb.",
@@ -64,7 +64,7 @@ export const MB = {
             { label: "Role", value: "UI/UX design, art direction" },
             { label: "Screens", value: "Desktop 1920 · iPad 768 · Mobile 440" },
             { label: "Delivered", value: "Auto-layout pages, tokens, UI kit" },
-            { label: "Studio", value: "Yourmomstudio" }
+            { label: "Studio", value: "YourMomStudio" }
         ],
         stats: [
             { value: 14, label: "Page bands" },

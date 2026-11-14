@@ -172,7 +172,7 @@ const AboutSection = () => {
                     Founders bring us an idea. They leave with a product in production.
                 </h2>
                 <p className={style.lead} data-reveal="">
-                    Yourmomstudio builds first versions — SaaS platforms, mobile apps, web products, ecommerce and
+                    YourMomStudio builds first versions — SaaS platforms, mobile apps, web products, ecommerce and
                     game interfaces. Design, engineering and QA in one subscription, from the first sketch to launch
                     day.
                 </p>

@@ -34,7 +34,8 @@ const EXPLORE = [
 
 const COMPANY = [
     { label: "The team", href: "/team" },
-    { label: "Case studies", href: "/#work" }
+    { label: "Case studies", href: "/#work" },
+    { label: "Book a call", href: "/book-a-call" }
 ];
 
 // Profiles come from app/data/site.ts. Until a URL is set the label renders as
@@ -89,7 +90,7 @@ const Footer = () => (
             {/* Columns */}
             <div className={style.columns}>
                 <div className={style.brand}>
-                    <p className={style.brandName}>Yourmomstudio</p>
+                    <p className={style.brandName}>YourMomStudio</p>
                     <p className={style.brandCopy}>
                         A full product team on one monthly subscription. Design, engineering and QA — from first
                         sketch to launch day.
@@ -135,7 +136,7 @@ const Footer = () => (
             <hr className={style.rule} />
 
             <div className={style.bottomBar}>
-                <p className={style.copyright}>© 2026 Yourmomstudio. All rights reserved.</p>
+                <p className={style.copyright}>© 2026 YourMomStudio. All rights reserved.</p>
                 <p className={style.availability}>
                     <span className={style.dot} aria-hidden="true" />
                     Now accepting projects for 2026
