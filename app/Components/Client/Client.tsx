@@ -1,48 +1,28 @@
-import { MB } from "@/app/portfolio/mdrn-blk/content";
-import { NW } from "@/app/portfolio/naturally-white/content";
-import { TUIT } from "@/app/portfolio/tuit-luxury-candle/content";
-import ProjectIndex, { type IndexProject } from "./ProjectIndex";
+import { WORK_CATEGORIES, WORK_COUNT } from "@/app/data/work";
+import WorkTabs from "./WorkTabs";
 import style from "./index.module.scss";
 
-// 06 · Work — the project index.
+// 06 · Case studies.
 //
-// Art direction: an editorial index of projects — big rows with number, title,
-// client and category — and, on desktop, a preview card that follows the
-// cursor. It holds up without thumbnails (each project gets a brand card with
-// its monogram) and gets better as real ones are added: give an entry an
-// `image` and both the preview and the mobile row thumbnail use it.
-//
-// Each row links to its own case study. The real ones (MDRN BLK, Naturally
-// White, Tüit) have a thumbnail and a preview reel that plays in the cursor
-// card. Add a row only when its case study is ready.
-
-const WORK: IndexProject[] = [
-    { title: MB.client, category: MB.category, href: MB.path, image: MB.card.image, video: MB.card.video },
-    { title: NW.client, category: NW.category, href: NW.path, image: NW.card.image, video: NW.card.video },
-    {
-        title: TUIT.client,
-        client: TUIT.clientShort,
-        category: TUIT.category,
-        href: TUIT.path,
-        image: TUIT.card.image,
-        video: TUIT.card.video
-    }
-];
+// Eyebrow "Selected work", then the case studies sorted by kind of work in
+// tabs (see WorkTabs.tsx and app/data/work.ts). Each card opens its case study.
 
 const Client = () => (
-    <section id="work" className={style.section}>
+    <section id="work" className={style.section} aria-labelledby="work-title">
         <header className={style.head}>
             <div className={style.headMain}>
-                <p className={style.eyebrow}>Client Project</p>
-                <h2 className={style.title}>Selected work for funded startups</h2>
+                <p className={style.eyebrow}>Selected work</p>
+                <h2 id="work-title" className={style.title}>
+                    Case studies
+                </h2>
             </div>
             <p className={style.headAside}>
-                <span className={style.headCount}>{String(WORK.length).padStart(2, "0")}</span>
-                selected projects — hover to preview, click for the case study
+                <span className={style.headCount}>{String(WORK_COUNT).padStart(2, "0")}</span>
+                case studies from brief to build. Pick a type of work, then open one.
             </p>
         </header>
 
-        <ProjectIndex projects={WORK} />
+        <WorkTabs categories={WORK_CATEGORIES} />
     </section>
 );
 
