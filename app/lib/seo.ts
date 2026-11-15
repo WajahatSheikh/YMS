@@ -8,7 +8,18 @@ import { SITE } from "@/app/data/site";
 // replaces the root one, and with it the image from app/opengraph-image.tsx.
 const SHARE_IMAGE = { url: "/opengraph-image", width: 1200, height: 630, alt: SITE.title };
 
-export const pageMetadata = ({ path, title, description }: { path: string; title: string; description: string }): Metadata => ({
+export const pageMetadata = ({
+    path,
+    title,
+    description,
+    image = SHARE_IMAGE
+}: {
+    path: string;
+    title: string;
+    description: string;
+    /** A page-specific share image (e.g. a service page's own); defaults to the site one. */
+    image?: { url: string; width: number; height: number; alt: string };
+}): Metadata => ({
     title,
     description,
     alternates: { canonical: path },
@@ -19,12 +30,12 @@ export const pageMetadata = ({ path, title, description }: { path: string; title
         locale: SITE.locale,
         title: `${title} | ${SITE.name}`,
         description,
-        images: [SHARE_IMAGE]
+        images: [image]
     },
     twitter: {
         card: "summary_large_image",
         title: `${title} | ${SITE.name}`,
         description,
-        images: [SHARE_IMAGE.url]
+        images: [image.url]
     }
 });

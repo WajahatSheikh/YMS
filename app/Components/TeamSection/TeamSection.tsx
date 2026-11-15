@@ -1,6 +1,7 @@
 import Image from "next/image";
 import TeamRail from "./TeamRail";
 import style from "./index.module.scss";
+import { MEMBERS } from "@/app/data/team";
 
 // 11 · Team — Figma node 143:1384 (1920×964)
 //
@@ -14,47 +15,6 @@ import style from "./index.module.scss";
 // past the edge. Here it is a real scroll rail (TeamRail.tsx — the only client
 // code in this section): edge to edge, draggable, and it keeps the design's
 // alternating 44px vertical offset on the even cards.
-
-interface Member {
-    name: string;
-    position: string;
-    /** Revealed on hover — the specialty line the component note describes. */
-    specialty: string;
-    photo: string;
-}
-
-const MEMBERS: Member[] = [
-    {
-        name: "Wajahat Sheikh",
-        position: "Head of Product Design",
-        specialty: "Sr. Product Designer | Game Designer | AI SaaS | UX & UI | B2B & B2C Platforms",
-        photo: "/assets/images/wajahat.png"
-    },
-    {
-        name: "Hamza Mithani",
-        position: "Marketing Manager",
-        specialty: "Senior Marketing Manager | SEO, Paid Ads & Content Strategy | Driving growth and revenue for SaaS and digital brands",
-        photo: "/assets/images/hamza.webp"
-    },
-    {
-        name: "Agha Zeeshan",
-        position: "Technical Product Manager",
-        specialty: "Technology Consultant | Program Manager | Technical Project Manager | Technical Product Owner | Scrum Master | Agile Practitioner | Business Analyst | CSM® | CSPO® | SSYB™",
-        photo: "/assets/images/agha-v2.jpg"
-    },
-    {
-        name: "Huzaifa Iqbal",
-        position: "Senior Front End Developer",
-        specialty: "Senior Frontend Architect | React.js, Next.js & React Native | Building scalable, high-performance web & mobile products",
-        photo: "/assets/images/huzaifa-v2.jpg"
-    },
-    {
-        name: "Imran",
-        position: "Lead Software Test Engineer",
-        specialty: "Automation Engineer | QA Automation | Selenium | Playwright | Python | API Testing | CI/CD | Web & End-to-End Testing | Agile",
-        photo: "/assets/images/imran.webp"
-    }
-];
 
 export const TeamSection = () => (
     <section id="team" className={style.section}>

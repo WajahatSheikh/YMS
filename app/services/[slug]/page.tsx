@@ -26,7 +26,14 @@ const findService = async (params: Promise<{ slug: string }>) => {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const service = await findService(params);
     if (!service) return {};
-    return pageMetadata({ path: serviceHref(service), title: service.seo.title, description: service.seo.description });
+    const path = serviceHref(service);
+    return pageMetadata({
+        path,
+        title: service.seo.title,
+        description: service.seo.description,
+        // The page's own share image (./opengraph-image.tsx).
+        image: { url: `${path}/opengraph-image`, width: 1200, height: 630, alt: `${service.seo.title}, by YourMomStudio` }
+    });
 }
 
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
