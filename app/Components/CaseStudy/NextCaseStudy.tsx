@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import type { RelatedCaseStudy } from "@/app/data/caseStudies";
 
 // "Next case study": the link every art-directed case study ends on.
@@ -61,7 +60,9 @@ export default function NextCaseStudy({
     const { study, shared } = pick;
 
     return (
-        <Link className={classes.link} href={study.path} data-transition data-transition-label={study.client}>
+        // A plain <a>: next/link would handle the click first (preventDefault) and
+        // skip the page transition; PageTransitionContext prefetches the route.
+        <a className={classes.link} href={study.path} data-transition data-transition-label={study.client}>
             <span className={classes.label}>{label}</span>
             <span className={classes.title}>{study.client}</span>
             <span className={classes.meta}>
@@ -84,6 +85,6 @@ export default function NextCaseStudy({
                 {cta && <span>{cta}</span>}
                 <Arrow />
             </span>
-        </Link>
+        </a>
     );
 }

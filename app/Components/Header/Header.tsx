@@ -41,7 +41,7 @@ const CallIcon = () => (
     </svg>
 );
 
-const BookACall = ({ className, placement }: { className?: string; placement: string }) => (
+export const BookACall = ({ className, placement }: { className?: string; placement: string }) => (
     <a className={`${style.cta} ${className ?? ""}`} {...bookingLinkProps(placement)} {...ctaGlow}>
         <CallIcon />
         <span>Book a call</span>
@@ -118,7 +118,7 @@ const useHiddenOnScrollDown = () => {
 // Case studies with their own art direction (their grounds change down the
 // page). Their header floats: no band, light pills that read on any ground,
 // and it steps aside on scroll down.
-const FLOATING_CASE_STUDIES = ["/portfolio/tuit-luxury-candle", "/portfolio/naturally-white", "/portfolio/mdrn-blk", "/portfolio/global-minds-education"];
+const FLOATING_CASE_STUDIES = ["/portfolio/tuit-luxury-candle", "/portfolio/naturally-white", "/portfolio/mdrn-blk", "/portfolio/global-minds-education", "/portfolio/squat-smart"];
 
 // ── Portfolio header — back arrow + Book a Call ───────────────────────────────
 // Dark island, like the placeholder case-study pages under it — or, with

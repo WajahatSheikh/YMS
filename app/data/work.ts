@@ -61,6 +61,7 @@ export const WORK_CATEGORIES: WorkCategory[] = [
         intro: "Websites and online stores, designed for desktop, tablet and phone and handed over as a build-ready system.",
         soon: "Website case studies are being written up.",
         projects: [
+            project("squat-smart", "Shopify landing page and product page for an at-home squat mat, built around its A, B and C foot zones.", "squat-smart-website-reel.mp4", "squat-smart-website-preview.mp4"),
             project("global-minds-education", "Seven-page website for an online university partner, rebuilt phone first for desktop, iPad and mobile.", "gme-website-reel.mp4", "gme-website-preview.mp4"),
             project("mdrn-blk", "Skatewear e-commerce homepage, rebuilt for desktop, iPad and mobile around a sticker-bombed design system.", "mdrn-blk-website-reel.mp4", "mdrn-blk-website-preview.mp4"),
             project("naturally-white", "Eight-page teeth-whitening website built around one job: getting the visitor to book.", "naturally-white-website-reel.mp4", "naturally-white-website-reel-sm.mp4"),

@@ -2,6 +2,7 @@ import { MB } from "@/app/portfolio/mdrn-blk/content";
 import { GME } from "@/app/portfolio/global-minds-education/content";
 import { NW } from "@/app/portfolio/naturally-white/content";
 import { TUIT } from "@/app/portfolio/tuit-luxury-candle/content";
+import { SS } from "@/app/portfolio/squat-smart/content";
 
 // The real, art-directed case studies, with the tags used to pick "next".
 // Each case study ends on a related one: a study that shares at least
@@ -21,6 +22,16 @@ export interface CaseStudyCard {
 }
 
 export const CASE_STUDIES: readonly CaseStudyCard[] = [
+    {
+        slug: SS.slug,
+        path: SS.path,
+        client: SS.client,
+        category: SS.category,
+        year: SS.year,
+        tags: ["E-commerce", "Fitness", "Website", "Responsive", "Design system"],
+        image: "/assets/images/work/squat-smart/squat-smart-next-card-v2.webp",
+        imageAlt: "Find your stance: the Squat Smart campaign model in an arch beside giant type, zone labels and the store on a phone"
+    },
     {
         slug: GME.slug,
         path: GME.path,

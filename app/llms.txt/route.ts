@@ -6,6 +6,7 @@ import { TUIT } from "@/app/portfolio/tuit-luxury-candle/content";
 import { NW } from "@/app/portfolio/naturally-white/content";
 import { MB } from "@/app/portfolio/mdrn-blk/content";
 import { GME } from "@/app/portfolio/global-minds-education/content";
+import { SS } from "@/app/portfolio/squat-smart/content";
 
 // /llms.txt — a plain-text map of the site for AI assistants and answer
 // engines (format: https://llmstxt.org). Built from the same data files as the
@@ -48,6 +49,7 @@ export function GET() {
         link(`${TUIT.client}: ${TUIT.category.toLowerCase()} design`, TUIT.path, TUIT.seoDescription),
         link(`${NW.client}: ${NW.category.toLowerCase()}`, NW.path, NW.seoDescription),
         link(`${MB.client}: ${MB.category.toLowerCase()} design`, MB.path, MB.seoDescription),
+        link(`${SS.client}: ${SS.category.toLowerCase()} design`, SS.path, SS.seoDescription),
         link(`${GME.client}: ${GME.category.toLowerCase()} design`, GME.path, GME.seoDescription),
         "",
         "## FAQ",
