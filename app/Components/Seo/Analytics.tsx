@@ -1,4 +1,5 @@
 import Script from "next/script";
+import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
 import { SITE } from "@/app/data/site";
 
 // Analytics tags, kept off the critical rendering path. The small inline config
@@ -16,6 +17,10 @@ import { SITE } from "@/app/data/site";
 // counts client-side navigations into the case studies. The booking modal sends
 // `book_call_open` and `book_call_scheduled` events (BookingModal.tsx) — mark
 // `book_call_scheduled` as a key event in GA4 to count booked calls.
+//
+// Vercel Web Analytics — cookieless visitor and page-view counts in the Vercel
+// dashboard (Project → Analytics). The script only reports on Vercel
+// deployments and is served from the site's own /_vercel/insights path.
 //
 // Google Tag Manager — loads only when NEXT_PUBLIC_GTM_ID is set, for Google
 // Ads conversions and remarketing configured inside the container. If GA4 is
@@ -61,6 +66,7 @@ export default function Analytics() {
         <>
             {ga && <GoogleAnalytics id={ga} />}
             {gtm && <GoogleTagManager id={gtm} />}
+            <VercelAnalytics />
         </>
     );
 }

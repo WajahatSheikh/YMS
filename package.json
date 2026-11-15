@@ -12,6 +12,7 @@
   "dependencies": {
     "@gsap/react": "^2.0.2",
     "@studio-freight/lenis": "^1.0.42",
+    "@vercel/analytics": "^2.0.1",
     "gsap": "file:gsap-bonus.tgz",
     "next": "^15.5.28",
     "react": "^19.0.0",
