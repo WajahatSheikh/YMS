@@ -44,7 +44,8 @@ const SOCIAL = [
     { label: "Instagram", href: SITE.social.instagram },
     { label: "Behance", href: SITE.social.behance },
     { label: "X / Twitter", href: SITE.social.x },
-    { label: "Threads", href: SITE.social.threads }
+    { label: "Threads", href: SITE.social.threads },
+    { label: "LinkedIn", href: SITE.social.linkedin }
 ];
 
 const PhoneIcon = () => (

@@ -47,7 +47,8 @@ export const SITE = {
         x: "https://x.com/your_momstudio" as string,
         behance: "https://www.behance.net/yourmomstudio" as string,
         threads: "https://www.threads.com/@your.momstudio" as string,
-        instagram: "https://www.instagram.com/your.momstudio/" as string
+        instagram: "https://www.instagram.com/your.momstudio/" as string,
+        linkedin: "https://www.linkedin.com/company/yourmomstudio/" as string
     }
 } as const;
 
