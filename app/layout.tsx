@@ -5,6 +5,7 @@ import "./globals.scss";
 import Wrapper from "./Components/Wrapper/Wrapper";
 import Footer from "./Components/Footer/Footer";
 import Analytics from "./Components/Seo/Analytics";
+import ClickTracking from "./Components/Seo/ClickTracking";
 import { SITE } from "./data/site";
 import { DEFAULT_THEME, THEME_COLOR, THEME_INIT_SCRIPT } from "./lib/theme";
 
@@ -115,6 +116,7 @@ export default function RootLayout({
                     Wrapper as a slot rather than imported inside it. */}
                 <Wrapper footer={<Footer />}>{children}</Wrapper>
                 <Analytics />
+                <ClickTracking />
             </body>
         </html>
     );
