@@ -35,7 +35,17 @@ const nextConfig: NextConfig = {
         silenceDeprecations: ["import", "legacy-js-api"]
     },
     async headers() {
-        return [{ source: "/:path*", headers: SECURITY_HEADERS }];
+        return [
+            { source: "/:path*", headers: SECURITY_HEADERS },
+            // Reels and previews keep their file names, so they get a week, not a
+            // year: long enough that a repeat visit never re-checks a 1 MB video
+            // (it was `max-age=0`, a revalidation on every play), short enough
+            // that a replaced file shows up within days.
+            {
+                source: "/assets/videos/:path*",
+                headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=86400" }]
+            }
+        ];
     }
 };
 

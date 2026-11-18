@@ -54,9 +54,9 @@ export const SERVICES: Service[] = [
         headline: "Websites designed and built by one team",
         summary: "Marketing sites, landing pages and replatforms on Webflow, Framer or custom code. We have shipped 50+ sites, and they go live looking exactly like the design.",
         seo: {
-            title: "Website design and development for startups",
+            title: "Startup website design and development",
             description:
-                "Marketing sites, landing pages and replatforms designed and built by one team, on Webflow, Framer or custom code, with SEO-ready structure."
+                "Startup website design agency: marketing sites, landing pages and replatforms designed and built by one team, on Webflow, Framer or custom code."
         },
         description:
             "We’ve shipped 50+ sites, from first launches to full rebrands and replatforms. Designed and built by one team, no handoff, no waiting on dev, no round-tripping between Figma and Slack. The site goes live looking exactly like it looked in the comp.",
@@ -77,9 +77,9 @@ export const SERVICES: Service[] = [
         title: "Mobile App",
         slug: "mobile-app",
         headline: "Mobile apps built for one thumb and zero patience",
-        summary: "iOS and Android apps designed and built by one team, from onboarding and user flows to cross-platform development and App Store launch.",
+        summary: "Mobile app design agency for iOS and Android: apps designed and built by one team, from onboarding and user flows to App Store launch.",
         seo: {
-            title: "iOS and Android app design and development",
+            title: "Mobile app design and development studio",
             description:
                 "iOS and Android apps designed and built by one team, from onboarding and user flows to cross-platform development and App Store launch."
         },
@@ -107,7 +107,7 @@ export const SERVICES: Service[] = [
         seo: {
             title: "SaaS product design and development",
             description:
-                "SaaS product strategy, UX, dashboards and onboarding that turns trials into paying users, plus front-end development, from one product team."
+                "SaaS product design agency: strategy, UX, dashboards and onboarding that turns trials into paying users, plus front-end development."
         },
         label: "Web Platforms",
         description:
@@ -157,9 +157,9 @@ export const SERVICES: Service[] = [
         headline: "2D game design that earns one more round",
         summary: "Core loop, characters, worlds and the game UI that holds it all together, for mobile casual games and branded experiences.",
         seo: {
-            title: "2D game design studio",
+            title: "2D game design and art studio",
             description:
-                "2D game design: concept and core loop, characters and environments, game UI and HUD, level design and animation-ready art for mobile and branded games."
+                "Game art studio for 2D game design: concept and core loop, characters and environments, game UI and HUD, level design and animation-ready art."
         },
         label: "2D Games",
         description:
@@ -185,7 +185,7 @@ export const SERVICES: Service[] = [
         seo: {
             title: "Brand identity design for startups",
             description:
-                "Brand identity for startups: logo and marks, colour and typography, usable brand guidelines, pitch deck and marketing templates, and brand voice."
+                "Brand identity design agency for startups: logo and marks, colour and typography, usable brand guidelines, pitch deck and marketing templates."
         },
         label: "Brand & Visuals",
         description:

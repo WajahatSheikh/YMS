@@ -59,6 +59,42 @@ export const FAQS: Faq[] = [
         topic: "Process",
         answer:
             "Monday you set the agenda. We design and build Tuesday to Thursday, shipping to staging as work lands. Friday you see it live and shape the next sprint."
+    },
+    {
+        question: "How much does an MVP cost?",
+        topic: "Pricing",
+        answer:
+            "Two ways to pay. A subscription is $3,999 a month for a full team working on your product every week. A fixed-scope project, such as a website, starts from $1,299 and depends on the deliverables. Book a free 30-minute call and we'll tell you which one fits your scope."
+    },
+    {
+        question: "How long does it take to build an MVP?",
+        topic: "Process",
+        answer:
+            "You see working design in week one and something clickable on staging by the end of week two. After that there is a live demo every Friday. Launch date depends on scope, so we agree it with you on the first call and check it against the demo each week."
+    },
+    {
+        question: "What is a design subscription?",
+        topic: "Pricing",
+        answer:
+            "One fixed monthly price for a product team instead of a project quote. You send requests, we design and build them in weekly sprints, and you can pause or cancel any time. It suits products where the work keeps coming, like an MVP that turns into a live product."
+    },
+    {
+        question: "Is a subscription better than hiring a designer or a freelancer?",
+        topic: "Pricing",
+        answer:
+            "A hire is one salary and one skill set, and a freelancer is one person's availability. A subscription gives you a team of design, frontend, backend, QA and a technical PM for one monthly price, with no hiring or notice period. A single in-house designer is the better fit once you have steady work for them every day."
+    },
+    {
+        question: "Do you build the product too, or only design it?",
+        topic: "Team",
+        answer:
+            "Both. The same team designs and builds, so what you approve in Figma is what ships: websites, iOS and Android apps, SaaS products and custom admin systems, all delivered dev-ready and then built."
+    },
+    {
+        question: "Do you build design systems for startups?",
+        topic: "Process",
+        answer:
+            "Yes. A design system is part of product design here: components, tokens and usage rules, built in Figma and handed over dev-ready, so your team can add screens without redesigning the basics."
     }
 ];
 

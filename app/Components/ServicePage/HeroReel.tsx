@@ -21,13 +21,19 @@ const HeroReel = ({ src, poster, alt }: { src: string; poster: string; alt: stri
         const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
         if (!large || reduced || saveData) return;
 
+        // Start as soon as the poster (the LCP image) has painted, not at the
+        // window load event, which waits for every image and script on the page
+        // and was what made the reel appear seconds late.
+        const poster = video.previousElementSibling as HTMLImageElement | null;
         const start = () => {
+            video.preload = "auto";
             video.src = src;
             video.muted = true;
             video.play().catch(() => {});
         };
-        if (document.readyState === "complete") start();
-        else window.addEventListener("load", start, { once: true });
+        const waiting = !!poster && poster.tagName === "IMG" && !poster.complete;
+        if (waiting) poster.addEventListener("load", start, { once: true });
+        else start();
 
         // Only play while on screen.
         const observer = new IntersectionObserver(([entry]) => {
@@ -37,7 +43,7 @@ const HeroReel = ({ src, poster, alt }: { src: string; poster: string; alt: stri
         });
         observer.observe(video);
         return () => {
-            window.removeEventListener("load", start);
+            poster?.removeEventListener("load", start);
             observer.disconnect();
         };
     }, [src]);

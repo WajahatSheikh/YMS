@@ -11,8 +11,8 @@ import { pageMetadata } from "@/app/lib/seo";
 // usual alternatives. The price itself lives on /pricing.
 
 const PATH = "/design-subscription";
-const TITLE = "Design and dev subscription for startups";
-const DESCRIPTION = `One monthly subscription for a full product team: design, frontend, backend, QA and a technical PM. ${PRICE_LABEL}/month, pause anytime, you own everything.`;
+const TITLE = "Design subscription for startups";
+const DESCRIPTION = `Design subscription for startups: one monthly price for a full product team. ${PRICE_LABEL}/month, pause anytime, you own everything.`;
 const CRUMBS = [{ name: "Design subscription", path: PATH }];
 const FAQS = faqsByTopic("Process", "Ownership", "Team");
 
