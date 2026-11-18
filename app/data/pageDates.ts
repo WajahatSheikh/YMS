@@ -6,18 +6,18 @@
 // the page says, and leave it alone for a redeploy or a styling tweak.
 
 export const PAGE_UPDATED: Record<string, string> = {
-    "/": "2026-11-15",
-    "/design-subscription": "2026-11-15",
-    "/pricing": "2026-11-15",
+    "/": "2026-11-18",
+    "/design-subscription": "2026-11-18",
+    "/pricing": "2026-11-18",
     "/book-a-call": "2026-11-15",
-    "/process": "2026-11-15",
-    "/team": "2026-11-15",
-    "/faq": "2026-11-15",
-    "/services": "2026-11-15"
+    "/process": "2026-11-18",
+    "/team": "2026-11-18",
+    "/faq": "2026-11-18",
+    "/services": "2026-11-18"
 };
 
 /** Service pages share one date unless a page is edited on its own. */
-export const SERVICES_UPDATED = "2026-11-15";
+export const SERVICES_UPDATED = "2026-11-18";
 
 /** "15 November 2026" for an ISO date. */
 export const formatUpdated = (iso: string) =>
