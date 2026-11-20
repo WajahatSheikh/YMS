@@ -39,7 +39,11 @@ const GoogleAnalytics = ({ id }: { id: string }) => (
     <>
         <Script src={`https://www.googletagmanager.com/gtag/js?id=${id}`} strategy="lazyOnload" />
         <Script id="ga4" strategy="afterInteractive">
-            {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config','${id}');`}
+            {/* Team opt-out: open any page with ?internal=1 once in a browser and GA4
+                ignores that browser from then on (?internal=0 turns it back on). It
+                keeps our own visits and test runs out of the reports without needing
+                a fixed IP address for a GA4 internal-traffic filter. */}
+            {`try{var q=new URLSearchParams(location.search).get('internal');if(q==='1')localStorage.setItem('yms-internal','1');if(q==='0')localStorage.removeItem('yms-internal');if(localStorage.getItem('yms-internal')==='1')window['ga-disable-${id}']=true}catch(e){}window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config','${id}');`}
         </Script>
     </>
 );
