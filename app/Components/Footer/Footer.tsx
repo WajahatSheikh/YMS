@@ -153,10 +153,10 @@ const Footer = () => (
                     halo round every letter, and the footer glow blocked behind it.
                     Served as-is the alpha survives intact. */}
                 <Image
-                    src="/assets/images/footer-wordmark.png"
+                    src="/assets/images/footer-wordmark.webp"
                     alt="YourMomStudio"
-                    width={3548}
-                    height={747}
+                    width={2400}
+                    height={505}
                     sizes="100vw"
                     unoptimized
                     priority={false}
